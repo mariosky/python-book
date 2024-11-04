@@ -3,8 +3,8 @@
 ---
 
 ### Capítulo 1: **Introducción a Python**
-**Objetivo:** Familiarizar al lector con la instalación y configuración de Python, incluyendo el uso de Jupyter Notebooks como herramienta interactiva de programación.
-- **Secciones:** Instalación Básica, Jupyter Notebooks
+**Objetivo:** Familiarizar al lector con la instalación y configuración de Python en distintos sistemas operativos, incluyendo el uso de Jupyter Notebooks como herramienta interactiva de programación y otras herramientas similares. 
+- **Secciones:** Instalación Básica, Múltiples versiones, Distribuciones, Jupyter Notebooks y Google Colaboratory
 - **Avance breve:** Paso a paso de instalación y configuración.
 - **Ilustraciones:** Capturas de pantalla del proceso de instalación y configuración de Jupyter Notebooks.
 
