@@ -77,14 +77,13 @@ Python 3.8  Python.Python.3.8  3.8.10    winget
 Python 3.9  Python.Python.3.9  3.9.13    winget
 ```
 
-Vamos a instalar la versión 3.13.2, la más reciente al día de hoy. Para esto
-utilizaremos el comando
-[`install`](https://learn.microsoft.com/es-es/windows/package-manager/winget/install#arguments),
-pasaremos el identificador del paquete (`--id Python.Python.3.13`) de manera
-exacta (`-e`). Queremos instalar Python para todos los usuarios de nuestro
-equipo por lo que agregaremos el parámetro `--scope manchine`. Para ejecutar el
-comando es importante ejecutar el programa de _Terminal_ como usuario
-**Administrador**.
+Vamos a instalar la versión 3.13.2, la más reciente
+al día de hoy. Para esto utilizaremos el comando [`install`](https://learn.microsoft.com/es-es/windows/package-manager/winget/install#arguments),
+pasaremos el identificador del paquete (`--id Python.Python.3.13`) de manera exacta (`-e`).
+Queremos instalar Python para todos los usuarios
+de nuestro equipo por lo que agregaremos el parámetro `--scope manchine`.
+Para ejecutar el comando es importante ejecutar el programa de _Terminal_
+como usuario **Administrador**.
 
 ```bash
 winget install -e --id Python.Python.3.13 --scope machine
@@ -114,19 +113,6 @@ funcionalidad del lenguaje, en ese caso podemos instalar la última versión del
 lenguaje desde repositorios no oficiales. Veamos las dos opciones:
 
 ### Instalación utilizando APT
-
-Antes de instalar podemos revisar si el interprete está instalado
-y es una versión reciente:
-
-```bash
-python3 --version
-```
-
-Si se imprime una versión mayor a 3.12.1 es una versión reciente y
-para la mayoría de los ejercicios del libro es más que suficiente.
-
-En caso de que requieras actualizar a la útlima versión del interprete disponible
-para tu versión de Ubuntu podemos seguir los siguientes pasos:
 
 Como primer paso, actualizamos el índice local del repositorio de paquetes de
 ubuntu para asegurarnos de instalar la última versión dispoible.
@@ -160,15 +146,6 @@ python3 --version
 
 Esto debe imprimir la versión del interprete.
 
-Ahora vamos a actualizar el programa `pip` con el que
-gestionamos los _paquetes_ o librerías de terceros
-ya sea a nuestra instalación del sistema o el ambiente de desarrollo
-que estemos utilizando. Esto lo hacemos utilizando `pip`:
-
-```bash
-python3 -m pip install --upgrade pip
-```
-
 ### Instalación utilizando el PPA deadsnakes
 
 Para instalar la última versión de Python en Ubuntu, vamos a utilizar el
@@ -187,29 +164,5 @@ reciente. Vamos a instalar otras herramientas para desarrollo utilizando dev
 para incluir los encabezados de C para compilar librerías y venv para instalar
 las herramientas de ambientes virtuales de Python que utilizaremos más
 adelante:
-
-```bash
-sudo apt install python3.13 python3.13-venv
-```
-
-Para ejecutar la nueva versión debemos especificar la versión para
-ejecutar el interprete correcto:
-
-```bash
-python3.13
-```
-
-Para instalar `pip` para el nuevo interprete debemos ejecutar el
-módulo `ensurepip`:
-
-```bash
-python3.13 -m ensurepip --upgrade
-```
-
-Y por último acutalizamos `pip`:
-
-```bash
-python3.13 -m pip install --upgrade pip
-```
 
 ## MacOS
