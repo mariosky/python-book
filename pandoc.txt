@@ -1,0 +1,1 @@
+pandoc -o pybook.pdf --latex-engine=xelatex 01.Intro.md 02.Install.md 03.Basic.md 04.Funciones.md --webtex
