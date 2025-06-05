@@ -1,0 +1,1 @@
+pandoc -o pybook.pdf --pdf-engine=xelatex 01.Intro.md 02.Install.md 03.Basic.md 04.Funciones.md --webtex   -V documentclass=book --top-level-division=chapter --toc
