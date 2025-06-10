@@ -1,5 +1,8 @@
 .. _capítulo_02:
 
+.. role:: python(code)
+   :language: python
+
 Fundamentos del lenguaje
 ====================================
 
@@ -49,19 +52,19 @@ dato, son simplemente nombres o etiquetas que hacen referencia a objetos. Los
 objetos por su parte, sí tienen un tipo de dato. Entonces, en esta línea, el
 resultado de la operación se almacena en memoria en una dirección
 específica, una referencia. Lo que sucede entonces es que el nombre ``x`` se ata a
-la referencia del objeto entero que se crea de la operación ``34-23``, el ``11`` en la memoria.
+la referencia del objeto entero que se crea de la operación :python:`34-23`, el :python:`11` en la memoria.
 Esto es distinto al concepto de variable en otros lenguajes. Por ejemplo, en C# las
 variables *tipo valor* reservan un espacio en la memoria donde se guarda literalmente el valor 
 que contienen, y los valores deben ser del tipo correspondiente. Si yo declaro una 
 variable como entera de 16 bits, solo puedo almacenar en ella objetos de este tipo.    
 
 Volviendo al ejemplo, el tipo de dato al que hace referencia el nombre ``x`` después de la asignación,
-es temporalmente ``int``, pero en otro momento, podríamos
+es temporalmente :python:`int`, pero en otro momento, podríamos
 atar el nombre ``x`` a un objeto diferente de otro tipo de dato. Por ejemplo, 
-``x = 2.3`` o ``x = "Hola"``. De nuevo, los objetos en memoria son tipo ``float`` y ``string``
+:python:`x = 2.3` o :python:`x = "Hola"`. De nuevo, los objetos en memoria son tipo :python:`float` y :python:`str`
 respectivamente y nuestra etiqueta ``x`` se puede atar a cualquiera de ellos sin
 ningún problema. Vemos entonces que se atan los nombres ``y`` y ``z`` a la cadena de caracteres
-``"Hola"`` y al flotante ``3.44`` respectivamente. 
+:python:`"Hola"` y al flotante :python:`3.44` respectivamente. 
 
 .. note::
 
@@ -110,7 +113,7 @@ En el ejemplo vemos que la condición no tiene indentación, pero el bloque de
 código que se ejecutará en caso de ser verdadera consta de dos líneas. Estas
 líneas tienen una indentación consistente de cuatro espacios cada una. Para
 terminar el bloque, simplemente escribimos una nueva línea que no contenga los
-espacios. Por ejemplo, la instrucción ``print(x)``.
+espacios. Por ejemplo, la instrucción :python:`print(x)`.
 
 .. rubric:: Cuatro espacios es buen estilo
 
@@ -126,14 +129,14 @@ estándar de la distribución principal de Python. Las siglas PEP vienen del ing
 documento público que brinda información a la comunidad sobre alguna nueva
 característica o sugerencia de mejora para el lenguaje.
 
-Siguiendo con el código, vemos también que los operadores lógicos (``and``, ``or``,
-``not``) son palabras y no símbolos como en ciertos lenguajes. Al igual que en la
+Siguiendo con el código, vemos también que los operadores lógicos (:python:`and`, :python:`or`,
+:python:`not`) son palabras y no símbolos como en ciertos lenguajes. Al igual que en la
 mayoría de los lenguajes, la concatenación de cadenas de caracteres se hace con
 el operador de adición. Para operaciones con otro tipo de objetos, los
 operadores (``+ - * /``) funcionan como siempre.
 
 Otra característica importante es que la función para imprimir en la consola es
-``print`` y no tuvimos que agregar una librería para acceder a su funcionalidad.
+:python:`print()` y no tuvimos que agregar una librería para acceder a su funcionalidad.
 Ya viene de fábrica. De hecho, Python incluye muchas funciones de este tipo
 dentro del lenguaje. Utilizaremos muchas de ellas más adelante. 
 
@@ -166,7 +169,7 @@ longitud fija.
 Los números con punto flotante, comúnmente llamados *flotantes* o *floats*,
 incluyen un punto decimal y también son de tamaño arbitrario. Se pueden
 representar utilizando la notación exponencial (*E*) indicando la décima
-potencia. Por ejemplo, ``21.3E-4`` es equivalente a ``21.3 * 10^-4``.
+potencia. Por ejemplo, :python:`21.3E-4` es equivalente a :python:`21.3 * 10^-4`.
 
 **Cadenas o Strings**
 
@@ -175,9 +178,9 @@ es una abstracción que veremos más adelante, cuando nos enfoquemos en estructu
 de datos; ahí veremos otros aspectos importantes de este tipo de dato. 
 Por lo pronto, podemos definir a una cadena como una colección
 ordenada de caracteres útil para almacenar texto. Las cadenas se pueden
-representar de distintas maneras: utilizando comillas dobles (``"Hola"``),
-comillas simples (``'Hola'``) y esto permite evitar cierto tipo de conflictos, por
-ejemplo, la cadena ``"Carl's Jr."`` utiliza comillas dobles para evitar el
+representar de distintas maneras: utilizando comillas dobles (:python:`"Hola"`),
+comillas simples (:python:`'Hola'`) y esto permite evitar cierto tipo de conflictos, por
+ejemplo, la cadena :python:`"Carl's Jr."` utiliza comillas dobles para evitar el
 conflicto con la comilla simple que es parte del nombre *Carl's*. Cuando tenemos
 múltiples párrafos o necesitamos utilizar los dos tipos de comillas en el texto,
 utilizamos comillas triples, ya sean dobles o simples:
@@ -199,13 +202,13 @@ Python incluye muchos métodos para realizar operaciones sobre este tipo de dato
 **Booleanos**
 
 Los valores de verdad en Python son representados explícitamente con los valores
-literales ``True`` o ``False``, verdadero y falso respectivamente, ambos deben
-iniciar con mayúscula. El tipo de dato ``bool`` es un subtipo de ``int``, por lo que
-en contextos numéricos ``True`` equivale a uno y ``False`` a cero
+literales :python:`True` o :python:`False`, verdadero y falso respectivamente, ambos deben
+iniciar con mayúscula. El tipo de dato :python:`bool` es un subtipo de :python:`int`, por lo que
+en contextos numéricos :python:`True` equivale a uno y :python:`False` a cero
 respectivamente. También existen otras formas implícitas de representación de
 estos valores de verdad cuando se utilizan operaciones lógicas. Por ejemplo, una
-cadena vacía es equivalente a ``False`` y una colección de datos con cierto número
-de elementos es equivalente a ``True``. Veremos ejemplos de esto más adelante.
+cadena vacía es equivalente a :python:`False` y una colección de datos con cierto número
+de elementos es equivalente a :python:`True`. Veremos ejemplos de esto más adelante.
 
 .. rubric:: Comentarios
 
@@ -240,16 +243,16 @@ asignación (o atado) a ellos de un valor literal.
 Para terminar esta sección, vamos a representar valores literales de los tipos de datos 
 básicos de Python: 
 
-- Entero (``int``): ``791926378172346918273469128374619283``, ``2``
-- Flotante (``float``): ``34.3``, ``0.33``
-- Cadena (``str``): ``"Python es un lenguaje dinámico"``, ``'Juan'``, ``"Leí el libro 'Pedro Páramo'."``
-- Booleano (``bool``): ``True``, ``False``
+- Entero (:python:`int`): :python:`791926378172346918273469128374619283`, :python:`2`
+- Flotante (:python:`float`): :python:`34.3`, :python:`0.33`
+- Cadena (:python:`str`)::python:`"Python es un lenguaje dinámico"`, :python:`'Juan'`, :python:`"Leí el libro 'Pedro Páramo'."`
+- Booleano (:python:`bool`): :python:`True`, :python:`False`
 
-.. rubric:: El valor especial ``None``
+.. rubric:: El valor especial :python:`None`
 
-La constante ``None`` es utilizada para indicar la ausencia de valor o un valor nulo. 
-Tiene su propio tipo ``NoneType``. De manera similar al valor ``NULL`` en bases de datos,
-el valor ``None`` no es igual a cero, ``False`` o vacío, aunque se considera ``False`` en 
+La constante :python:`None` es utilizada para indicar la ausencia de valor o un valor nulo. 
+Tiene su propio tipo :python:`NoneType`. De manera similar al valor ``NULL`` en bases de datos,
+el valor :python:`None` no es igual a cero, :python:`False` o vacío, aunque se considera :python:`False` en 
 condiciones booleanas. Se puede utilizar para definir un nombre que no hace referencia 
 a un objeto todavía. Por ejemplo:
 
@@ -258,9 +261,9 @@ a un objeto todavía. Por ejemplo:
    x = None 
    print(x)
 
-En este caso ``x`` existe aunque el objeto al que está atado es ``None``. Esto
+En este caso ``x`` existe aunque el objeto al que está atado es :python:`None`. Esto
 significa que no está atada a un valor todavía. El intérprete no imprime nada
-cuando imprimimos ``None``.
+cuando imprimimos :python:`None`.
 
 Funciones
 ---------
@@ -311,15 +314,15 @@ Por ejemplo, en C:
 
 En Python no es necesario indicar el tipo de dato que regresa la función ni
 tampoco el tipo de dato de los parámetros que recibe. Entonces, el encabezado de
-la función se simplifica mucho, ya que solo indicamos con ``def`` el inicio de la
-definición de la función. Indicamos el nombre (``suma``) y entre paréntesis una
-lista opcional de parámetros separados por una coma (``suma(a, b)``). Por último, 
+la función se simplifica mucho, ya que solo indicamos con :python:`def` el inicio de la
+definición de la función. Indicamos el nombre (:python:`suma`) y entre paréntesis una
+lista opcional de parámetros separados por una coma (:python:`suma(a, b)`). Por último, 
 algo muy importante, el símbolo de dos puntos (``:``) que marca el inicio del
 bloque de código que define el cuerpo de la función.
 
 Como vimos anteriormente, el bloque del cuerpo de la función debe estar indentado 
-utilizando cuatro espacios. El bloque termina con la única instrucción ``return a + b`` 
-indicando que queremos regresar como resultado la operación ``a + b``, la suma de 
+utilizando cuatro espacios. El bloque termina con la única instrucción :python:`return a + b` 
+indicando que queremos regresar como resultado la operación :python:`a + b`, la suma de 
 los dos números ``a`` y ``b``.
 
 Ejecución de funciones
@@ -362,7 +365,7 @@ continuación?
    >>> suma('hola', ' mundo')
    'hola mundo'
 
-El resultado sería ``'hola mundo'``, la concatenación de las dos cadenas de
+El resultado sería :python:`'hola mundo'`, la concatenación de las dos cadenas de
 entrada. Esto resalta el punto que habíamos considerado anteriormente: no
 debemos asumir que los nombres estarán atados a objetos de cierto tipo.
 
@@ -382,10 +385,10 @@ los correctos. Ejemplo:
    def suma(a: int, b: int) -> int:
        return a + b
 
-Aquí, ``a`` y ``b`` se anotan como enteros (``int``), y ``-> int`` indica que la función
+Aquí, ``a`` y ``b`` se anotan como enteros (:python:`int`), y ``-> int`` indica que la función
 devuelve un entero. Estas anotaciones son utilizadas por herramientas de
 edición y librerías para alertarnos de manera estática de posibles errores en
-nuestro código. En otra sección veremos el uso del método ``type()`` incluido de
+nuestro código. En otra sección veremos el uso del método :python:`type()` incluido de
 fábrica para inspeccionar en tiempo de ejecución el tipo de dato de una
 variable, lo que nos permitirá verificar que los parámetros sean del tipo
 correcto. Por lo pronto, puedes investigar este método e intentar validar que
@@ -394,8 +397,8 @@ solo se reciban y regresen valores enteros.
 Las funciones siempre regresan un valor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-En el caso de que no especifiquemos una instrucción de ``return``, la función 
-regresará el valor de ``None`` de manera automática.
+En el caso de que no especifiquemos una instrucción de :python:`return`, la función 
+regresará el valor de :python:`None` de manera automática.
 
 Ejemplo de una versión interactiva de esta sección:
 
@@ -442,13 +445,13 @@ Veamos un ejemplo:
 
 Este código se está ejecutando de manera interactiva, por eso se incluye el
 prompt ``>>>`` del intérprete. En la primera instrucción definimos la función
-``por_tres``, esta función triplica el valor que entra como parámetro. Ahora viene
-lo bueno. La función ``aplica`` toma como parámetro una función (``f``) y regresa el
-resultado de pasar como parámetro a esa función el parámetro ``a``. Aquí vemos el
+:python:`por_tres(a)`, esta función triplica el valor que entra como parámetro. Ahora viene
+lo bueno. La función :python:`aplica(f, a)` toma como parámetro una función (:python:`f`) y regresa el
+resultado de pasar como parámetro a esa función el parámetro :python:`a`. Aquí vemos el
 concepto de *primera clase*: podemos tomar como parámetro de una función otra
-función. Esto lo hacemos en la tercera instrucción ``aplica(por_tres, 6)``.
-Enviamos a la función ``aplica`` la función ``por_tres`` y nos regresa como
-resultado el resultado de la función, en este caso ``6 * 3``. Este tema lo vamos a
+función. Esto lo hacemos en la tercera instrucción :python:`aplica(por_tres, 6)`.
+Enviamos a la función :python:`aplica(f, a)` la función `:python:`por_tres(a)` y nos regresa como
+resultado el resultado de la función, en este caso :python:`6 * 3`. Este tema lo vamos a
 retomar cuando veamos el tema de programación funcional.
 
 Colecciones 
@@ -477,22 +480,22 @@ Secuencias
 Pyhton incluye de forma nativa, estructuras de datos abstractas para 
 gestionar colecciones secuenciales de objetos:
 
-Tupla `tuple`                   
+Tupla :python:`tuple`                   
    Es una secuencia **inmutable** de elementos. Los elementos pueden ser de 
    diferentes tipos inluidas otras colecciones.
 
-Cadenas de caracteres `str`
+Cadenas de caracteres :python:`str`
    Conceptualmente iguales a las tuplas pues también son **inmutables**, pero 
    los elementos son caracteres y se definen de una manera distinta.
 
-Listas `list` 
+Listas :python:`list` 
    Una secuencia **mutable** de elementos, con mayor funcionalidad que las 
    estructuras anteriores.
 
 .. _Niklaus Wirth:  https://es.wikipedia.org/wiki/Niklaus_Wirth
 
 Este tipo de objetos tienen su equivalente en otros lenguajes 
-por ejemplo, las listas se incluyen en C# con la clase genérica `List<T>` o  `ArrayList<E>` en Java.
+por ejemplo, las listas se incluyen en C# con la clase genérica ``List<T>`` o  ``ArrayList<E>`` en Java.
 
 Los tres tipos de secuencias comparten cierta funcionalidad y tienen una 
 sintaxis similar. Las operaciones que veremos a continuación, son aplicables a
@@ -558,7 +561,7 @@ no conozcamos el tamaño del arreglo.
 		>>> t[1] 
 		'abc'
 
-Índice negativo: se cuenta de derecha a izquierda, iniciando en –1.
+Índice negativo: se cuenta de derecha a izquierda, iniciando en ``–1``.
 
 Listas vs Tuplas
 ^^^^^^^^^^^^^^^^
@@ -597,8 +600,8 @@ nuevamente.
 .. important::
    Gracias a que las **tuplas** son **inmutables**, estas estructuras son más rápidas y eficientes.  
 
-Cortes *slicing*
-^^^^^^^^^^^^^^^^
+Cortes (*slicing*)
+^^^^^^^^^^^^^^^^^^^
 
 Una funcionalidad muy importante que nos brindad las secuencias son los cortes.
 Un corte, regresa una copia del contenedor incluyendo un subconjunto de los
@@ -624,7 +627,7 @@ número de elementos que tiene la secuencia.
    :align: center
    :alt: Puntos de cortes de la cadena `"Hola"`
    
-   En la figura podemos ver los puntos de corte de la palabra "Hola".
+   En la figura podemos ver los puntos de corte de la palabra :python:`"Hola"`.
    Podemos observar que los puntos de corte están ubicados antes o 
    después de los elementos en la secuencia y no coinciden con los índices
    de los elementos.  
@@ -634,12 +637,12 @@ Cómo copiar una secuencia
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Para indicar que el corte inicial es desde el punto inicial o cero,
-simplemente se omite el valor, por ejemplo: `lista[:21]`. Igual si queremos indicar que el 
+simplemente se omite el valor, por ejemplo: :python:`lista[:21]`. Igual si queremos indicar que el 
 corte se hará hasta el último elemento también se omite el límite 
-superior `lista[12:]`. 
+superior :python:`lista[12:]`. 
 
 Para regresar una copia de toda la secuencia simplemente omitimos 
-ambos límites `[:]`. Por ejemplo, para regresar una copia de la 
+ambos límites :python:`[:]`. Por ejemplo, para regresar una copia de la 
 siguiente tupla:
 
 
@@ -665,13 +668,13 @@ es normalmente un error. Veamos un ejemplo, para que quede clara esta idea:
    >>> lista2
    ['hola', 'abc', 4.56, (2,3), 'def']
 
-Como vemos en el ejemplo, al asignar `lista2 = lista1` realmente 
+Como vemos en el ejemplo, al asignar :python:`lista2 = lista1` realmente 
 ambos nombres están atados al mismo objeto lista en la memoria. 
-Si hacemos un cambio en uno, por ej. `lista1[0] = 'hola'`. Realmente 
+Si hacemos un cambio en uno, por ej. :python:`lista1[0] = 'hola'`. Realmente 
 parece que el cambio se hace en ambas "copias", pensar esto es un 
 error ya que realmente ambos nombres aunque sean distintos hacen 
-referencia al mismo objeto. Si vemos el contenido de la `lista2` será 
-igual a `lista1` aunque aparentemente no la modificamos. 
+referencia al mismo objeto. Si vemos el contenido de la :python:`lista2` será 
+igual a :python:`lista1` aunque aparentemente no la modificamos. 
 
 El operador `in`
 ^^^^^^^^^^^^^^^^
@@ -732,6 +735,26 @@ la sintaxis es `<secuencia> * int`.
 
    >>> "Hola" * 3
    "HolaHolaHola"
+
+Operaciones en listas
+---------------------
+
+.. rubric::  :python:`append( )`
+
+.. code-block:: python
+
+   >>> li = [1, 11, 3, 4, 5]
+   >>> li.append("a")	# Se utiliza un método de la lista
+   >>> li
+   [1, 11, 3, 4, 5, "a"]
+
+.. rubric::  :python:`insert( )`
+
+.. code-block:: python
+
+   >>> li.insert(2, "i")
+   >>>li
+   [1, 11, "i", 3, 4, 5, "a"]
 
 Diccionarios
 ------------
