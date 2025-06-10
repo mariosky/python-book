@@ -1086,3 +1086,84 @@ Veremos primero dos casos básicos:
 
 Control de flujo
 ----------------
+
+En esta sección repasaremos la sintáxis básica de los elementos
+del programa que nos sirven para controlar el flujo de nuestros 
+algoritmos. 
+
+
+.. rubric::  Condiciones
+
+En el siguiente ejemplo vemos un ejemplo del uso de condicionales 
+en Python. Algunos puntos importantes son la falta de paréntesis 
+para indicar la condición y el uso del doble punto `:` para marcar 
+el inicio del bloque. De nuevo es imortante notar la indentación y 
+el uso de la construcción :python:`elif`. También vemos como se 
+evalúa la expresión inmediatamente al momento de ser declarada de 
+manera interactiva:
+
+.. code-block:: python
+
+   >>> x = 12
+   >>> if x == 3:
+   ...     print("x vale 3")
+   ... elif x == 100:
+   ...     print("x vale 100")
+   ... else:
+   ...     print("x vale otra cosa")
+   ...
+   x vale otra cosa
+
+
+.. rubric::  Ciclos :python:`while`
+
+De nuevo se expresa la condición sin paréntesis y se utiliza 
+el doble punto ``:`` separar la condición del ciclo. Se itera 
+en el ciclo mientras la condición sea verdadera.    
+
+.. code-block:: python
+
+   >>> x = 3
+   >>> while x < 5:
+   ...     print(x, " en el ciclo")
+   ...     x+=1
+   ...
+   3  en el ciclo
+   4  en el ciclo
+
+Dentro del bloque puedes utilizar la palabra :python:`break` para salir del ciclo completamente, 
+sin evaluar nuevamente la condición. En cambio si utilizad :python:`continue`, se termina la 
+iteración actual y se evalúa inmediatamente la condición para ir a la siguiente iteración.
+
+
+.. rubric::  Ciclos :python:`for`
+
+Un ciclo :python:`for` recorre cada uno de los elementos de una colección, o
+cualquier objeto `iterable` pasando el objeto al bloque sobre el cual se está
+iterando. El ciclo termina cuando se termina de recorrer el iterable. Esto 
+es muy diferente al ciclo `for` de otros lenguajes en los que se evalúa una condición 
+para evaluar si se debe continual con la siguiente iteración. Este 
+tipo de iteraciones resulta más natural la mayoría de las veces. Otros lenguajes 
+de programación han agregado esta funcionalidad. Por ejemplo, C# cuenta con la construcción 
+``foreach``. La sintáxis sería: 
+
+.. code-block:: python 
+
+   for <elemento> in <colección>:
+      <sentencias>
+
+<colección>
+   Si <colección> es una lista o tupla, el ciclo for recorre cada elemento de la colección.
+   Si <colección> es una cadena, entonces el ciclo  recorre cada carácter de la cadena.  
+<elemento>
+   Es un nobre local para referirnos al objeto de la colección que estamos visitando en 
+   la iteración actual.
+   Puede ser un patrón para desempar elementos del contenedor. Veremos un ejemplo de esto 
+   a continuación.
+<sentencias>
+   Es el bloque de código en python que queremos ejecutar en cada iteración.
+
+.. code-block:: python 
+
+   for caracter in 'Hello World':
+       print(caracter)
