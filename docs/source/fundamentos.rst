@@ -477,6 +477,16 @@ el diseno del programa.
 Secuencias
 ^^^^^^^^^^
 
+.. figure:: ./images/secuencia.svg
+   :align: left
+   :alt: Un arreglo dinámico clásico con nodos ligados.
+   
+   Python internamente *no utiliza* listas ligadas como podríamos pensar. Utiliza bloques de memoria contiguos, implementandos mediante 
+   `arreglos dinámicos <https://es.wikipedia.org/wiki/Array_din%C3%A1mico>`__. Esto permite 
+   recorrer las listas mucho más rápido que en los casos que hay que moverse a 
+   distintas partes en la memoria. Una desventaja es que puede ser más dificil encontrar 
+   bloques más grandes donde quepa toda la lísta. 
+
 Pyhton incluye de forma nativa, estructuras de datos abstractas para 
 gestionar colecciones secuenciales de objetos:
 
@@ -739,25 +749,340 @@ la sintaxis es `<secuencia> * int`.
 Operaciones en listas
 ---------------------
 
-.. rubric::  :python:`append( )`
+En esta sección vamos a ver algunas operaciones que solo 
+se incluyen en los objetos tipo lista ya que modifican de alguna manera
+la estructura o los elementos contenidos en ellas. La estructura 
+de las lístas es dinámica, así que puede cambiar de tamaño y 
+crecer hasta un límite impuesto solo por la memoria disponible.
+
+Las operaciones más básicas y útiles son la de agragar un elemento al final
+de la lista, insertar un elemento en alguna posición o borrarlo:
+
+.. rubric::  :python:`list.append(elemento)`
 
 .. code-block:: python
 
    >>> li = [1, 11, 3, 4, 5]
-   >>> li.append("a")	# Se utiliza un método de la lista
+   >>> li.append("a")	# Es obligatorio pasar como parámetro un elemento.
    >>> li
    [1, 11, 3, 4, 5, "a"]
 
-.. rubric::  :python:`insert( )`
+.. rubric::  :python:`insert(índice, elemento)`
 
 .. code-block:: python
 
    >>> li.insert(2, "i")
-   >>>li
+   >>> li
    [1, 11, "i", 3, 4, 5, "a"]
+
+.. rubric:: Cómo eliminar elementos de una lista
+
+Hay varias formas de borrar un elemento:
+
+.. code-block:: python
+
+   >>> del li[1] # Se elimina el 11 
+   >>> li
+   [1, "i", 3, 4, 5, "a"]
+
+La sintaxis cambia un poco ya que no es un método 
+miembro de la lista, utiliza la palabra :python:`del`.
+
+Aunque esta forma es muy práctica, es preferible utilizar un método,
+ya que pude llamarse utilizando herramientas de programación funcional,
+esto lo veremos en la sección de programación funcional. El método
+:python:`list.pop(índice)` regresa y elimina el elemento de la lista en la
+posición indicada por el índice, en caso de no recibir un parámetro elimina el
+último elemento de la lista:  
+
+.. rubric::  :python:`pop(índice)`
+
+.. code-block:: python
+
+   >>> li = [1, 2, 3, 4] 
+   >>> elemento_eliminado = li.pop(1)  # Elimina el elemento en el índice 1 ('2')
+   >>> li  
+   [1, 3, 4]
+   >>> elemento_eliminado  
+   2
+
+En el caso de no enviar el índice como parámetro:
+
+.. code-block:: python
+
+   >>> elemento_eliminado = li.pop()  # Elimina el último elemento ('4')
+   >>> li  
+   [1, 3]
+   >>> elemento_eliminado  
+   4
+
+.. danger:: ¿Qué pasará si ejecutamos :python:`li.pop()` y ya no hay elementos? 
+
+
+Otra manera de eliminar uno o varios elementos es mediante el 
+método :python:`list.remove(elemento)`. Este método elimina la primera 
+ocurrencia del elemento en la lista. Se lanza la excepción `ValueError` en 
+caso de que el elemento no se encuentre en la lista.  
+
+.. code-block:: python
+
+   >>> li = [1, 2, 3, 2, 4] 
+   >>> li.remove(2)  # Elimina el primer '2'
+   >>> li :web
+   [1, 3, 2, 4]
+
+.. tip:: 
+   Antes de intentar eliminar el `elemento` podemos verificar si este existe 
+   utilizando el operador :python:`in`. 
+
+.. rubric::  :python:`list.clear()`
+
+Este método elimina todos los elementos de la lista.
+
+Otras funciónes útiles para estas tareas son:
+
+.. code-block:: python
+
+   >>> li = ['a', 'b', 'c', 'b']
+
+.. rubric::  :python:`list.index()`
+
+.. code-block:: python
+
+   >>> li.index('b')     # indice de primera ocurrencia*
+   1
+
+.. rubric::  :python:`list.count()`
+
+.. code-block:: python
+
+   >>> li.count('b')     # número de ocurrencias
+   2
+
+.. rubric::  :python:`list.extend(lista)`
+
+Recordemos que el operador de adicición `+` crea una **nueva lista** a partir
+de concatenar dos listas existentes. Con esto se crea un nuevo objeto y una nueva referencia.
+Por otro lado :python:`list.extend()` modifica la estructura de la lista *in-place*, sin modificar 
+la referencia y que es el mismo objeto.
+
+.. code-block:: python
+
+   >>> li = [1, 2, 3, 2, 4] 
+   >>> li.extend([9, 8, 7])           
+   >>>li
+   [1, 2, 3, 4, 9, 8, 7]
+
+.. danger::
+   Cuidado: `extend` recibe una lista, `append` recibe un solo elemento.
+
+No podemos lograr lo mismo con el método :python:`list.append(elemento)` ya 
+que este agregaría a la lista como el último elemento de esta. Veamos un ejemplo:
+
+.. code-block:: python
+
+   >>> li = [1, 2, 3, 2, 4] 
+   >>> li.append([10, 11, 12])
+   >>> li
+   [1, 2, 3, 4, [10, 11, 12]]
+
+Otros métodos que alteran el órden de los elementos en la lista son los siguientes: 
+
+.. code-block:: python
+
+   >>> li = [5, 2, 6, 8]
+
+.. rubric::  :python:`list.reverse()`
+
+.. code-block:: python
+
+   >>> li.reverse()    # ordena en reversa la lista *in place*
+   >>> li
+   [8, 6, 2, 5]
+
+.. rubric::  :python:`list.sort()`
+
+.. code-block:: python
+
+   >>> li.sort()       # ordena la lista *in place*
+   >>> li
+   [2, 5, 6, 8]
+
+En caso de que no haya un órden establecido o queramos modificar 
+la manera en la que se comparan los elementos para establecer el 
+órden, podemos enviar una función que se encarge de hacer esta tarea. 
+Veremos ejemplos de esto en la sección de programación funcional.
+
+.. code-block:: python
+
+   >>> li.sort(alguna_funcion) # se ordena utilizando la función recibida
+
+Para convertir entre ellas utiliza las funciones :python:`list()` y :python:`tuple()`:
+
+- :python:`li = list(tu)`
+- :python:`tu = tuple(li)`
 
 Diccionarios
 ------------
 
-Ejercicios
-----------
+.. figure:: ./images/dict.svg
+   :align: left
+   :alt: Un diccionario como una colección de claves y sus corresponidientes valores.
+   
+Una estructura de datos muy importante en Python es el diccionario. Un diccionario es 
+un `arreglo asociativo <https://en.wikipedia.org/wiki/Associative_array>`__, también conocidos como mapas o almacenes clave-valor. En lugar 
+de almacenar los elementos de manera secuencial y acceder a estos mediante un índice los 
+diccionarios utilizan objeto inmutable como una `clave` la cual se asocia a un solo elemento 
+en la memoria al que vamos a llamar el `valor`.  Entonces un diccionario es un almacen de 
+pares `clave-valor`. La clave debe ser un valor inmutable (casí siempre son cadenas de caracteres) 
+ya que su contenido es utilizado para recuperar la ubicación en la memoria donde esta almacenado el elemento correspondiente. 
+Si sufriera el cambio más mínimo, la dirección que obtendría sería distinta y ya no encontraríamos 
+el elemento correspondiente.
+
+Los diccionarios se implementan normalmente utilizando una `función hash <https://es.wikipedia.org/wiki/Funci%C3%B3n_hash>`__, 
+estas funciones toman como entrada un objeto y regresan un `hash`, un valor seleccionado de manera 
+aleatoria con una distribución uniforme. Esto es importante ya que los valores de hash son 
+menos que la cantidad de objetos diferentes que podemos utilizar como clave. 
+
+
+.. figure:: ./images/hash.svg
+   :align: left
+   :scale: 80 %
+   :alt: Ejemplo de una `función hash <https://es.wikipedia.org/wiki/Funci%C3%B3n_hash>`__ .
+
+Vamos a suponer que tenemos un espacio de memoria muy limitada, y 
+solo tenemos ocho espacios de memoria. Ahora, queremos almacenar a cuatro estudiantes utilizando 
+un diccionario y el nombre del estudiante como la clave. Aunque el número de estudiantes aquí es menor, pensemos que estos estudiantes 
+podrían tener cualquier nombre y en ese caso si son muchos más los nombres que existen que el espacio disponible. 
+La función hash toma como parámetro el nombre y nos regresa un valor aleatorio de 
+los ocho posibles. Una buena función hash nos regresaría valores distribuidos a todo lo largo de 
+la memoria disponible. Sin embargo, toda función hash en alguún momento nos va a regresar 
+el mismo valor `hash` para dos objetos distintos, a esto le llamamos una colisión. La probabilidad de que esto suceda
+se va a incrementar mientras vayan quedando menos valores `hash` disponibles. Las implementaciones 
+de estructuras de este tipo, resuelven esta situación, pero si sucede mucho, el desempeño 
+del diccionario se verá afectado. 
+
+Para definif un diccionario, lo hacemos de una manera similar a las secuencias. Es de nuevo 
+una lista de elementos separados por comas, solo que ahora los elementos son pares :python:`'clave:valor'`.
+También cambia el símbolo delimitador, ahora encerramos a los elementos entre llaves :python:`{ }`.
+Veamos un ejemplo: 
+
+.. code-block:: python
+
+   >>> d = {'usuario':'juan', 'password':'1234'}
+   >>> d['usuario']
+   'juan'
+   >>> d['password']
+   '1234'
+   >>> d['juan']
+   Traceback (most recent call last):
+   File "<python-input-3>", line 1, in <module>
+      d['juan']
+      ~^^^^^^^^
+   KeyError: 'juan'
+
+Como vemos de manera similar a las secuencias se utilizand los corchetes para indicar 
+el elemento que queremos recuperar, pero en lugar de un índice debemos pasar 
+la clave correspondiente. La excepción de :python:`KeyError` es muy común, se lanza 
+cada vez que tratamos de recuperar un valor, pero la clave no existe en el diccionario. 
+En este caso :python:`'juan'` no es una clave válida. Esta en el diccionario que 
+definimos pero es un `valor` no una `clave`. Del mismo modo que con las lístas, podemos 
+utilizar el operador :python:`in` para revisar antes, y estar seguros que la clave se 
+encuentra en el diccionario. 
+
+.. danger:: 
+   - Recuerda que solo podemos utilizar objetos inmutables como clave. 
+   - Al recuperar un valor la clave debe de existir en el diccionario.
+
+Para agregar un nuevo par :python:`'clave:valor'` simplemente
+pasamos la nueva llave entre los corchetes y asignamos el nuevo valor. 
+En caso de que la clave exista estaríamos reemplazando el valor anterior
+por uno nuevo. En el ejemplo a continuación agregamos una nueva clave `'id'`
+con el valor :python:`34`. Podemos recuperar la lista de las claves 
+incluidas en el diccionario con el método :python:`dict.keys()`.
+
+.. code-block:: python
+
+   >>> d
+   {'usuario': 'juan', 'password': '1234'}
+   >>> d['id'] = 34
+   >>> d
+   {'usuario': 'juan', 'password': '1234', 'id': 34}
+   >>> d.keys()
+   dict_keys(['usuario', 'password', 'id'])
+   >>> 'juan' in d
+   False
+   >>> 'id' in d
+   True
+
+Para borrar un par :python:`'clave:valor'` utilizamos la palabra 
+:python:`del` al igual que con las listas. Y del mismo modo podemos
+limpiar el diccionario para dejarlo vacio:
+
+.. code-block:: python
+
+   >>> d
+   {'usuario': 'juan', 'password': '1234', 'id': 34}
+   >>> del d['usuario']
+   >>> d
+   {'password': '1234', 'id': 34}
+   >>> d.clear()
+   >>> d
+   {}
+
+.. danger:: 
+   Recuerda que los diccionarios utilizan una función hash por lo que 
+   los valores no se almacenan de manera secuencial.
+
+Los métodos :python:`dict.values()` y :python:`dict.items()` nos 
+permiten regresar todos los elementos del diccionario. 
+
+.. code-block:: python
+
+   >>> d = {'usuario':'juan', 'password':'1234'}
+   >>> d.values()
+   dict_values(['juan', '1234'])
+   >>> d.items()
+   dict_items([('usuario', 'juan'), ('password', '1234')])
+   >>> if 'id' in d: print(d['z'])
+   ...
+   >>>
+
+.. attention::
+   Normalmente no recuperamos los elementos de un diccionario en forma 
+   secuencial.  Si necesitamos esa funcionalidad debemos evaluar el uso 
+   de una estructura tipo lista o tupla. 
+
+Expresiones lógicas
+------------------- 
+
+Recordemos que :python:`True` y :python:`False` son valores literales. Pero
+hay otros valores equivalentes:
+
+- :python:`False` : Cero, :python:`None`, contenedores u objetos vacíos.
+- :python:`True` : Números distintos a cero, objetos no vacíos.
+
+Los operadores de comparación son los mismos a los que estamos acostumbrados: ``==``, ``!=``, ``<``, ``<=``, etc.
+El operador ``==`` regresa verdadero si ambos operandos tienen el mismo valor.
+Por ejemplo, :python:`x == y` regresa :python:`True` si ambos objetos tienen el mismo valor. 
+Para evaluar si :python:`x` y :python:`y` son el mismo objeto, hacen referencia al mismo 
+objeto en memoria, utilizamos el operador :python:`is`.  
+
+Los operadores booleanos  :python:`and` y :python:`or` no regresan necesariamente :python:`True` o 
+:python:`False`. Lo que regresan es el valor de una de sus sub-expresiones. Este valor podría no ser booleano.
+Veremos primero dos casos básicos:
+
+- :python:`x and y and z`: 
+    * Si todas las expresiones son verdaderas, regresa el valor de `z`.
+    * De otro modo, regresa el valor de la primera expresión falsa.
+
+- :python:`x or y or z`: 
+  * Si todas son falsas, regresa el valor de la expresión `z`.
+  * De otro modo, regresa el valor de la primera expresión verdadera.
+
+.. important::
+   :python:`and` y :python:`or` utilizan evaluación lazy, así que no se siguen evaluando 
+   las siguientes sub-expresiones, al resolver la expresión lógica.
+
+Control de flujo
+----------------
