@@ -1,0 +1,671 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>1. Fundamentos del lenguaje &mdash; documentación de pyBook - </title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e2bb6099"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Instalación de Python" href="instalaci%C3%B3n.html" />
+    <link rel="prev" title="0. Introducción" href="introducci%C3%B3n.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyBook
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Preliminares</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introducci%C3%B3n.html">0. Introducción</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contenido:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Fundamentos del lenguaje</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduccion">1.1. Introducción</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tipos-de-datos-basicos">1.2. Tipos de datos básicos</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#funciones">1.3. Funciones</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#definicion-de-una-funcion">1.3.1. Definición de una función</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ejecucion-de-funciones">1.3.2. Ejecución de funciones</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#anotacion-de-tipos">1.3.3. Anotación de tipos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#las-funciones-siempre-regresan-un-valor">1.3.4. Las funciones siempre regresan un valor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#las-funciones-son-ciudadanos-de-primera-clase">1.3.5. Las funciones son ciudadanos de primera clase</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#colecciones">1.4. Colecciones</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#secuencias">1.4.1. Secuencias</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cortes-slicing">1.4.2. Cortes <em>slicing</em></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#diccionarios">1.5. Diccionarios</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#ejercicios">1.6. Ejercicios</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Anexos:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="instalaci%C3%B3n.html">Instalación de Python</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyBook</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><span class="section-number">1. </span>Fundamentos del lenguaje</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/fundamentos.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fundamentos-del-lenguaje">
+<span id="capitulo-02"></span><h1><span class="section-number">1. </span>Fundamentos del lenguaje<a class="headerlink" href="#fundamentos-del-lenguaje" title="Link to this heading"></a></h1>
+<section id="introduccion">
+<h2><span class="section-number">1.1. </span>Introducción<a class="headerlink" href="#introduccion" title="Link to this heading"></a></h2>
+<p>El lenguaje Python es un lenguaje interpretado, de propósito general, de código
+abierto y multiparadigma que fue diseñado originalmente por el desarrollador
+holandés Guido van Rossum a principios de los años noventa. La intención de
+Guido era crear un lenguaje de scripts, fácil de programar y que fuera
+legible, por lo que se utilizan sangrías para dar
+legibilidad al código y estas forman parte del lenguaje. De hecho, el nombre del lenguaje es en honor
+al grupo inglés de comedia Monty Python.</p>
+<p>Empezemos directamente con un ejemplo de código analizando las diferencias que
+vemos respecto a otros lenguajes compilados como <em>C#</em> o <em>Java</em>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">34</span> <span class="o">-</span> <span class="mi">23</span>            <span class="c1"># Comentario</span>
+<span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Hola&quot;</span>             <span class="c1"># Otro comentario</span>
+<span class="n">z</span> <span class="o">=</span> <span class="mf">3.45</span>
+
+<span class="k">if</span> <span class="n">z</span> <span class="o">==</span> <span class="mf">3.45</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">==</span> <span class="s2">&quot;Hola&quot;</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="s2">&quot; Mundo&quot;</span>  <span class="c1"># Concatenación de cadenas</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Echando un vistazo general al programa, nos llama primero la atención el hecho
+de que no se importan algunas librerías al inicio del programa. Por ejemplo,
+para la entrada y salida de datos a la consola. También notamos que al declarar
+las variables no especificamos explícitamente cuál es su tipo de dato. Tampoco
+tenemos que insertar nuestro código en algún método especial como <code class="docutils literal notranslate"><span class="pre">main</span></code> o
+agregarlo dentro de alguna clase. Funciona como un <em>script</em>. Veamos línea por
+línea.</p>
+<p class="rubric">Los nombres se atan a objetos</p>
+<p>En la primera línea vemos la declaración de una variable llamada <code class="docutils literal notranslate"><span class="pre">x</span></code> a la cual
+se le asigna el resultado de una resta entre dos números enteros. Aquí
+encontramos la primera diferencia: en Python las «variables» no tienen un tipo de
+dato, son simplemente nombres o etiquetas que hacen referencia a objetos. Los
+objetos por su parte, sí tienen un tipo de dato. Entonces, en esta línea, el
+resultado de la operación se almacena en memoria en una dirección
+específica, una referencia. Lo que sucede entonces es que el nombre <code class="docutils literal notranslate"><span class="pre">x</span></code> se ata a
+la referencia del objeto entero que se crea de la operación <code class="docutils literal notranslate"><span class="pre">34-23</span></code>, el <code class="docutils literal notranslate"><span class="pre">11</span></code> en la memoria.
+Esto es distinto al concepto de variable en otros lenguajes. Por ejemplo, en C# las
+variables <em>tipo valor</em> reservan un espacio en la memoria donde se guarda literalmente el valor
+que contienen, y los valores deben ser del tipo correspondiente. Si yo declaro una
+variable como entera de 16 bits, solo puedo almacenar en ella objetos de este tipo.</p>
+<p>Volviendo al ejemplo, el tipo de dato al que hace referencia el nombre <code class="docutils literal notranslate"><span class="pre">x</span></code> después de la asignación,
+es temporalmente <code class="docutils literal notranslate"><span class="pre">int</span></code>, pero en otro momento, podríamos
+atar el nombre <code class="docutils literal notranslate"><span class="pre">x</span></code> a un objeto diferente de otro tipo de dato. Por ejemplo,
+<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">2.3</span></code> o <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">&quot;Hola&quot;</span></code>. De nuevo, los objetos en memoria son tipo <code class="docutils literal notranslate"><span class="pre">float</span></code> y <code class="docutils literal notranslate"><span class="pre">string</span></code>
+respectivamente y nuestra etiqueta <code class="docutils literal notranslate"><span class="pre">x</span></code> se puede atar a cualquiera de ellos sin
+ningún problema. Vemos entonces que se atan los nombres <code class="docutils literal notranslate"><span class="pre">y</span></code> y <code class="docutils literal notranslate"><span class="pre">z</span></code> a la cadena de caracteres
+<code class="docutils literal notranslate"><span class="pre">&quot;Hola&quot;</span></code> y al flotante <code class="docutils literal notranslate"><span class="pre">3.44</span></code> respectivamente.</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>En este texto utilizo un léxico que debería entender un programador con
+algo de experiencia. Recuerda que este es el público al que va dirigido el libro. En
+caso de que haya algunos pocos términos que no tengas claro su significado, no hay problema,
+investiga un poco y te debería quedar claro.</p>
+</div>
+<p class="rubric">Python es dinámico</p>
+<p>Algunos programadores pueden ver esta funcionalidad de Python como algo peligroso y
+realmente lo es. Podemos equivocarnos fácilmente pensando que <code class="docutils literal notranslate"><span class="pre">x</span></code> hace
+referencia a un objeto de tipo entero cuando por algún error puede referirse
+a una cadena de caracteres o a un flotante y causar problemas en nuestro código.
+El lenguaje nos protege hasta cierto punto ya que lanzará una excepción en caso
+de que no esté definida una operación para un tipo de dato específico, pero en
+general es algo que debemos tener en cuenta en este tipo de lenguajes dinámicos.</p>
+<p>Otro problema que tenemos es que, a diferencia de los lenguajes fuertemente
+tipados, nuestras herramientas de programación en ocasiones no pueden ayudarnos
+desplegando, por ejemplo, la lista de atributos o miembros de un objeto, ya que
+no sabe a qué tipo de objeto hará referencia el nombre que estamos utilizando.</p>
+<p>Otra diferencia importante la encontramos en este bloque de código:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">z</span> <span class="o">==</span> <span class="mf">3.45</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">==</span> <span class="s2">&quot;Hola&quot;</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="s2">&quot; Mundo&quot;</span>  <span class="c1"># Concatenación de cadenas</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="rubric">El espacio es importante</p>
+<p>Aquí definimos un bloque que se va a ejecutar si la condición del <code class="docutils literal notranslate"><span class="pre">if</span></code> es
+verdadera. A diferencia de otros lenguajes, aquí definimos el bloque utilizando
+espacios (una sangría). Es común llamarle <em>indentación</em> a esta sangría por el
+nombre que recibe en inglés. Entonces, el bloque inicia al cambiar la
+indentación y debe mantenerse al saltar de línea y termina cuando regresamos la indentación
+al nivel anterior.</p>
+<p class="rubric">Indentación consistente</p>
+<p>En el ejemplo vemos que la condición no tiene indentación, pero el bloque de
+código que se ejecutará en caso de ser verdadera consta de dos líneas. Estas
+líneas tienen una indentación consistente de cuatro espacios cada una. Para
+terminar el bloque, simplemente escribimos una nueva línea que no contenga los
+espacios. Por ejemplo, la instrucción <code class="docutils literal notranslate"><span class="pre">print(x)</span></code>.</p>
+<p class="rubric">Cuatro espacios es buen estilo</p>
+<p>La indentación puede hacerse utilizando la tecla tabulador (tab), pero se
+recomienda que no se utilicen caracteres de tabulación y en su lugar se
+reemplacen automáticamente por cuatro espacios. Esta es una capacidad que tienen
+los editores de código y por lo regular se hace por defecto para los archivos
+con extensión  <code class="docutils literal notranslate"><span class="pre">.py</span></code> utilizados para los scripts de Python. La convención de
+utilizar cuatro espacios la establece la [PEP 8](<a class="reference external" href="https://peps.python.org/pep-0008/">https://peps.python.org/pep-0008/</a>),
+en donde podemos encontrar las convenciones utilizadas por los programadores de las librerías
+estándar de la distribución principal de Python. Las siglas PEP vienen del inglés
+<em>Python Enhancement Proposal</em> (Propuesta de Mejora para Python). Un PEP es un
+documento público que brinda información a la comunidad sobre alguna nueva
+característica o sugerencia de mejora para el lenguaje.</p>
+<p>Siguiendo con el código, vemos también que los operadores lógicos (<code class="docutils literal notranslate"><span class="pre">and</span></code>, <code class="docutils literal notranslate"><span class="pre">or</span></code>,
+<code class="docutils literal notranslate"><span class="pre">not</span></code>) son palabras y no símbolos como en ciertos lenguajes. Al igual que en la
+mayoría de los lenguajes, la concatenación de cadenas de caracteres se hace con
+el operador de adición. Para operaciones con otro tipo de objetos, los
+operadores (<code class="docutils literal notranslate"><span class="pre">+</span> <span class="pre">-</span> <span class="pre">*</span> <span class="pre">/</span></code>) funcionan como siempre.</p>
+<p>Otra característica importante es que la función para imprimir en la consola es
+<code class="docutils literal notranslate"><span class="pre">print</span></code> y no tuvimos que agregar una librería para acceder a su funcionalidad.
+Ya viene de fábrica. De hecho, Python incluye muchas funciones de este tipo
+dentro del lenguaje. Utilizaremos muchas de ellas más adelante.</p>
+<div class="admonition-baterias-incluidas admonition">
+<p class="admonition-title">Baterías incluidas</p>
+<p>Esto es parte del lema de <strong>baterías incluidas</strong> de Python, que se refiere a
+que el lenguaje incluye una extensa y muy útil colección de librerías
+(módulos en Python) en la distribución estándar.</p>
+</div>
+</section>
+<section id="tipos-de-datos-basicos">
+<h2><span class="section-number">1.2. </span>Tipos de datos básicos<a class="headerlink" href="#tipos-de-datos-basicos" title="Link to this heading"></a></h2>
+<p><strong>Enteros</strong></p>
+<p>A diferencia de otros lenguajes que incluyen distintos tipos de datos para
+representar enteros de distintos tamaños, por ejemplo en C# el tipo de dato
+<code class="docutils literal notranslate"><span class="pre">long</span></code> representa a un entero de 64 bits con signo, mientras que <code class="docutils literal notranslate"><span class="pre">short</span></code>
+representa a un entero con signo de 16 bits. En Python solo tenemos un tipo de
+dato entero <code class="docutils literal notranslate"><span class="pre">int</span></code> con una precisión arbitraria, capaz de almacenar enteros de
+cualquier tamaño. Bueno, el tamaño solo está limitado por la cantidad de
+memoria disponible en el sistema. Python evita el desbordamiento asignando
+dinámicamente más memoria para almacenar el resultado de una operación entera.
+Este costo computacional adicional hace que Python sea apropiado para el cómputo
+científico, sacrificando las ventajas en desempeño que supone el tener enteros de
+longitud fija.</p>
+<p><strong>Números con punto flotante</strong></p>
+<p>Los números con punto flotante, comúnmente llamados <em>flotantes</em> o <em>floats</em>,
+incluyen un punto decimal y también son de tamaño arbitrario. Se pueden
+representar utilizando la notación exponencial (<em>E</em>) indicando la décima
+potencia. Por ejemplo, <code class="docutils literal notranslate"><span class="pre">21.3E-4</span></code> es equivalente a <code class="docutils literal notranslate"><span class="pre">21.3</span> <span class="pre">*</span> <span class="pre">10^-4</span></code>.</p>
+<p><strong>Cadenas o Strings</strong></p>
+<p>En Python, una cadena o string es una <em>secuencia</em> de caracteres. Una <em>secuencia</em>
+es una abstracción que veremos más adelante, cuando nos enfoquemos en estructuras
+de datos; ahí veremos otros aspectos importantes de este tipo de dato.
+Por lo pronto, podemos definir a una cadena como una colección
+ordenada de caracteres útil para almacenar texto. Las cadenas se pueden
+representar de distintas maneras: utilizando comillas dobles (<code class="docutils literal notranslate"><span class="pre">&quot;Hola&quot;</span></code>),
+comillas simples (<code class="docutils literal notranslate"><span class="pre">'Hola'</span></code>) y esto permite evitar cierto tipo de conflictos, por
+ejemplo, la cadena <code class="docutils literal notranslate"><span class="pre">&quot;Carl's</span> <span class="pre">Jr.&quot;</span></code> utiliza comillas dobles para evitar el
+conflicto con la comilla simple que es parte del nombre <em>Carl’s</em>. Cuando tenemos
+múltiples párrafos o necesitamos utilizar los dos tipos de comillas en el texto,
+utilizamos comillas triples, ya sean dobles o simples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Este es un ejemplo del uso de</span>
+<span class="sd">comillas triples para definir texto</span>
+<span class="sd">que puede incluir comillas como &quot;Carl&#39;s Jr.&quot; y</span>
+<span class="sd">saltos de línea.</span>
+<span class="sd">    Indentación</span>
+<span class="sd">    Indentación</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>En otra sección nos vamos a concentrar en la funcionalidad de los objetos tipo <em>string</em>;
+Python incluye muchos métodos para realizar operaciones sobre este tipo de datos.</p>
+<p><strong>Booleanos</strong></p>
+<p>Los valores de verdad en Python son representados explícitamente con los valores
+literales <code class="docutils literal notranslate"><span class="pre">True</span></code> o <code class="docutils literal notranslate"><span class="pre">False</span></code>, verdadero y falso respectivamente, ambos deben
+iniciar con mayúscula. El tipo de dato <code class="docutils literal notranslate"><span class="pre">bool</span></code> es un subtipo de <code class="docutils literal notranslate"><span class="pre">int</span></code>, por lo que
+en contextos numéricos <code class="docutils literal notranslate"><span class="pre">True</span></code> equivale a uno y <code class="docutils literal notranslate"><span class="pre">False</span></code> a cero
+respectivamente. También existen otras formas implícitas de representación de
+estos valores de verdad cuando se utilizan operaciones lógicas. Por ejemplo, una
+cadena vacía es equivalente a <code class="docutils literal notranslate"><span class="pre">False</span></code> y una colección de datos con cierto número
+de elementos es equivalente a <code class="docutils literal notranslate"><span class="pre">True</span></code>. Veremos ejemplos de esto más adelante.</p>
+<p class="rubric">Comentarios</p>
+<p>Python no cuenta con una sintaxis para definir comentarios que abarquen
+múltiples líneas. En este caso se pueden utilizar comillas triples para
+comentar múltiples líneas. Si un <em>valor literal</em> no se asigna a un nombre, este
+es ignorado por el intérprete de Python.</p>
+<p>Este tipo de comentarios también se utiliza para documentar el código en
+situaciones específicas. Por ejemplo, se puede incluir una cadena de
+documentación en la primera línea de una función o clase.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">suma</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;El docstring. Esta función</span>
+<span class="sd">    regresa la suma o concatenación de dos cadenas, es</span>
+<span class="sd">    importante ya que blah blah blah.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>  <span class="c1"># Comentario aquí...</span>
+</pre></div>
+</div>
+<p>Los comentarios de Python son línea por línea y se especifican con el símbolo de
+almohadilla (<code class="docutils literal notranslate"><span class="pre">#</span></code>). En una línea, todo lo que está a la derecha de <code class="docutils literal notranslate"><span class="pre">#</span></code> es un
+comentario.</p>
+<p class="rubric">Literales</p>
+<p>En los ejemplos anteriores utilizamos <em>valores literales</em> de los tipos de datos que
+ilustramos. Es importante reconocer que estos valores representan datos u objetos específicos
+de cierto tipo de dato. Entonces, en los ejemplos anteriores, le definíamos nombres, mediante la
+asignación (o atado) a ellos de un valor literal.</p>
+<p>Para terminar esta sección, vamos a representar valores literales de los tipos de datos
+básicos de Python:</p>
+<ul class="simple">
+<li><p>Entero (<code class="docutils literal notranslate"><span class="pre">int</span></code>): <code class="docutils literal notranslate"><span class="pre">791926378172346918273469128374619283</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code></p></li>
+<li><p>Flotante (<code class="docutils literal notranslate"><span class="pre">float</span></code>): <code class="docutils literal notranslate"><span class="pre">34.3</span></code>, <code class="docutils literal notranslate"><span class="pre">0.33</span></code></p></li>
+<li><p>Cadena (<code class="docutils literal notranslate"><span class="pre">str</span></code>): <code class="docutils literal notranslate"><span class="pre">&quot;Python</span> <span class="pre">es</span> <span class="pre">un</span> <span class="pre">lenguaje</span> <span class="pre">dinámico&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">'Juan'</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;Leí</span> <span class="pre">el</span> <span class="pre">libro</span> <span class="pre">'Pedro</span> <span class="pre">Páramo'.&quot;</span></code></p></li>
+<li><p>Booleano (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+<p class="rubric">El valor especial <code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+<p>La constante <code class="docutils literal notranslate"><span class="pre">None</span></code> es utilizada para indicar la ausencia de valor o un valor nulo.
+Tiene su propio tipo <code class="docutils literal notranslate"><span class="pre">NoneType</span></code>. De manera similar al valor <code class="docutils literal notranslate"><span class="pre">NULL</span></code> en bases de datos,
+el valor <code class="docutils literal notranslate"><span class="pre">None</span></code> no es igual a cero, <code class="docutils literal notranslate"><span class="pre">False</span></code> o vacío, aunque se considera <code class="docutils literal notranslate"><span class="pre">False</span></code> en
+condiciones booleanas. Se puede utilizar para definir un nombre que no hace referencia
+a un objeto todavía. Por ejemplo:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>En este caso <code class="docutils literal notranslate"><span class="pre">x</span></code> existe aunque el objeto al que está atado es <code class="docutils literal notranslate"><span class="pre">None</span></code>. Esto
+significa que no está atada a un valor todavía. El intérprete no imprime nada
+cuando imprimimos <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</section>
+<section id="funciones">
+<h2><span class="section-number">1.3. </span>Funciones<a class="headerlink" href="#funciones" title="Link to this heading"></a></h2>
+<p>En esta sección veremos cómo definir funciones en Python. Estas nos permiten
+crear abstracciones funcionales que nos permiten descomponer las tareas
+involucradas en la resolución de problemas complejos. En Python no es necesario
+que las funciones estén declaradas como miembros de una clase, como sucede en
+los lenguajes orientados a objetos puros. Podemos definirlas de manera
+independiente e incluso programar en Python siguiendo un paradigma funcional.</p>
+<section id="definicion-de-una-funcion">
+<h3><span class="section-number">1.3.1. </span>Definición de una función<a class="headerlink" href="#definicion-de-una-funcion" title="Link to this heading"></a></h3>
+<p>Veamos una definición básica de una función que suma dos números:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">suma</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="gp">... </span><span class="w">   </span><span class="sd">&quot;&quot;&quot; Esta función suma dos números&quot;&quot;&quot;</span>
+<span class="gp">... </span>   <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+<p>Este ejemplo lo estoy capturando directamente en el intérprete básico de Python,
+ejecutado de manera interactiva. Una vez en el prompt <code class="docutils literal notranslate"><span class="pre">&gt;&gt;&gt;</span></code>, puedes empezar a
+capturar la función. Debes escribir el encabezado (la primera línea) y después
+dar un salto de línea con la tecla <em>Enter</em>. Si te fijas, aparecen ahora tres
+puntos (<code class="docutils literal notranslate"><span class="pre">...</span></code>) en lugar del prompt; debes ingresar cuatro espacios
+manualmente para agregar la indentación. Al final del bloque, vamos a terminar
+de capturar la función dando un salto de línea final sin agregar espacios. Esto
+le dice al intérprete que ya terminamos de definir el bloque y, por lo tanto, la
+función. Fíjate que el prompt regresa al modo normal <code class="docutils literal notranslate"><span class="pre">&gt;&gt;&gt;</span></code>. Esto significa
+también que no hubo error en la captura de la función y ya se encuentra en la
+memoria lista para ser utilizada.</p>
+<p>En otros lenguajes debemos ser muy específicos indicando el tipo de dato que
+regresa una función o indicar de alguna manera, por ejemplo, con <code class="docutils literal notranslate"><span class="pre">void</span></code>, si la
+función no devuelve ningún valor.</p>
+<p>Por ejemplo, en C:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kt">int</span><span class="w"> </span><span class="nf">suma</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">2</span><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="linenos">3</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>En Python no es necesario indicar el tipo de dato que regresa la función ni
+tampoco el tipo de dato de los parámetros que recibe. Entonces, el encabezado de
+la función se simplifica mucho, ya que solo indicamos con <code class="docutils literal notranslate"><span class="pre">def</span></code> el inicio de la
+definición de la función. Indicamos el nombre (<code class="docutils literal notranslate"><span class="pre">suma</span></code>) y entre paréntesis una
+lista opcional de parámetros separados por una coma (<code class="docutils literal notranslate"><span class="pre">suma(a,</span> <span class="pre">b)</span></code>). Por último,
+algo muy importante, el símbolo de dos puntos (<code class="docutils literal notranslate"><span class="pre">:</span></code>) que marca el inicio del
+bloque de código que define el cuerpo de la función.</p>
+<p>Como vimos anteriormente, el bloque del cuerpo de la función debe estar indentado
+utilizando cuatro espacios. El bloque termina con la única instrucción <code class="docutils literal notranslate"><span class="pre">return</span> <span class="pre">a</span> <span class="pre">+</span> <span class="pre">b</span></code>
+indicando que queremos regresar como resultado la operación <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">b</span></code>, la suma de
+los dos números <code class="docutils literal notranslate"><span class="pre">a</span></code> y <code class="docutils literal notranslate"><span class="pre">b</span></code>.</p>
+</section>
+<section id="ejecucion-de-funciones">
+<h3><span class="section-number">1.3.2. </span>Ejecución de funciones<a class="headerlink" href="#ejecucion-de-funciones" title="Link to this heading"></a></h3>
+<p>Una vez definida la función, podemos ejecutarla de esta manera, utilizando
+valores literales como parámetros:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">suma</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">6</span>
+</pre></div>
+</div>
+<p>En este ejemplo no estamos asignando el resultado de la suma a ninguna variable
+o imprimiendo el resultado. Sin embargo, el ejemplo está pensado para ejecutarse
+de manera interactiva utilizando el intérprete. En este caso, el
+resultado de la función se imprimiría automáticamente en la siguiente línea de
+la sesión. Por otro lado, si escribimos el código como un script y lo corremos
+no se imprimiría nada, pues no se ejecuta de manera interactiva.</p>
+<p>Para ver el resultado si ejecutamos el script, podríamos escribir algo como:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Esto está en un archivo llamado programa.py</span>
+<span class="c1"># Lo puedes ejecutar con el intérprete así: python2 programa.py</span>
+<span class="n">resultado</span> <span class="o">=</span> <span class="n">suma</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">resultado</span><span class="p">)</span>
+
+<span class="c1"># Aún más compacto</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">suma</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Hay un detalle importante en nuestro código. Por alguna razón estamos asegurando
+que <code class="docutils literal notranslate"><span class="pre">a</span></code> y <code class="docutils literal notranslate"><span class="pre">b</span></code> son valores numéricos. ¿Pero qué hay del caso que se muestra a
+continuación?</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">suma</span><span class="p">(</span><span class="s1">&#39;hola&#39;</span><span class="p">,</span> <span class="s1">&#39; mundo&#39;</span><span class="p">)</span>
+<span class="go">&#39;hola mundo&#39;</span>
+</pre></div>
+</div>
+<p>El resultado sería <code class="docutils literal notranslate"><span class="pre">'hola</span> <span class="pre">mundo'</span></code>, la concatenación de las dos cadenas de
+entrada. Esto resalta el punto que habíamos considerado anteriormente: no
+debemos asumir que los nombres estarán atados a objetos de cierto tipo.</p>
+</section>
+<section id="anotacion-de-tipos">
+<h3><span class="section-number">1.3.3. </span>Anotación de tipos<a class="headerlink" href="#anotacion-de-tipos" title="Link to this heading"></a></h3>
+<p>Desde la versión 2.5 se le agregó la anotación de tipos (<em>type hints</em> o <em>type
+annotations</em>). Estas anotaciones nos permiten especificar como en otros
+lenguajes, el tipo de dato de los parámetros y el del valor que regresan las
+funciones. El problema es que no son obligatorias y no tienen un efecto en
+tiempo de ejecución. Python no vigila que los datos enviados o regresados sean
+los correctos. Ejemplo:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">suma</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+</pre></div>
+</div>
+<p>Aquí, <code class="docutils literal notranslate"><span class="pre">a</span></code> y <code class="docutils literal notranslate"><span class="pre">b</span></code> se anotan como enteros (<code class="docutils literal notranslate"><span class="pre">int</span></code>), y <code class="docutils literal notranslate"><span class="pre">-&gt;</span> <span class="pre">int</span></code> indica que la función
+devuelve un entero. Estas anotaciones son utilizadas por herramientas de
+edición y librerías para alertarnos de manera estática de posibles errores en
+nuestro código. En otra sección veremos el uso del método <code class="docutils literal notranslate"><span class="pre">type()</span></code> incluido de
+fábrica para inspeccionar en tiempo de ejecución el tipo de dato de una
+variable, lo que nos permitirá verificar que los parámetros sean del tipo
+correcto. Por lo pronto, puedes investigar este método e intentar validar que
+solo se reciban y regresen valores enteros.</p>
+</section>
+<section id="las-funciones-siempre-regresan-un-valor">
+<h3><span class="section-number">1.3.4. </span>Las funciones siempre regresan un valor<a class="headerlink" href="#las-funciones-siempre-regresan-un-valor" title="Link to this heading"></a></h3>
+<p>En el caso de que no especifiquemos una instrucción de <code class="docutils literal notranslate"><span class="pre">return</span></code>, la función
+regresará el valor de <code class="docutils literal notranslate"><span class="pre">None</span></code> de manera automática.</p>
+<p>Ejemplo de una versión interactiva de esta sección:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Python</span> <span class="mf">2.11.5</span> <span class="p">(</span><span class="n">main</span><span class="p">,</span> <span class="n">Sep</span> <span class="mi">11</span> <span class="mi">2023</span><span class="p">,</span> <span class="mi">08</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">25</span><span class="p">)</span> <span class="p">[</span><span class="n">Clang</span> <span class="mf">14.0.6</span> <span class="p">]</span> <span class="n">on</span> <span class="n">darwin</span>
+<span class="n">Type</span> <span class="s2">&quot;help&quot;</span><span class="p">,</span> <span class="s2">&quot;copyright&quot;</span><span class="p">,</span> <span class="s2">&quot;credits&quot;</span> <span class="ow">or</span> <span class="s2">&quot;license&quot;</span> <span class="k">for</span> <span class="n">more</span> <span class="n">information</span><span class="o">.</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="k">def</span><span class="w"> </span><span class="nf">suma</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="o">...</span>     <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+<span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">suma</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="mi">4</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">suma</span><span class="p">(</span><span class="s1">&#39;hola &#39;</span><span class="p">,</span> <span class="s1">&#39;mundo&#39;</span><span class="p">)</span>
+<span class="s1">&#39;hola mundo&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">exit</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="las-funciones-son-ciudadanos-de-primera-clase">
+<h3><span class="section-number">1.3.5. </span>Las funciones son ciudadanos de primera clase<a class="headerlink" href="#las-funciones-son-ciudadanos-de-primera-clase" title="Link to this heading"></a></h3>
+<p>Cuando decimos que en un lenguaje de programación las funciones son ciudadanos
+de primera clase (<em>first-class citizens</em>), significa que las funciones tienen el
+mismo estatus que otros tipos de datos como los enteros, cadenas o flotantes.</p>
+<p>Esto significa que las funciones:</p>
+<ul class="simple">
+<li><p>Se pueden asignar a variables</p></li>
+<li><p>Se pueden pasar como parámetros a otras funciones</p></li>
+<li><p>Se pueden regresar como resultado de otras funciones</p></li>
+<li><p>Se pueden almacenar en estructuras de datos como listas, diccionarios, etc.</p></li>
+</ul>
+<p>Este es un concepto fundamental en la programación funcional que veremos más adelante.
+Veamos un ejemplo:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">por_tres</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+<span class="go">        return a * 2</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">aplica</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+<span class="go">        return f(a)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aplica</span><span class="p">(</span><span class="n">por_tres</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="go">20</span>
+</pre></div>
+</div>
+<p>Este código se está ejecutando de manera interactiva, por eso se incluye el
+prompt <code class="docutils literal notranslate"><span class="pre">&gt;&gt;&gt;</span></code> del intérprete. En la primera instrucción definimos la función
+<code class="docutils literal notranslate"><span class="pre">por_tres</span></code>, esta función triplica el valor que entra como parámetro. Ahora viene
+lo bueno. La función <code class="docutils literal notranslate"><span class="pre">aplica</span></code> toma como parámetro una función (<code class="docutils literal notranslate"><span class="pre">f</span></code>) y regresa el
+resultado de pasar como parámetro a esa función el parámetro <code class="docutils literal notranslate"><span class="pre">a</span></code>. Aquí vemos el
+concepto de <em>primera clase</em>: podemos tomar como parámetro de una función otra
+función. Esto lo hacemos en la tercera instrucción <code class="docutils literal notranslate"><span class="pre">aplica(por_tres,</span> <span class="pre">6)</span></code>.
+Enviamos a la función <code class="docutils literal notranslate"><span class="pre">aplica</span></code> la función <code class="docutils literal notranslate"><span class="pre">por_tres</span></code> y nos regresa como
+resultado el resultado de la función, en este caso <code class="docutils literal notranslate"><span class="pre">6</span> <span class="pre">*</span> <span class="pre">3</span></code>. Este tema lo vamos a
+retomar cuando veamos el tema de programación funcional.</p>
+</section>
+</section>
+<section id="colecciones">
+<h2><span class="section-number">1.4. </span>Colecciones<a class="headerlink" href="#colecciones" title="Link to this heading"></a></h2>
+<aside class="sidebar">
+<p class="sidebar-title">Objetos inmutables y mutables.</p>
+<p>Son aquellos objetos que no pueden modificar su contenido una vez creados.
+Para «cambiar» el valor de un objeto tenemos que crear un nuevo objeto y actualizar la referencia.
+En el caso de los objetos <em>mutables</em>, cuando modificamos su contenido esto afecta
+a todas las referencias atadas al mismo.</p>
+</aside>
+<p>El pionero de la computación y autor del lenguaje Pascal, <a class="reference external" href="https://es.wikipedia.org/wiki/Niklaus_Wirth">Niklaus Wirth</a> escribió
+un libro titulado <strong>Algoritmos + Estructuras de Datos = Programas</strong>, la idea básica
+del título sigue siendo muy poderosa y vigente:</p>
+<blockquote>
+<div><p>«Un buen programa es el resultado de un algoritmo eficaz combinado con estructuras de datos adecuadas.»</p>
+</div></blockquote>
+<p>Como programadores debemos saber elegir correctamente las estructuras de datos que
+vamos a utlizar en nuestros programas ya que esto puede simplificar o complicar mucho
+el diseno del programa.</p>
+<section id="secuencias">
+<h3><span class="section-number">1.4.1. </span>Secuencias<a class="headerlink" href="#secuencias" title="Link to this heading"></a></h3>
+<p>Pyhton incluye de forma nativa, estructuras de datos abstractas para
+gestionar colecciones secuenciales de objetos:</p>
+<dl class="simple">
+<dt>Tupla <cite>tuple</cite></dt><dd><p>Es una secuencia <strong>inmutable</strong> de elementos. Los elementos pueden ser de
+diferentes tipos inluidas otras colecciones.</p>
+</dd>
+<dt>Cadenas de caracteres <cite>str</cite></dt><dd><p>Conceptualmente iguales a las tuplas pues también son <strong>inmutables</strong>, pero
+los elementos son caracteres y se definen de una manera distinta.</p>
+</dd>
+<dt>Listas <cite>list</cite></dt><dd><p>Una secuencia <strong>mutable</strong> de elementos, con mayor funcionalidad que las
+estructuras anteriores.</p>
+</dd>
+</dl>
+<p>Este tipo de objetos tienen su equivalente en otros lenguajes
+por ejemplo, las listas se incluyen en C# con la clase genérica <cite>List&lt;T&gt;</cite> o  <cite>ArrayList&lt;E&gt;</cite> en Java.</p>
+<p>Los tres tipos de secuencias comparten cierta funcionalidad y tienen una
+sintaxis similar. Las operaciones que veremos a continuación, son aplicables a
+todas las colecciones tipo secuencia.</p>
+<p>Las tuplas se definien como una lista de elementos separados por comas, y se
+encierran entre paréntesis:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tu</span> <span class="o">=</span> <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="mf">3.26</span><span class="p">,</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">),</span> <span class="s1">&#39;xyz&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Las listas se definen igual solo que se encierran entre corchetes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="mf">3.26</span><span class="p">,</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">),</span> <span class="s1">&#39;xyz&#39;</span><span class="p">,]</span>
+</pre></div>
+</div>
+<p>Podemos también incluir al final una coma sin provocar problemas.
+Esto nos permite copiar y pegar elementos sin tener que preocuparnos
+por agregar o borrar la coma al final.</p>
+<p>Como ya vimos anteriormente las cadenas de caracteres se pueden definir
+de varias formas:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;Hola Mundo&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">st</span> <span class="o">=</span> <span class="s2">&quot;Hola Mundo&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">st</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;Para definir este párrafo multi-línea</span>
+<span class="go">            utilizamos triple comillas.&#39;&#39;&#39;</span>
+</pre></div>
+</div>
+<p>Podemos acceder a los elementos individuales de una tupla, lista o cadenas
+utilizando la notación de corchetes con índices. Como los arreglos clásicos de
+C#, Java, C.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">tu</span> <span class="o">=</span> <span class="p">(</span><span class="mi">33</span><span class="p">,</span> <span class="s1">&#39;def&#39;</span><span class="p">,</span> <span class="mf">4.56</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;def&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tu</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>     <span class="c1"># Segundo elemento de la tupla.</span>
+<span class="go">&#39;def&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">li</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;abc&quot;</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mf">4.34</span><span class="p">,</span> <span class="mi">23</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">li</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>      <span class="c1"># Segundo elemento de la lista.</span>
+<span class="go">34</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">st</span> <span class="o">=</span> <span class="s2">&quot;Hola Mundo&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">st</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>   <span class="c1"># Segundo elemento de la cadena.</span>
+<span class="go">&#39;e&#39;</span>
+</pre></div>
+</div>
+<p>También podemos utilizar índices negativos, estos nos permiten
+indicar fácilmente la posición de los últimos elementos aunque
+no conozcamos el tamaño del arreglo.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="mf">4.56</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;def&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Índice positivo: se cuenta de izquierda a derecha empezando en 0.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">&#39;abc&#39;</span>
+</pre></div>
+</div>
+<p>Índice negativo: se cuenta de derecha a izquierda, iniciando en –1.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
+<span class="go">4.56</span>
+</pre></div>
+</div>
+</section>
+<section id="cortes-slicing">
+<h3><span class="section-number">1.4.2. </span>Cortes <em>slicing</em><a class="headerlink" href="#cortes-slicing" title="Link to this heading"></a></h3>
+<p>Una funcionalidad muy importante que nos brindad las secuencias son los cortes.
+Un corte, regresa una copia del contenedor incluyendo un subconjunto de los
+miembros originales. Un corte se puede especificar con dos índices. Se empieza
+a copiar desde el primer índice y se detiene antes del segundo.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="mf">4.56</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;def&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+<span class="go">             (&#39;abc&#39;, 4.56, (2,3))</span>
+</pre></div>
+</div>
+<p>También podemos utilizar índices negativos. Esto es de mucha ayuda para
+referirnos a los últimos elementos aún cuando ignoremos el
+número de elementos que tiene la secuencia.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">             (&#39;abc&#39;, 4.56, (2,3))</span>
+</pre></div>
+</div>
+<figure class="align-left" id="id1">
+<img alt="Puntos de cortes de la cadena &quot;Hola&quot;" src="_images/hola.png" />
+<figcaption>
+<p><span class="caption-text">En la figura podemos ver los puntos de corte de la palabra «Hola».
+Podemos observar que los puntos de corte están ubicados antes o
+después de los elementos en la secuencia y no coinciden con los índices
+de los elementos.</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p class="rubric">Cómo copiar una secuencia</p>
+<p>Para indicar que el corte inicial es desde el punto inicial o cero,
+simplemente se omite el valor, por ejemplo: <cite>lista[:21]</cite>. Igual si queremos indicar que el
+corte se hará hasta el último elemento también se omite el límite
+superior <cite>lista[12:]</cite>.</p>
+<p>Para regresar una copia de toda la secuencia simplemente omitimos
+ambos límites <cite>[:]</cite>. Por ejemplo, para regresar una copia de la
+siguiente tupla:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="mi">23</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="mf">4.56</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;def&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">[:]</span>
+<span class="go">(23, &#39;abc&#39;, 4.56, (2,3), &#39;def&#39;)</span>
+</pre></div>
+</div>
+<p>Recordemos que si asignamos simplemente un nombre a otro, no estamos
+regresando una copia. Estamos asignando la misma referencia a ambos nombres.
+En el caso de un objeto mutable como una lista, si hacemos un cambio utilizando
+una referencia este cambio se reflejará en todas las referencias, lo cual
+es normalmente un error. Veamos un ejemplo, para que quede clara esta idea:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">lista1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">23</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="mf">4.56</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;def&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lista2</span> <span class="o">=</span> <span class="n">lista1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lista1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;hola&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lista1</span>
+<span class="go">[&#39;hola&#39;, &#39;abc&#39;, 4.56, (2,3), &#39;def&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">lista2</span>
+<span class="go">[&#39;hola&#39;, &#39;abc&#39;, 4.56, (2,3), &#39;def&#39;]</span>
+</pre></div>
+</div>
+<p>Como vemos en el ejemplo, al asignar <cite>lista2 = lista1</cite> realmente
+ambos nombres están atados al mismo objeto lista en la memoria.
+Si hacemos un cambio en uno, por ej. <cite>lista1[0] = “hola”</cite>. Realmente
+parece que el cambio se hace en ambas «copias», pensar esto es un
+error ya que realmente ambos nombres aunque sean distintos hacen
+referencia al mismo objeto. Si vemos el contenido de la <cite>lista2</cite> será
+igual a <cite>lista1</cite> aunque aparentemente no la modificamos.</p>
+</section>
+</section>
+<section id="diccionarios">
+<h2><span class="section-number">1.5. </span>Diccionarios<a class="headerlink" href="#diccionarios" title="Link to this heading"></a></h2>
+</section>
+<section id="ejercicios">
+<h2><span class="section-number">1.6. </span>Ejercicios<a class="headerlink" href="#ejercicios" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="introducci%C3%B3n.html" class="btn btn-neutral float-left" title="0. Introducción" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="instalaci%C3%B3n.html" class="btn btn-neutral float-right" title="Instalación de Python" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2025, Jose Mario García Valdez.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

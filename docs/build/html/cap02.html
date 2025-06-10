@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 2: Introducción al lenguaje &mdash; documentación de pyBook - </title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e2bb6099"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyBook
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Capítulo 2: Introducción al lenguaje</a><ul>
+<li><a class="reference internal" href="#los-nombres-se-atan-a-objetos">Los nombres se atan a objetos</a></li>
+<li><a class="reference internal" href="#cuidado-python-es-dinamico">Cuidado: Python es dinámico</a></li>
+<li><a class="reference internal" href="#el-espacio-es-importante">El espacio es importante</a></li>
+<li><a class="reference internal" href="#definicion-de-bloques-con-indentacion-consistente">Definición de bloques con indentación consistente</a></li>
+<li><a class="reference internal" href="#cuatro-espacios-es-buen-estilo">Cuatro espacios es buen estilo</a></li>
+<li><a class="reference internal" href="#baterias-incluidas">Baterías incluidas</a></li>
+<li><a class="reference internal" href="#tipos-de-datos-basicos">Tipos de datos básicos</a></li>
+<li><a class="reference internal" href="#comentarios">Comentarios</a></li>
+<li><a class="reference internal" href="#literales">Literales</a></li>
+<li><a class="reference internal" href="#el-valor-especial-none">El valor especial <code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyBook</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Capítulo 2: Introducción al lenguaje</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cap02.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="capitulo-2-introduccion-al-lenguaje">
+<span id="capitulo-02"></span><h1>Capítulo 2: Introducción al lenguaje<a class="headerlink" href="#capitulo-2-introduccion-al-lenguaje" title="Link to this heading"></a></h1>
+<p>Empezemos directamente con un ejemplo de código analizando las diferencias que
+vemos respecto a otros lenguajes compilados como <em>C#</em> o <em>Java</em>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">34</span> <span class="o">-</span> <span class="mi">23</span>            <span class="c1"># Comentario</span>
+<span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;Hola&quot;</span>             <span class="c1"># Otro comentario</span>
+<span class="n">z</span> <span class="o">=</span> <span class="mf">3.45</span>
+
+<span class="k">if</span> <span class="n">z</span> <span class="o">==</span> <span class="mf">3.45</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">==</span> <span class="s2">&quot;Hola&quot;</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="s2">&quot; Mundo&quot;</span>  <span class="c1"># Concatenación de cadenas</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Echando un vistazo general al programa, nos llama primero la atención el hecho
+de que no se importan algunas librerías al inicio del programa. Por ejemplo,
+para la entrada y salida de datos a la consola. También notamos que al declarar
+las variables no especificamos explícitamente cuál es su tipo de dato. Tampoco
+tenemos que insertar nuestro código en algún método especial como <code class="docutils literal notranslate"><span class="pre">main</span></code> o
+agregarlo dentro de alguna clase. Funciona como un <em>script</em>. Veamos línea por
+línea.</p>
+<section id="los-nombres-se-atan-a-objetos">
+<h2>Los nombres se atan a objetos<a class="headerlink" href="#los-nombres-se-atan-a-objetos" title="Link to this heading"></a></h2>
+<p>En la primera línea vemos la declaración de una variable llamada <code class="docutils literal notranslate"><span class="pre">x</span></code> a la cual
+se le asigna el resultado de una resta entre dos números enteros. Aquí
+encontramos la primera diferencia: en Python las «variables» no tienen un tipo de
+dato, son simplemente nombres o etiquetas que hacen referencia a objetos. Los
+objetos por su parte, sí tienen un tipo de dato. Entonces, en esta línea, el
+resultado de la operación se almacena en memoria en una dirección
+específica, una referencia. Lo que sucede entonces es que el nombre <code class="docutils literal notranslate"><span class="pre">x</span></code> se ata a
+la referencia del objeto entero que se crea de la operación <code class="docutils literal notranslate"><span class="pre">34-23</span></code>, el <code class="docutils literal notranslate"><span class="pre">11</span></code> en la memoria.
+Esto es distinto al concepto de variable en otros lenguajes. Por ejemplo, en C# las
+variables <em>tipo valor</em> reservan un espacio en la memoria donde se guarda literalmente el valor
+que contienen, y los valores deben ser del tipo correspondiente. Si yo declaro una
+variable como entera de 16 bits, solo puedo almacenar en ella objetos de este tipo.</p>
+<p>Volviendo al ejemplo, el tipo de dato al que hace referencia el nombre <code class="docutils literal notranslate"><span class="pre">x</span></code> después de la asignación,
+es temporalmente <code class="docutils literal notranslate"><span class="pre">int</span></code>, pero en otro momento, podríamos
+atar el nombre <code class="docutils literal notranslate"><span class="pre">x</span></code> a un objeto diferente de otro tipo de dato. Por ejemplo,
+<code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">2.3</span></code> o <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">=</span> <span class="pre">&quot;Hola&quot;</span></code>. De nuevo, los objetos en memoria son tipo <code class="docutils literal notranslate"><span class="pre">float</span></code> y <code class="docutils literal notranslate"><span class="pre">string</span></code>
+respectivamente y nuestra etiqueta <code class="docutils literal notranslate"><span class="pre">x</span></code> se puede atar a cualquiera de ellos sin
+ningún problema. Vemos entonces que se atan los nombres <code class="docutils literal notranslate"><span class="pre">y</span></code> y <code class="docutils literal notranslate"><span class="pre">z</span></code> a la cadena de caracteres
+<code class="docutils literal notranslate"><span class="pre">&quot;Hola&quot;</span></code> y al flotante <code class="docutils literal notranslate"><span class="pre">3.44</span></code> respectivamente.</p>
+</section>
+<section id="cuidado-python-es-dinamico">
+<h2>Cuidado: Python es dinámico<a class="headerlink" href="#cuidado-python-es-dinamico" title="Link to this heading"></a></h2>
+<p>Algunos programadores pueden ver esta funcionalidad de Python como algo peligroso y
+realmente lo es. Podemos equivocarnos fácilmente pensando que <code class="docutils literal notranslate"><span class="pre">x</span></code> hace
+referencia a un objeto de tipo entero cuando por algún error puede referirse
+a una cadena de caracteres o a un flotante y causar problemas en nuestro código.
+El lenguaje nos protege hasta cierto punto ya que lanzará una excepción en caso
+de que no esté definida una operación para un tipo de dato específico, pero en
+general es algo que debemos tener en cuenta en este tipo de lenguajes dinámicos.
+Otro problema que tenemos es que, a diferencia de los lenguajes fuertemente
+tipados, nuestras herramientas de programación en ocasiones no pueden ayudarnos
+desplegando, por ejemplo, la lista de atributos o miembros de un objeto, ya que
+no sabe a qué tipo de objeto hará referencia el nombre que estamos utilizando.</p>
+<p>Otra diferencia importante la encontramos en este bloque de código:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">z</span> <span class="o">==</span> <span class="mf">3.45</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">==</span> <span class="s2">&quot;Hola&quot;</span><span class="p">:</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="s2">&quot; Mundo&quot;</span>  <span class="c1"># Concatenación de cadenas</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="el-espacio-es-importante">
+<h2>El espacio es importante<a class="headerlink" href="#el-espacio-es-importante" title="Link to this heading"></a></h2>
+<p>Aquí definimos un bloque que se va a ejecutar si la condición del <code class="docutils literal notranslate"><span class="pre">if</span></code> es
+verdadera. A diferencia de otros lenguajes, aquí definimos el bloque utilizando
+espacios (una sangría). Es común llamarle <em>indentación</em> a esta sangría por el
+nombre que recibe en inglés. Entonces, el bloque inicia al cambiar la
+indentación y debe mantenerse al saltar de línea y termina cuando regresamos la indentación
+al nivel anterior.</p>
+</section>
+<section id="definicion-de-bloques-con-indentacion-consistente">
+<h2>Definición de bloques con indentación consistente<a class="headerlink" href="#definicion-de-bloques-con-indentacion-consistente" title="Link to this heading"></a></h2>
+<p>En el ejemplo vemos que la condición no tiene indentación, pero el bloque de
+código que se ejecutará en caso de ser verdadera consta de dos líneas. Estas
+líneas tienen una indentación consistente de cuatro espacios cada una. Para
+terminar el bloque, simplemente escribimos una nueva línea que no contenga los
+espacios. Por ejemplo, la instrucción <code class="docutils literal notranslate"><span class="pre">print(x)</span></code>.</p>
+</section>
+<section id="cuatro-espacios-es-buen-estilo">
+<h2>Cuatro espacios es buen estilo<a class="headerlink" href="#cuatro-espacios-es-buen-estilo" title="Link to this heading"></a></h2>
+<p>La indentación puede hacerse utilizando la tecla tabulador (tab), pero se
+recomienda que no se utilicen caracteres de tabulación y en su lugar se
+reemplacen automáticamente por cuatro espacios. Esta es una capacidad que tienen
+los editores de código y por lo regular se hace por defecto para los archivos
+con extensión  <code class="docutils literal notranslate"><span class="pre">.py</span></code> utilizados para los scripts de Python. La convención de
+utilizar cuatro espacios la establece la [PEP 8](<a class="reference external" href="https://peps.python.org/pep-0008/">https://peps.python.org/pep-0008/</a>),
+en donde podemos encontrar las convenciones utilizadas por los programadores de las librerías
+estándar de la distribución principal de Python. Las siglas PEP vienen del inglés
+<em>Python Enhancement Proposal</em> (Propuesta de Mejora para Python). Un PEP es un
+documento público que brinda información a la comunidad sobre alguna nueva
+característica o sugerencia de mejora para el lenguaje.</p>
+<p>Siguiendo con el código, vemos también que los operadores lógicos (<code class="docutils literal notranslate"><span class="pre">and</span></code>, <code class="docutils literal notranslate"><span class="pre">or</span></code>,
+<code class="docutils literal notranslate"><span class="pre">not</span></code>) son palabras y no símbolos como en ciertos lenguajes. Al igual que en la
+mayoría de los lenguajes, la concatenación de cadenas de caracteres se hace con
+el operador de adición. Para operaciones con otro tipo de objetos, los
+operadores (<code class="docutils literal notranslate"><span class="pre">+</span> <span class="pre">-</span> <span class="pre">*</span> <span class="pre">/</span></code>) funcionan como siempre.</p>
+</section>
+<section id="baterias-incluidas">
+<h2>Baterías incluidas<a class="headerlink" href="#baterias-incluidas" title="Link to this heading"></a></h2>
+<p>Otra característica importante es que la función para imprimir en la consola es
+<code class="docutils literal notranslate"><span class="pre">print</span></code> y no tuvimos que agregar una librería para acceder a su funcionalidad.
+Ya viene de fábrica. De hecho, Python incluye muchas funciones de este tipo
+dentro del lenguaje. Utilizaremos muchas de ellas más adelante. Esto es parte
+del lema de <em>baterías incluidas</em> de Python, que se refiere a que el lenguaje
+incluye una extensa y muy útil colección de librerías (módulos en Python) en la
+distribución estándar.</p>
+<div class="admonition note">
+<p class="admonition-title">Nota</p>
+<p>En este texto utilizo un léxico que debería entender un programador con
+algo de experiencia. Recuerda que este es el público al que va dirigido el libro. En
+caso de que haya algunos pocos términos que no tengas claro su significado, no hay problema,
+investiga un poco y te debería quedar claro.</p>
+</div>
+</section>
+<section id="tipos-de-datos-basicos">
+<h2>Tipos de datos básicos<a class="headerlink" href="#tipos-de-datos-basicos" title="Link to this heading"></a></h2>
+<p><strong>Enteros</strong></p>
+<p>A diferencia de otros lenguajes que incluyen distintos tipos de datos para
+representar enteros de distintos tamaños, por ejemplo en C# el tipo de dato
+<code class="docutils literal notranslate"><span class="pre">long</span></code> representa a un entero de 64 bits con signo, mientras que <code class="docutils literal notranslate"><span class="pre">short</span></code>
+representa a un entero con signo de 16 bits. En Python solo tenemos un tipo de
+dato entero <code class="docutils literal notranslate"><span class="pre">int</span></code> con una precisión arbitraria, capaz de almacenar enteros de
+cualquier tamaño. Bueno, el tamaño solo está limitado por la cantidad de
+memoria disponible en el sistema. Python evita el desbordamiento asignando
+dinámicamente más memoria para almacenar el resultado de una operación entera.
+Este costo computacional adicional hace que Python sea apropiado para el cómputo
+científico, sacrificando las ventajas en desempeño que supone el tener enteros de
+longitud fija.</p>
+<p><strong>Números con punto flotante</strong></p>
+<p>Los números con punto flotante, comúnmente llamados <em>flotantes</em> o <em>floats</em>,
+incluyen un punto decimal y también son de tamaño arbitrario. Se pueden
+representar utilizando la notación exponencial (<em>E</em>) indicando la décima
+potencia. Por ejemplo, <code class="docutils literal notranslate"><span class="pre">21.3E-4</span></code> es equivalente a <code class="docutils literal notranslate"><span class="pre">21.3</span> <span class="pre">*</span> <span class="pre">10^-4</span></code>.</p>
+<p><strong>Cadenas o Strings</strong></p>
+<p>En Python, una cadena o string es una <em>secuencia</em> de caracteres. Una <em>secuencia</em>
+es una abstracción que veremos más adelante, cuando nos enfoquemos en estructuras
+de datos; ahí veremos otros aspectos importantes de este tipo de dato.
+Por lo pronto, podemos definir a una cadena como una colección
+ordenada de caracteres útil para almacenar texto. Las cadenas se pueden
+representar de distintas maneras: utilizando comillas dobles (<code class="docutils literal notranslate"><span class="pre">&quot;Hola&quot;</span></code>),
+comillas simples (<code class="docutils literal notranslate"><span class="pre">'Hola'</span></code>) y esto permite evitar cierto tipo de conflictos, por
+ejemplo, la cadena <code class="docutils literal notranslate"><span class="pre">&quot;Carl's</span> <span class="pre">Jr.&quot;</span></code> utiliza comillas dobles para evitar el
+conflicto con la comilla simple que es parte del nombre <em>Carl’s</em>. Cuando tenemos
+múltiples párrafos o necesitamos utilizar los dos tipos de comillas en el texto,
+utilizamos comillas triples, ya sean dobles o simples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Este es un ejemplo del uso de</span>
+<span class="sd">comillas triples para definir texto</span>
+<span class="sd">que puede incluir comillas como &quot;Carl&#39;s Jr.&quot; y</span>
+<span class="sd">saltos de línea.</span>
+<span class="sd">    Indentación</span>
+<span class="sd">    Indentación</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>En otra sección nos vamos a concentrar en la funcionalidad de los objetos tipo <em>string</em>;
+Python incluye muchos métodos para realizar operaciones sobre este tipo de datos.</p>
+<p><strong>Booleanos</strong></p>
+<p>Los valores de verdad en Python son representados explícitamente con los valores
+literales <code class="docutils literal notranslate"><span class="pre">True</span></code> o <code class="docutils literal notranslate"><span class="pre">False</span></code>, verdadero y falso respectivamente, ambos deben
+iniciar con mayúscula. El tipo de dato <code class="docutils literal notranslate"><span class="pre">bool</span></code> es un subtipo de <code class="docutils literal notranslate"><span class="pre">int</span></code>, por lo que
+en contextos numéricos <code class="docutils literal notranslate"><span class="pre">True</span></code> equivale a uno y <code class="docutils literal notranslate"><span class="pre">False</span></code> a cero
+respectivamente. También existen otras formas implícitas de representación de
+estos valores de verdad cuando se utilizan operaciones lógicas. Por ejemplo, una
+cadena vacía es equivalente a <code class="docutils literal notranslate"><span class="pre">False</span></code> y una colección de datos con cierto número
+de elementos es equivalente a <code class="docutils literal notranslate"><span class="pre">True</span></code>. Veremos ejemplos de esto más adelante.</p>
+</section>
+<section id="comentarios">
+<h2>Comentarios<a class="headerlink" href="#comentarios" title="Link to this heading"></a></h2>
+<p>Python no cuenta con una sintaxis para definir comentarios que abarquen
+múltiples líneas. En este caso se pueden utilizar comillas triples para
+comentar múltiples líneas. Si un <em>valor literal</em> no se asigna a un nombre, este
+es ignorado por el intérprete de Python.</p>
+<p>Este tipo de comentarios también se utiliza para documentar el código en
+situaciones específicas. Por ejemplo, se puede incluir una cadena de
+documentación en la primera línea de una función o clase.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">suma</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;El docstring. Esta función</span>
+<span class="sd">    regresa la suma o concatenación de dos cadenas, es</span>
+<span class="sd">    importante ya que blah blah blah.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>  <span class="c1"># Comentario aquí...</span>
+</pre></div>
+</div>
+<p>Los comentarios de Python son línea por línea y se especifican con el símbolo de
+almohadilla (<code class="docutils literal notranslate"><span class="pre">#</span></code>). En una línea, todo lo que está a la derecha de <code class="docutils literal notranslate"><span class="pre">#</span></code> es un
+comentario.</p>
+</section>
+<section id="literales">
+<h2>Literales<a class="headerlink" href="#literales" title="Link to this heading"></a></h2>
+<p>En los ejemplos anteriores utilizamos <em>valores literales</em> de los tipos de datos que
+ilustramos. Es importante reconocer que estos valores representan datos u objetos específicos
+de cierto tipo de dato. Entonces, en los ejemplos anteriores, le definíamos nombres, mediante la
+asignación (o atado) a ellos de un valor literal.</p>
+<p>Para terminar esta sección, vamos a representar valores literales de los tipos de datos
+básicos de Python:</p>
+<ul class="simple">
+<li><p>Entero (<code class="docutils literal notranslate"><span class="pre">int</span></code>): <code class="docutils literal notranslate"><span class="pre">791926378172346918273469128374619283</span></code>, <code class="docutils literal notranslate"><span class="pre">2</span></code></p></li>
+<li><p>Flotante (<code class="docutils literal notranslate"><span class="pre">float</span></code>): <code class="docutils literal notranslate"><span class="pre">34.3</span></code>, <code class="docutils literal notranslate"><span class="pre">0.33</span></code></p></li>
+<li><p>Cadena (<code class="docutils literal notranslate"><span class="pre">str</span></code>): <code class="docutils literal notranslate"><span class="pre">&quot;Python</span> <span class="pre">es</span> <span class="pre">un</span> <span class="pre">lenguaje</span> <span class="pre">dinámico&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">'Juan'</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;Leí</span> <span class="pre">el</span> <span class="pre">libro</span> <span class="pre">'Pedro</span> <span class="pre">Páramo'.&quot;</span></code></p></li>
+<li><p>Booleano (<code class="docutils literal notranslate"><span class="pre">bool</span></code>): <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+</ul>
+</section>
+<section id="el-valor-especial-none">
+<h2>El valor especial <code class="docutils literal notranslate"><span class="pre">None</span></code><a class="headerlink" href="#el-valor-especial-none" title="Link to this heading"></a></h2>
+<p>La constante <code class="docutils literal notranslate"><span class="pre">None</span></code> es utilizada para indicar la ausencia de valor o un valor nulo.
+Tiene su propio tipo <code class="docutils literal notranslate"><span class="pre">NoneType</span></code>. De manera similar al valor <code class="docutils literal notranslate"><span class="pre">NULL</span></code> en bases de datos,
+el valor <code class="docutils literal notranslate"><span class="pre">None</span></code> no es igual a cero, <code class="docutils literal notranslate"><span class="pre">False</span></code> o vacío, aunque se considera <code class="docutils literal notranslate"><span class="pre">False</span></code> en
+condiciones booleanas. Se puede utilizar para definir un nombre que no hace referencia
+a un objeto todavía. Por ejemplo:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>En este caso <code class="docutils literal notranslate"><span class="pre">x</span></code> existe aunque el objeto al que está atado es <code class="docutils literal notranslate"><span class="pre">None</span></code>. Esto
+significa que no está atada a un valor todavía. El intérprete no imprime nada
+cuando imprimimos <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2025, Jose Mario García Valdez.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

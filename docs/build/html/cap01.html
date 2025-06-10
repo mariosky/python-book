@@ -1,0 +1,368 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Capítulo 1: Introducción a Python &mdash; documentación de pyBook - </title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=e2bb6099"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="next" title="Capítulo 2: Introducción al lenguaje" href="cap02.html" />
+    <link rel="prev" title="pyBook documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyBook
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Parte I:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Capítulo 1: Introducción a Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#por-que-uso-python">¿Por qué uso Python?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-quien-va-dirigido-este-libro">¿A quién va dirigido este libro?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#instalacion-de-python">Instalación de Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#python-en-tu-sistema">Python en tu sistema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linux">Linux</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#instalacion-utilizando-apt">Instalación utilizando APT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#instalacion-utilizando-el-ppa-de-deadsnakes">Instalación utilizando el PPA de deadsnakes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#macos">MacOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cap02.html">Capítulo 2: Introducción al lenguaje</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Parte II:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Capítulo 1: Introducción a Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#por-que-uso-python">¿Por qué uso Python?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-quien-va-dirigido-este-libro">¿A quién va dirigido este libro?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#instalacion-de-python">Instalación de Python</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#python-en-tu-sistema">Python en tu sistema</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linux">Linux</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#instalacion-utilizando-apt">Instalación utilizando APT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#instalacion-utilizando-el-ppa-de-deadsnakes">Instalación utilizando el PPA de deadsnakes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#macos">MacOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cap02.html">Capítulo 2: Introducción al lenguaje</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyBook</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Capítulo 1: Introducción a Python</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cap01.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="capitulo-1-introduccion-a-python">
+<span id="capitulo-01"></span><h1>Capítulo 1: Introducción a Python<a class="headerlink" href="#capitulo-1-introduccion-a-python" title="Link to this heading"></a></h1>
+<p>En estos días a principios del 2025, Python es el lenguaje de programación más
+popular, según el índice de <a class="reference external" href="https://www.tiobe.com">TIOBE</a>, quienes además le han dado el premio de
+«lenguaje de programación del año 2024». El premio se otorga al lenguaje con el
+mayor incremento de calificación en un año, creciendo un 9.3% solo
+en el año 2024 (<a class="reference external" href="https://www.tiobe.com/tiobe-index/">https://www.tiobe.com/tiobe-index/</a>). Actualmente, Python no
+tiene rival en varios campos de la computación, por ejemplo, análisis de datos,
+aprendizaje automático y desarrollo de aplicaciones de aprendizaje profundo.
+Una razón de este éxito se debe a lo práctico que resulta aprender el lenguaje,
+ya que es interpretado, lo que nos permite probar el código sin necesidad de
+compilarlo. Algunas desventajas son su bajo rendimiento en comparación con
+lenguajes compilados como C++ o Rust y que muchos de los errores en el código
+suceden al momento de ejecución.</p>
+<section id="por-que-uso-python">
+<h2>¿Por qué uso Python?<a class="headerlink" href="#por-que-uso-python" title="Link to this heading"></a></h2>
+<p>En mi caso, llegué al lenguaje atraído por sus <em>frameworks</em> para el desarrollo de
+aplicaciones web a principios de los dos mil, por ejemplo el framework
+<a class="reference external" href="https://cherrypy.dev/">CherryPy</a> con el que desarrollé algunas aplicaciones
+web, de una manera muy fácil para la época. Ya después surgieron <a class="reference external" href="https://www.djangoproject.com/">Django</a> y
+<a class="reference external" href="https://fastapi.tiangolo.com/">FastAPI</a> más utilizados en la actualidad. Aunque probé otros lenguajes de
+scripts populares para esas tareas como <a class="reference external" href="https://www.tcl.tk/">tcl</a>, <a class="reference external" href="https://www.php.net/">PHP</a> y ya después <a class="reference external" href="https://www.ruby-lang.org/en/">Ruby</a>,
+la sintaxis de Python se me hizo más amigable y fácil de entender. Con el paso
+del tiempo surgieron muchas librerías y servicios innovadores para el
+desarrollo de aplicaciones científicas que no encontraba en los otros
+lenguajes, por lo que lo fui utilizando para otro tipo de proyectos. Por
+ejemplo, en 2008, Python era el único lenguaje utilizado por Google App Engine,
+permitiendo de una manera muy sencilla de ejecutar código de alto desempeño en
+la nube de manera automática. Otro proyecto interesante fue
+<a class="reference external" href="https://www.crunchbase.com/organization/picloud">PiCloud</a>, este servicio
+permitía de una manera transparente ejecutar código de alto desempeño en la
+nube a partir de código ejecutado localmente, solamente importando una
+librería. Era la primera aproximación a lo que hoy es computación
+<a class="reference external" href="https://es.wikipedia.org/wiki/Serverless_computing">Serverless</a>.</p>
+</section>
+<section id="a-quien-va-dirigido-este-libro">
+<h2>¿A quién va dirigido este libro?<a class="headerlink" href="#a-quien-va-dirigido-este-libro" title="Link to this heading"></a></h2>
+<p>Igualmente, otros programadores llegarán a interesarse por Python por algún
+proyecto o problema que quieren atacar, y para el cual ya existe una librería o
+código escrito que soluciona gran parte del problema central. Tal vez sea
+utilizar un <a class="reference external" href="https://platform.openai.com/docs/quickstart">API de inteligencia artificial generativa</a>,
+<a class="reference external" href="https://pillow.readthedocs.io/en/latest/index.html">procesar imágenes</a> para subirlas a
+un servicio en la
+<a class="reference external" href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-uploading-files.html">nube</a>,
+programar un <a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/">rastreador web</a>,
+o un simulador utilizando <a class="reference external" href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.odeint.html">ecuaciones diferenciales ordinarias</a>.
+Python tiene librerías y ejemplos para este tipo de problemas.</p>
+<p>Si este es tu caso, este libro está pensado en ti. El objetivo es facilitar
+a los programadores ponerse al día de manera rápida con el lenguaje. Servir como
+guía para resolver distintos tipos de problemas de ingeniería para los
+que Python será de gran ayuda.</p>
+</section>
+</section>
+<section id="instalacion-de-python">
+<h1>Instalación de Python<a class="headerlink" href="#instalacion-de-python" title="Link to this heading"></a></h1>
+<p>En caso de que no tengas instalado y configurado Python en tu sistema, aquí están
+unas guías para tu sistema operativo. Para hacer estas instalaciones
+utilizaremos la línea de comandos porque es la manera más práctica de mostrarlo
+en texto y es una de las maneras más prácticas de instalación para los
+programadores. El sistema operativo que recomiendo para programar en Python es
+Linux o macOS, precisamente porque están más orientados a la línea de comandos
+y hay muchas herramientas para este estilo de trabajo. También se puede
+utilizar Windows, pero hay algunos programas o librerías que corren nativamente
+en Linux o macOS y no tienen soporte oficial en Windows. Por ejemplo, Redis.</p>
+<section id="python-en-tu-sistema">
+<h2>Python en tu sistema<a class="headerlink" href="#python-en-tu-sistema" title="Link to this heading"></a></h2>
+<p>Dependiendo de tu sistema operativo o los programas que tengas previamente
+instalados, es probable que haya varias instalaciones de Python en tu
+computadora. Por ejemplo, algunas versiones de Linux y macOS utilizan Python
+como parte de las herramientas del sistema operativo, por lo que tienen alguna versión preinstalada. Para
+complicar las cosas, de seguro va a incluir una versión más vieja, como la 2.x, la cual
+es una versión completamente distinta y no compatible con las versiones
+modernas del lenguaje. Para tratar de evitar confusiones, en las versiones modernas se
+utiliza el nombre de <code class="docutils literal notranslate"><span class="pre">python3</span></code> para el intérprete. La versión dos (viejita) se llama
+simplemente <code class="docutils literal notranslate"><span class="pre">python</span></code>.</p>
+<p>Además, para los programadores, es recomendable el uso de ambientes virtuales de
+desarrollo. En caso de que no hayas escuchado el término, son herramientas que
+nos permiten tener instalaciones aisladas del lenguaje; estos ambientes incluyen
+sus propias copias de versiones compatibles de las librerías y código utilizados
+por el proyecto. Por último, también es posible programar utilizando
+contenedores, los cuales son en sí una instalación aislada no solo del lenguaje,
+sino también de los programas incluidos en el sistema operativo. Este tipo de
+instalaciones avanzadas las veremos más adelante. En esta sección instalaremos
+una versión de Python para uso general por parte de los usuarios del sistema.</p>
+</section>
+<section id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Link to this heading"></a></h2>
+<p>En caso de que no tengas instalada la aplicación <em>Terminal</em>, te recomiendo que la instales
+cuanto antes. Puedes instalarla desde la <a class="reference external" href="https://apps.microsoft.com/detail/9n0dx20hk701">Microsoft Store</a>.
+Esta es una versión más moderna y rápida que el tradicional programa de Command Prompt
+(console.exe), además esta versión es de <a class="reference external" href="https://github.com/microsoft/terminal">código abierto</a>.</p>
+<p>Estos pasos para instalar Python funcionan para las versiones 10 y 11 de
+Windows. Para seguir practicando el uso de la terminal, vamos a utilizar la
+herramienta WinGet, esta herramienta nos permite gestionar aplicaciones desde
+la línea de comandos, parecido a lo que hacen los programas <code class="docutils literal notranslate"><span class="pre">apt</span></code> en
+distribuciones de Linux Debian o el programa <code class="docutils literal notranslate"><span class="pre">brew</span></code> en macOS.</p>
+<p>Veamos si está instalado WinGet ejecutando el siguiente comando en Terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>winget<span class="w"> </span>-v
+</pre></div>
+</div>
+<p>Se debería desplegar la versión del programa winget en tu computadora. Si el
+comando no es reconocido debemos instalar
+<a class="reference external" href="https://learn.microsoft.com/es-es/windows/package-manager/winget/">WinGet</a>.
+Una vez instalado <em>winget</em>, podemos consultar las versiones de Python
+disponibles:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>winget<span class="w"> </span>search<span class="w"> </span>--id<span class="w"> </span>Python.Python
+</pre></div>
+</div>
+<p>Lo que nos arroja las versiones disponibles:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Nombre<span class="w">      </span>Id<span class="w">                 </span>Versión<span class="w">   </span>Origen
+------------------------------------------------
+Python<span class="w"> </span><span class="m">2</span><span class="w">    </span>Python.Python.2<span class="w">    </span><span class="m">2</span>.7.18150<span class="w"> </span>winget
+Python<span class="w"> </span><span class="m">3</span>.0<span class="w">  </span>Python.Python.3.0<span class="w">  </span><span class="m">3</span>.0.1<span class="w">     </span>winget
+...
+Python<span class="w"> </span><span class="m">3</span>.13<span class="w"> </span>Python.Python.3.13<span class="w"> </span><span class="m">3</span>.13.2<span class="w">    </span>winget
+</pre></div>
+</div>
+<p>Vamos a instalar la versión 3.13.2, la más reciente al día de hoy. Para esto
+utilizaremos el comando
+<a class="reference external" href="https://learn.microsoft.com/es-es/windows/package-manager/winget/install#arguments">install</a>,
+pasaremos el identificador del paquete (<code class="docutils literal notranslate"><span class="pre">--id</span> <span class="pre">Python.Python.3.13</span></code>) de manera
+exacta (<code class="docutils literal notranslate"><span class="pre">-e</span></code>). Queremos instalar Python para todos los usuarios de nuestro
+equipo, por lo que agregaremos el parámetro <code class="docutils literal notranslate"><span class="pre">--scope</span> <span class="pre">machine</span></code>. Para ejecutar el
+comando es importante ejecutar el programa de <em>Terminal</em> como usuario
+<strong>Administrador</strong>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>winget<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>--id<span class="w"> </span>Python.Python.3.13<span class="w"> </span>--scope<span class="w"> </span>machine
+</pre></div>
+</div>
+<p>Para revisar que el intérprete se instaló correctamente, debemos de cerrar la
+terminal y abrirla de nuevo para que se cargue la configuración. Una vez hecho
+esto, ejecutamos el intérprete con el comando <code class="docutils literal notranslate"><span class="pre">python</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>PS<span class="w"> </span>C:<span class="se">\U</span>sers<span class="se">\U</span>suario&gt;<span class="w"> </span>python
+Python<span class="w"> </span><span class="m">3</span>.13.2<span class="w"> </span><span class="o">(</span>tags/v3.13.2:4f8bb39,<span class="w"> </span>Feb<span class="w">  </span><span class="m">4</span><span class="w"> </span><span class="m">2025</span>,<span class="w"> </span><span class="m">15</span>:23:48<span class="o">)</span><span class="w"> </span><span class="o">[</span>MSC<span class="w"> </span>v.1942<span class="w"> </span><span class="m">64</span><span class="w"> </span>bit<span class="w"> </span><span class="o">(</span>AMD64<span class="o">)]</span><span class="w"> </span>on<span class="w"> </span>win32
+Type<span class="w"> </span><span class="s2">&quot;help&quot;</span>,<span class="w"> </span><span class="s2">&quot;copyright&quot;</span>,<span class="w"> </span><span class="s2">&quot;credits&quot;</span><span class="w"> </span>or<span class="w"> </span><span class="s2">&quot;license&quot;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>more<span class="w"> </span>information.
+&gt;&gt;&gt;
+</pre></div>
+</div>
+</section>
+<section id="linux">
+<h2>Linux<a class="headerlink" href="#linux" title="Link to this heading"></a></h2>
+<p>Python se incluye en la mayoría de las distribuciones de Linux. Puedes
+consultar <a class="reference external" href="https://distrowatch.com/">distrowatch.com</a> para ver la versión
+exacta incluida en tu distribución específica de Linux. Por ejemplo, actualmente uso
+la versión Ubuntu LTS 24.04, la cual incluye la versión 3.12.3. Utilizar la
+versión que se incluye en los repositorios oficiales tiene la ventaja de que
+son versiones relativamente recientes y la mayoría de los programas y librerías
+son compatibles. Dicho esto, en ocasiones queremos probar la última
+funcionalidad del lenguaje; en ese caso podemos instalar la última versión desde
+repositorios no oficiales. Veamos las dos opciones:</p>
+<section id="instalacion-utilizando-apt">
+<h3>Instalación utilizando APT<a class="headerlink" href="#instalacion-utilizando-apt" title="Link to this heading"></a></h3>
+<p>Antes de instalar, podemos revisar si el intérprete está instalado
+y es una versión reciente:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>Si se imprime una versión mayor a 3.12.1, es una versión reciente y
+para la mayoría de los ejercicios del libro es más que suficiente.</p>
+<p>En caso de que requieras actualizar a la última versión del intérprete disponible
+para tu versión de Ubuntu, podemos seguir los siguientes pasos:</p>
+<p>Como primer paso, actualizamos el índice local del repositorio de paquetes de
+Ubuntu para asegurarnos de instalar la última versión disponible:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>update
+</pre></div>
+</div>
+<p>Ahora podemos actualizar nuestro sistema:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>-y<span class="w"> </span>upgrade
+</pre></div>
+</div>
+<p>El parámetro <code class="docutils literal notranslate"><span class="pre">-y</span></code> nos permite confirmar con anticipación la instalación
+de las nuevas versiones.</p>
+<p>Si solo queremos actualizar el intérprete y sus dependencias, podemos
+ejecutar el comando:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3
+</pre></div>
+</div>
+<p>Una vez actualizado el sistema, podemos ver la versión del intérprete con:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>Ahora vamos a actualizar el programa <code class="docutils literal notranslate"><span class="pre">pip</span></code>, con el que
+gestionamos los <em>paquetes</em> o librerías de terceros:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+</pre></div>
+</div>
+</section>
+<section id="instalacion-utilizando-el-ppa-de-deadsnakes">
+<h3>Instalación utilizando el PPA de deadsnakes<a class="headerlink" href="#instalacion-utilizando-el-ppa-de-deadsnakes" title="Link to this heading"></a></h3>
+<p>Para instalar la última versión de Python en Ubuntu, vamos a utilizar el
+<a class="reference external" href="https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa">repositorio</a> del equipo
+<em>deadsnakes</em>, en el cual se incluyen versiones más recientes que en la
+distribución oficial. Para esto, agregamos el repositorio a nuestro sistema con
+los siguientes comandos:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>add-apt-repository<span class="w"> </span>ppa:deadsnakes/ppa
+sudo<span class="w"> </span>apt<span class="w"> </span>update
+</pre></div>
+</div>
+<p>Una vez agregado el repositorio no oficial, podemos instalar la versión más
+reciente. Vamos a instalar otras herramientas para desarrollo utilizando dev
+para incluir los encabezados de C para compilar librerías y venv para instalar
+las herramientas de ambientes virtuales de Python que utilizaremos más
+adelante:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3.13<span class="w"> </span>python3.13-venv
+</pre></div>
+</div>
+<p>Para ejecutar la nueva versión, debemos especificar la versión:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3.13
+</pre></div>
+</div>
+<p>Para instalar <code class="docutils literal notranslate"><span class="pre">pip</span></code> para el nuevo intérprete:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3.13<span class="w"> </span>-m<span class="w"> </span>ensurepip<span class="w"> </span>--upgrade
+</pre></div>
+</div>
+<p>Y por último, actualizamos <code class="docutils literal notranslate"><span class="pre">pip</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3.13<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+</pre></div>
+</div>
+</section>
+</section>
+<section id="macos">
+<h2>MacOS<a class="headerlink" href="#macos" title="Link to this heading"></a></h2>
+<p>Para instalar Python en MacOS, puedes bajar la última versión de <a class="reference external" href="https://www.python.org/downloads/">python.org</a>
+y seguir las instrucciones para instalarlo utilizando la aplicación.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="index.html" class="btn btn-neutral float-left" title="pyBook documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="cap02.html" class="btn btn-neutral float-right" title="Capítulo 2: Introducción al lenguaje" accesskey="n" rel="next">Siguiente <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2025, Jose Mario García Valdez.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
