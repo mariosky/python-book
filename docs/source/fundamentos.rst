@@ -560,10 +560,42 @@ no conozcamos el tamaño del arreglo.
 
 Índice negativo: se cuenta de derecha a izquierda, iniciando en –1.
 
+Listas vs Tuplas
+^^^^^^^^^^^^^^^^
+
+La principal diferencia entre ambas secuencias es que las listas
+pueden ser modificadas **in place**. Por ejemplo, utilizando el índice,
+podemos modificar el valor al que hace referencia:
+
 .. code-block:: python
 
-		>>> t[-3] 
-		4.56
+   >>> li = ['abc', 23, 4.34, 23]
+   >>> li[1] = 45 
+   >>> li
+   ['abc', 45, 4.34, 23]
+
+Si intentamos esto con una tupla, no es posible ya que es inmutable:
+
+.. code-block:: python
+
+   >>> t = (23, 'abc', 4.56, (2,3), 'def')
+   >>> t[2] = 3.14
+
+   Traceback (most recent call last):
+   File "<pyshell#75>", line 1, in -toplevel-
+      tu[2] = 3.14
+   TypeError: object doesn't support item assignment
+
+Una manera de "modificar" una tupla o cualquier estructura inmutable es
+creando una nueva estructura con la modificación y reasignandola al nombre 
+nuevamente. 
+
+.. code-block:: python
+   
+   >>> t = (23, 'abc', 3.14, (2,3), 'def')
+
+.. important::
+   Gracias a que las **tuplas** son **inmutables**, estas estructuras son más rápidas y eficientes.  
 
 Cortes *slicing*
 ^^^^^^^^^^^^^^^^
@@ -589,8 +621,8 @@ número de elementos que tiene la secuencia.
 		('abc', 4.56, (2,3))
 
 .. figure:: ./images/hola.png
-   :align: left
-   :alt: Puntos de cortes de la cadena "Hola"
+   :align: center
+   :alt: Puntos de cortes de la cadena `"Hola"`
    
    En la figura podemos ver los puntos de corte de la palabra "Hola".
    Podemos observar que los puntos de corte están ubicados antes o 
@@ -598,7 +630,8 @@ número de elementos que tiene la secuencia.
    de los elementos.  
 
 
-.. rubric:: Cómo copiar una secuencia
+Cómo copiar una secuencia
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Para indicar que el corte inicial es desde el punto inicial o cero,
 simplemente se omite el valor, por ejemplo: `lista[:21]`. Igual si queremos indicar que el 
@@ -640,7 +673,65 @@ error ya que realmente ambos nombres aunque sean distintos hacen
 referencia al mismo objeto. Si vemos el contenido de la `lista2` será 
 igual a `lista1` aunque aparentemente no la modificamos. 
 
+El operador `in`
+^^^^^^^^^^^^^^^^
 
+El operador `in` establece una condición booleana para ver si un elemento está en un 
+estructura tipo secuencia. También se puede utilizar junto con `not`:
+
+.. code-block:: python
+
+   >>> t = (1, 2, 4, 5)
+   >>> 3 in t
+   False
+   >>> 4 in t
+   True
+   >>> 4 not in t
+   False
+
+En las cadenas de caracteres, comprueba si una subcadena está en la secuencia:
+
+.. code-block:: python
+
+   >>> a = 'abcde'
+   >>> 'c' in a
+   True
+   >>> 'cd' in a
+   True
+   >>> 'ac' in a
+   False
+
+
+Los operadorer `+` y `*`
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+El operador `+` produce una nueva secuencia cuyos valores son la concatenación de los operandos.
+
+.. code-block:: python
+
+   >>> (1, 2, 3) + (4, 5, 6)
+   (1, 2, 3, 4, 5, 6)
+
+   >>> [1, 2, 3] + [4, 5, 6]
+   [1, 2, 3, 4, 5, 6]
+
+   >>> "Hello" + " " + "World"
+   "Hello World"
+
+En el caso del operador de producto `*` se produce una nueva secuencia 
+a partir de la original repetida `n` veces.  El valor de `n` es un entero, entonces 
+la sintaxis es `<secuencia> * int`. 
+
+.. code-block:: python
+
+   >>> (1, 2, 3) * 3
+   (1, 2, 3, 1, 2, 3, 1, 2, 3)
+
+   >>> [1, 2, 3] * 3
+   [1, 2, 3, 1, 2, 3, 1, 2, 3]
+
+   >>> "Hola" * 3
+   "HolaHolaHola"
 
 Diccionarios
 ------------
