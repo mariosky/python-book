@@ -950,6 +950,9 @@ menos que la cantidad de objetos diferentes que podemos utilizar como clave.
    :scale: 80 %
    :alt: Ejemplo de una `función hash <https://es.wikipedia.org/wiki/Funci%C3%B3n_hash>`__ .
 
+Funciones *Hash*
+^^^^^^^^^^^^^^^^
+
 Vamos a suponer que tenemos un espacio de memoria muy limitada, y 
 solo tenemos ocho espacios de memoria. Ahora, queremos almacenar a cuatro estudiantes utilizando 
 un diccionario y el nombre del estudiante como la clave. Aunque el número de estudiantes aquí es menor, pensemos que estos estudiantes 
@@ -1052,6 +1055,36 @@ permiten regresar todos los elementos del diccionario.
    Normalmente no recuperamos los elementos de un diccionario en forma 
    secuencial.  Si necesitamos esa funcionalidad debemos evaluar el uso 
    de una estructura tipo lista o tupla. 
+
+Listas vs Diccionarios
+^^^^^^^^^^^^^^^^^^^^^^
+Es importante conocer que tan eficente es una estructura de datos para 
+relizar ciertas tareas y así poder decidir si la utilizamos o no.
+
+.. important::
+   Aunque esta fuera del ámbito de este tema, es imortante que como 
+   programadores conozcamos  La notación `O grande <https://es.wikipedia.org/wiki/Cota_superior_asint%C3%B3tica#%C3%93rdenes_usuales_para_funciones>`__ (Big O notation) 
+   que nos permite de una manera muy compacta darnos una idea de la 
+   eficiencia de un algoritmo o estructura, en términos del 
+   tiempo del tiempo de ejecución y la cantidad de memoria que utiliza, 
+   en función del número de elementos que hay que procesar.
+
+Podemos resumir el desempeño de ambas estructuras (en cuanto a tiempo de ejecución) de la siguiente manera:
+
+Listas
+   - Se implementan como arreglos dinámicos con memoria contigua.
+   - El acceso a los elementos utilizando el por índice es O(1) (muy rápido).
+   - Buscar un elemento por su valor tiene una complejidad O(n) (esto es lento para listas muy grandes).
+   - Insertar un valor al final (``append``) es rápido en promedio O(1). Esto se debe a que se reserva espacio con anterioridad.
+   - Insertar o eliminar un valor en alguna posición (índice) es O(n) porque hay que mover elementos.
+   - Iteración secuencial muy rápida ya que los valores están contiguos en la memoria e incluso se puede implementar algo con memoria caché. 
+
+Diccionarios
+   - Se implementan como funciones hash.
+   - Recuperación del valor utilizando la clave es muy rápida, en promedio O(1). 
+   - Insertar o eliminar un valor es muy rápido O(1) en promedio.
+   - Iteración secuencial es también rápida ya que cada elemento es O(1) asimtóticamente igual que las listas, pero en la práctica las listas son más rápidas para esta tarea. 
+
 
 Expresiones lógicas
 ------------------- 
@@ -1163,7 +1196,294 @@ de programación han agregado esta funcionalidad. Por ejemplo, C# cuenta con la 
 <sentencias>
    Es el bloque de código en python que queremos ejecutar en cada iteración.
 
+Veamos dos ejemplos:
+
+Primero veamos el caso de iterar utilizando colección *iterable* a 
+una cadena de caracteres. Recordemos que una cadena es básicamente una tupla, también inmutable
+pero que tiene en cada posición un caracter. Entonces el código a continuación imprimiría 
+un caracter en cada iteración. Como ya habras notado el método `str.print( )` da un salto de
+línea en cada impresión. En la sección dedicada a operaciones con cadenas de texto veremos 
+con más detalle los métodos de impresión.   
+
 .. code-block:: python 
 
-   for caracter in 'Hello World':
-       print(caracter)
+   >>> for c in 'hola':
+   ...     print(c)
+   ...
+   h
+   o
+   l
+   a
+
+Como segundo ejemplo veremos el caso en el que `<colección>` a su vez contiene elementos compuestos. Por ejemplo,
+una lista de sequencias o diccionarios. En este caso podemos utilizar a `<elemento>` como una plantilla de la 
+estructura que nos sirver para desempacar los elementos incluidos en `<colección>`:
+
+.. code-block:: python 
+
+   >>> for (a, b) in [(1,2), (2,3), (3,4)]:
+   ...     print(a + b)
+   ...     
+   3
+   5
+   7
+
+En el ejemplo tenemos una `<colección>` de tuplas con dos enteros cada una. 
+Todas las tuplas tienen la misma estructura por lo que podemos hacer una 
+plantilla que empate con esta estructura. Vemos como :python:`(a, b)` puede 
+recibir a :python:`(1, 2)`, en este caso :python:`a` se ata al entero :python:`1` y 
+:python:`b` se ata al entero :python:`2`. Una vez desempacados los valores 
+los podemos utilizar en el bloque de código a cada uno de manera independiente.
+
+Esto contrasta con la opción de recibir en un `<elemento>` que solo sea un nombre. 
+En este caso tenemos que hacer referencia a los elementos individuales "manualmente":
+
+.. code-block:: python 
+
+   >>> for tupla in [(1,2), (2,3), (3,4)]:
+   ...     print(tupla[0] + tupla[1])
+   ...     
+   3
+   5
+   7
+
+
+.. rubric::  El uso de :python:`range()`
+
+La manera clásica de hacer un ciclo `for` en otros lenguajes de programación
+imperativa sería algo como
+
+.. code-block:: c 
+
+   #include <stdio.h>
+
+   int main() {
+      int i;
+      for (i = 1; i <= 5; i++) {
+         printf("%d\n", i);
+      }
+      return 0;
+   }
+
+donde utilizamos a un entero llamado `i` por convención, ya que normalmente 
+nos sirve de índice de la iteración
+
+.. math::
+    \sum_{i=1}^{n} i. 
+
+En el caso de Python, este tipo de ciclos se hace de una manera consistente.
+Utilizamos una secuencia de enteros prefabricada con los índices que ocupamos. 
+Para el caso anterior podríamos hacer algo como:
+
+.. code-block:: python
+
+   >>> for i in [1, 2, 3, 4]:
+   ...     print(i) 
+   ... 
+   1
+   2
+   3
+   4
+
+Aunque esta es una solución funcional, no sería muy práctica en 
+el caso de que ocupemos iterar de cero a un millón. Para esto 
+en Python utilizamos un método de fabrica que genera esta lista 
+de índices: 
+
+.. code-block:: python
+
+   >>> for i in range(1, 5):
+   ...     print(i)
+   ... 
+   1
+   2
+   3
+   4
+
+El método :python:`range()` nos regresa un **objeto iterable** e inmutable que
+funciona de manera similar a un `generador <https://es.wikipedia.org/wiki/Generador_(inform%C3%A1tica)>`__
+(no lo es). Es decir, :python:`range()` no
+genera y almacena inmediatamente todos los valores de los índices en la
+memoria, más bien los va generando bajo demanda. Esto es muy eficiente. 
+
+Si creamos un objeto iterable de manera interactiva:
+
+.. code-block:: python
+
+   >>> range(5)
+   range(0, 5)
+
+Vemos que no regresa una lista con los índices, regresa el objeto iterable. 
+Cuando pasamos solo un parámetro a la función el iterable va de cero a uno 
+menos del valor que pasamos. Esto es lo que hacemos normalmente en los 
+ciclos que creamos para recorrer una secuencia de la manera tradicional.
+Si queremos ver los índices como una lista podemos utilizar el constructor de `list()`:
+
+.. code-block:: python
+
+   >>> list(range(5))
+   [0, 1, 2, 3, 4]
+
+Si queremos generar los índices saltándonos algunos números enviamos 
+el salto como tercer parámetro:
+
+.. code-block:: python
+
+   >>> list(range(2,10,2))
+   [2, 4, 6, 8]
+
+incluso podemos generar índices a la inversa:
+
+.. code-block:: python
+
+   >>> list(range(10,1,-2))
+   [10, 8, 6, 4, 2]
+
+
+Paso de parámetros utilizando estructuras
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Python no tiene sobrecargado de funciones (que haya dos o más funciones con el mismo nombre). 
+De hecho, si declaras dos funciones Python simplemente reemplaza la primera definición con 
+la segunda: 
+
+.. code-block:: python
+
+   >>> def imprime_saludo(nombre):
+   ...     print('Hola, soy ', nombre)
+   ...     
+   >>> imprime_saludo('Mario') 
+   Hola, soy  Mario
+   >>> def imprime_saludo(nombre):
+   ...     print('Hola')
+   ...     
+   >>> imprime_saludo('Mario')
+   Hola
+   >>> 
+
+.. Danger::
+   La facilidad para redefinir funciones en Python puede ser peligroso 
+   ya que sin querer podríamos redefinir un método de alguna librería o 
+   que haya escrito otro programador. En otros lenguajes debemos de etiquetar 
+   a nuestras funciones para permitir que se pueda redefinir.
+
+Podemos simular el sobrecargado de funciones utilizando parámetros opcionales 
+con un valor por defecto:
+
+.. code-block:: python
+
+   >>> def imprime_saludo(nombre, saludo='Hola, soy'):
+   ...     print(saludo, nombre)
+   ...     
+   >>> imprime_saludo('Mario')
+   Hola, soy Mario
+   >>> imprime_saludo('Mario', '¿Qué tal?, me llamo ' )
+   ¿Qué tal?, me llamo  Mario
+
+En el ejemplo el parámetro ``saludo`` es opcional. En caso
+de que no se envíe un argumento tomará la cadena `'Hola, soy'`.
+El parámetro `nombre` es obligatorio ya que no tiene un valor 
+por defecto. Primero van los parámetros obligatorios y luego 
+los opcionales.
+
+Otra flexibilidad que nos ofrece el lenguaje es la capadidad de 
+las funciones para recibir un número arbitrario de argumentos. 
+Los argumentos pueden ser posicionales o utilizando nombres: 
+
+.. rubric::  Secuencia de argumentos
+
+.. code-block:: python
+
+   >>> def imprime_args(*argumentos):
+   ...     print(argumentos)
+   ...     
+   >>> imprime_args(1, 'hola', 34.2)
+   (1, 'hola', 34.2)
+   >>> 
+
+Si queremos podemos indicar parámetros posicionales pero estos deben ir antes de 
+la secuencia:
+
+.. code-block:: python
+
+   >>> def imprime_args(param1, param2, *argumentos):
+   ...     print(argumentos)
+   ...     print(param1, param2)
+   ...     
+   >>> imprime_args(1, 'hola', 34.2)
+   (34.2,)
+   1 hola
+
+.. important::
+   En ejemplo vemos un detalle importante. Cuando una tupla tiene un solo 
+   elemento se le agrega una coma para que no se confunda con una expresión entre paréntesis.
+
+Podemos también enviar una tupla con argumentos de una función con parámetros posicionales:
+
+.. code-block:: python
+
+   >>> def imprime_args(a, b, c):                                                                                                                                                        
+   ...     print(a, c, b)
+   ... 
+   >>> tupla = (1, 'hola', 34.2)
+   >>> imprime_args(*tupla) 
+   1 34.2 hola
+
+Fíjate como se debe enviar la tupla anteponiendo un asterísco :python:`*tupla`.
+
+.. code-block:: python
+
+   >>> def imprime_kwargs(**kwargs):
+   ...     print(kwargs)
+   ...     if 'id' in kwargs: print(kwargs['id'])
+   ...     
+   >>> imprime_kwargs(id=100, nombre='Juan', edad=37)
+   {'id': 100, 'nombre': 'Juan', 'edad': 37}
+   100
+
+Al igual que con los parámetros por posición, también se puede usar `**` al llamar la función. 
+Y ahora pasamos un diccionario.
+
+>>> def imprime_args(a, b, c):
+...     print(a, c, b)
+...     
+>>> dic = {'a':123, 'c':(2,3), 'b':'Hola'} 
+>>> imprime_args(**dic)
+123 (2, 3) Hola
+
+.. tip::
+   Se utilizan por convención los nombres de ``args`` (argumentos) y 
+   ``kwargs`` (argumentos por *key words*), pero esto no es obligatorio y 
+   tu puedes utilizar cualquier nombre.
+
+Recolección automática de basura
+--------------------------------
+
+Python cuenta con un mecanismo de recolección de basura automático, 
+un sistema que elimina aquellos objetos que ya no están siendo 
+referenciados por algún nombre.  
+
+Python utiliza la técnica de conteo de referencias. Cada objeto lleva
+la cuenta de cuantos nombres hacen referencia apuntan a él. Cuando 
+llega a cero, el objeto se elimina, recuperando espacio de memoria.
+Veamos un ejemplo: 
+
+   >>> x = 12 # 'x' apunta a 12
+   >>> y = [1, 2, 3] # 'y' apunta a la lista, cada elemento de la lista también apunta al entero correspondiente
+   >>> x = y # 'x' ahora apunta a la lista. Ningún objeto está atado a 12. El objeto se elimina. Si el doce estuviera en la lista no se elimina.
+   >>> x
+   [1, 2, 3]
+   >>> y
+   [1, 2, 3]
+   >>> del x 
+   >>> del y # Ningún objeto está atado a la lista. La lista se elimina.
+   >>> x # El nombre 'x' ya se borró, se lanza una excepción
+   Traceback (most recent call last):
+   File "<python-input-54>", line 1, in <module>
+      x
+   NameError: name 'x' is not defined
+
+.. Danger:: 
+   La técnida de conteo no puede detectar casos en los que dos objetos se referencían 
+   mutuamente, pero nadie hace referencia a ninguno de los dos. Para esto Python utiliza
+   un módulo especial que los detecta y recupera la memoria.
