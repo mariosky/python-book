@@ -6,17 +6,16 @@
 Fundamentos del lenguaje
 ====================================
 
-
-Introducción 
+Introducción
 ------------
 
 El lenguaje Python es un lenguaje interpretado, de propósito general, de código
 abierto y multiparadigma que fue diseñado originalmente por el desarrollador
 holandés Guido van Rossum a principios de los años noventa. La intención de
-Guido era crear un lenguaje de scripts, fácil de programar y que fuera
-legible, por lo que se utilizan sangrías para dar
-legibilidad al código y estas forman parte del lenguaje. De hecho, el nombre del lenguaje es en honor
-al grupo inglés de comedia Monty Python.
+Guido era crear un lenguaje de scripts, fácil de programar y que fuera legible,
+por lo que se utilizan sangrías para dar legibilidad al código y estas forman
+parte del lenguaje. De hecho, el nombre del lenguaje es en honor al grupo inglés
+de comedia Monty Python.
 
 Empezemos directamente con un ejemplo de código analizando las diferencias que
 vemos respecto a otros lenguajes compilados como *C#* o *Java*:
@@ -47,48 +46,51 @@ línea.
 
 En la primera línea vemos la declaración de una variable llamada ``x`` a la cual
 se le asigna el resultado de una resta entre dos números enteros. Aquí
-encontramos la primera diferencia: en Python las "variables" no tienen un tipo de
-dato, son simplemente nombres o etiquetas que hacen referencia a objetos. Los
+encontramos la primera diferencia: en Python las "variables" no tienen un tipo
+de dato, son simplemente nombres o etiquetas que hacen referencia a objetos. Los
 objetos por su parte, sí tienen un tipo de dato. Entonces, en esta línea, el
-resultado de la operación se almacena en memoria en una dirección
-específica, una referencia. Lo que sucede entonces es que el nombre ``x`` se ata a
-la referencia del objeto entero que se crea de la operación :python:`34-23`, el :python:`11` en la memoria.
-Esto es distinto al concepto de variable en otros lenguajes. Por ejemplo, en C# las
-variables *tipo valor* reservan un espacio en la memoria donde se guarda literalmente el valor 
-que contienen, y los valores deben ser del tipo correspondiente. Si yo declaro una 
-variable como entera de 16 bits, solo puedo almacenar en ella objetos de este tipo.    
+resultado de la operación se almacena en memoria en una dirección específica,
+una referencia. Lo que sucede entonces es que el nombre ``x`` se ata a la
+referencia del objeto entero que se crea de la operación :python:`34-23`, el
+:python:`11` en la memoria.  Esto es distinto al concepto de variable en otros
+lenguajes. Por ejemplo, en C# las variables *tipo valor* reservan un espacio en
+la memoria donde se guarda literalmente el valor que contienen, y los valores
+deben ser del tipo correspondiente. Si yo declaro una variable como entera de 16
+bits, solo puedo almacenar en ella objetos de este tipo.
 
-Volviendo al ejemplo, el tipo de dato al que hace referencia el nombre ``x`` después de la asignación,
-es temporalmente :python:`int`, pero en otro momento, podríamos
-atar el nombre ``x`` a un objeto diferente de otro tipo de dato. Por ejemplo, 
-:python:`x = 2.3` o :python:`x = "Hola"`. De nuevo, los objetos en memoria son tipo :python:`float` y :python:`str`
-respectivamente y nuestra etiqueta ``x`` se puede atar a cualquiera de ellos sin
-ningún problema. Vemos entonces que se atan los nombres ``y`` y ``z`` a la cadena de caracteres
-:python:`"Hola"` y al flotante :python:`3.44` respectivamente. 
+Volviendo al ejemplo, el tipo de dato al que hace referencia el nombre ``x``
+después de la asignación, es temporalmente :python:`int`, pero en otro momento,
+podríamos atar el nombre ``x`` a un objeto diferente de otro tipo de dato. Por
+ejemplo, :python:`x = 2.3` o :python:`x = "Hola"`. De nuevo, los objetos en
+memoria son tipo :python:`float` y :python:`str` respectivamente y nuestra
+etiqueta ``x`` se puede atar a cualquiera de ellos sin ningún problema. Vemos
+entonces que se atan los nombres ``y`` y ``z`` a la cadena de caracteres
+:python:`"Hola"` y al flotante :python:`3.44` respectivamente.
 
 .. note::
 
-   En este texto utilizo un léxico que debería entender un programador con 
-   algo de experiencia. Recuerda que este es el público al que va dirigido el libro. En 
-   caso de que haya algunos pocos términos que no tengas claro su significado, no hay problema, 
-   investiga un poco y te debería quedar claro.
+   En este texto utilizo un léxico que debería entender un programador con algo
+   de experiencia. Recuerda que este es el público al que va dirigido el libro.
+   En caso de que haya algunos pocos términos que no tengas claro su
+   significado, no hay problema, investiga un poco y te debería quedar claro.
 
 .. rubric:: Python es dinámico
 
-Algunos programadores pueden ver esta funcionalidad de Python como algo peligroso y
-realmente lo es. Podemos equivocarnos fácilmente pensando que ``x`` hace 
-referencia a un objeto de tipo entero cuando por algún error puede referirse
-a una cadena de caracteres o a un flotante y causar problemas en nuestro código.
-El lenguaje nos protege hasta cierto punto ya que lanzará una excepción en caso
-de que no esté definida una operación para un tipo de dato específico, pero en
-general es algo que debemos tener en cuenta en este tipo de lenguajes dinámicos.
+Algunos programadores pueden ver esta funcionalidad de Python como algo
+peligroso y realmente lo es. Podemos equivocarnos fácilmente pensando que ``x``
+hace referencia a un objeto de tipo entero cuando por algún error puede
+referirse a una cadena de caracteres o a un flotante y causar problemas en
+nuestro código.  El lenguaje nos protege hasta cierto punto ya que lanzará una
+excepción en caso de que no esté definida una operación para un tipo de dato
+específico, pero en general es algo que debemos tener en cuenta en este tipo de
+lenguajes dinámicos.
 
 Otro problema que tenemos es que, a diferencia de los lenguajes fuertemente
 tipados, nuestras herramientas de programación en ocasiones no pueden ayudarnos
-desplegando, por ejemplo, la lista de atributos o miembros de un objeto, ya que 
+desplegando, por ejemplo, la lista de atributos o miembros de un objeto, ya que
 no sabe a qué tipo de objeto hará referencia el nombre que estamos utilizando.
 
-Otra diferencia importante la encontramos en este bloque de código: 
+Otra diferencia importante la encontramos en este bloque de código:
 
 .. code-block:: python
 
@@ -104,12 +106,12 @@ Aquí definimos un bloque que se va a ejecutar si la condición del ``if`` es
 verdadera. A diferencia de otros lenguajes, aquí definimos el bloque utilizando
 espacios (una sangría). Es común llamarle *indentación* a esta sangría por el
 nombre que recibe en inglés. Entonces, el bloque inicia al cambiar la
-indentación y debe mantenerse al saltar de línea y termina cuando regresamos la indentación 
-al nivel anterior.
+indentación y debe mantenerse al saltar de línea y termina cuando regresamos la
+indentación al nivel anterior.
 
 .. rubric:: Indentación consistente
 
-En el ejemplo vemos que la condición no tiene indentación, pero el bloque de 
+En el ejemplo vemos que la condición no tiene indentación, pero el bloque de
 código que se ejecutará en caso de ser verdadera consta de dos líneas. Estas
 líneas tienen una indentación consistente de cuatro espacios cada una. Para
 terminar el bloque, simplemente escribimos una nueva línea que no contenga los
@@ -122,10 +124,11 @@ recomienda que no se utilicen caracteres de tabulación y en su lugar se
 reemplacen automáticamente por cuatro espacios. Esta es una capacidad que tienen
 los editores de código y por lo regular se hace por defecto para los archivos
 con extensión  ``.py`` utilizados para los scripts de Python. La convención de
-utilizar cuatro espacios la establece la [PEP 8](https://peps.python.org/pep-0008/),
-en donde podemos encontrar las convenciones utilizadas por los programadores de las librerías
-estándar de la distribución principal de Python. Las siglas PEP vienen del inglés 
-*Python Enhancement Proposal* (Propuesta de Mejora para Python). Un PEP es un 
+utilizar cuatro espacios la establece la
+[PEP8](https://peps.python.org/pep-0008/), en donde podemos encontrar las
+convenciones utilizadas por los programadores de las librerías estándar de la
+distribución principal de Python. Las siglas PEP vienen del inglés
+*Python Enhancement Proposal* (Propuesta de Mejora para Python). Un PEP es un
 documento público que brinda información a la comunidad sobre alguna nueva
 característica o sugerencia de mejora para el lenguaje.
 
@@ -138,10 +141,10 @@ operadores (``+ - * /``) funcionan como siempre.
 Otra característica importante es que la función para imprimir en la consola es
 :python:`print()` y no tuvimos que agregar una librería para acceder a su funcionalidad.
 Ya viene de fábrica. De hecho, Python incluye muchas funciones de este tipo
-dentro del lenguaje. Utilizaremos muchas de ellas más adelante. 
+dentro del lenguaje. Utilizaremos muchas de ellas más adelante.
 
 .. admonition:: Baterías incluidas
-   
+
    Esto es parte del lema de **baterías incluidas** de Python, que se refiere a
    que el lenguaje incluye una extensa y muy útil colección de librerías
    (módulos en Python) en la distribución estándar.
@@ -175,7 +178,7 @@ potencia. Por ejemplo, :python:`21.3E-4` es equivalente a :python:`21.3 * 10^-4`
 
 En Python, una cadena o string es una *secuencia* de caracteres. Una *secuencia*
 es una abstracción que veremos más adelante, cuando nos enfoquemos en estructuras
-de datos; ahí veremos otros aspectos importantes de este tipo de dato. 
+de datos; ahí veremos otros aspectos importantes de este tipo de dato.
 Por lo pronto, podemos definir a una cadena como una colección
 ordenada de caracteres útil para almacenar texto. Las cadenas se pueden
 representar de distintas maneras: utilizando comillas dobles (:python:`"Hola"`),
@@ -187,13 +190,13 @@ utilizamos comillas triples, ya sean dobles o simples:
 
 .. code-block:: python
 
-   """ 
-   Este es un ejemplo del uso de 
-   comillas triples para definir texto 
-   que puede incluir comillas como "Carl's Jr." y 
-   saltos de línea. 
-       Indentación 
-       Indentación 
+   """
+   Este es un ejemplo del uso de
+   comillas triples para definir texto
+   que puede incluir comillas como "Carl's Jr." y
+   saltos de línea.
+       Indentación
+       Indentación
    """
 
 En otra sección nos vamos a concentrar en la funcionalidad de los objetos tipo *string*;
@@ -224,7 +227,7 @@ documentación en la primera línea de una función o clase.
 .. code-block:: python
 
    def suma(x, y):
-       """El docstring. Esta función 
+       """El docstring. Esta función
        regresa la suma o concatenación de dos cadenas, es
        importante ya que blah blah blah."""
        return x + y  # Comentario aquí...
@@ -235,13 +238,14 @@ comentario.
 
 .. rubric:: Literales
 
-En los ejemplos anteriores utilizamos *valores literales* de los tipos de datos que 
-ilustramos. Es importante reconocer que estos valores representan datos u objetos específicos 
-de cierto tipo de dato. Entonces, en los ejemplos anteriores, le definíamos nombres, mediante la 
-asignación (o atado) a ellos de un valor literal.
+En los ejemplos anteriores utilizamos *valores literales* de los tipos de datos
+que ilustramos. Es importante reconocer que estos valores representan datos u
+objetos específicos de cierto tipo de dato. Entonces, en los ejemplos
+anteriores, le definíamos nombres, mediante la asignación (o atado) a ellos de
+un valor literal.
 
-Para terminar esta sección, vamos a representar valores literales de los tipos de datos 
-básicos de Python: 
+Para terminar esta sección, vamos a representar valores literales de los tipos
+de datos básicos de Python:
 
 - Entero (:python:`int`): :python:`791926378172346918273469128374619283`, :python:`2`
 - Flotante (:python:`float`): :python:`34.3`, :python:`0.33`
@@ -250,15 +254,16 @@ básicos de Python:
 
 .. rubric:: El valor especial :python:`None`
 
-La constante :python:`None` es utilizada para indicar la ausencia de valor o un valor nulo. 
-Tiene su propio tipo :python:`NoneType`. De manera similar al valor ``NULL`` en bases de datos,
-el valor :python:`None` no es igual a cero, :python:`False` o vacío, aunque se considera :python:`False` en 
-condiciones booleanas. Se puede utilizar para definir un nombre que no hace referencia 
-a un objeto todavía. Por ejemplo:
+La constante :python:`None` es utilizada para indicar la ausencia de valor o un
+valor nulo.  Tiene su propio tipo :python:`NoneType`. De manera similar al valor
+``NULL`` en bases de datos, el valor :python:`None` no es igual a cero,
+:python:`False` o vacío, aunque se considera :python:`False` en condiciones
+booleanas. Se puede utilizar para definir un nombre que no hace referencia a un
+objeto todavía. Por ejemplo:
 
 .. code-block:: python
 
-   x = None 
+   x = None
    print(x)
 
 En este caso ``x`` existe aunque el objeto al que está atado es :python:`None`. Esto
@@ -283,7 +288,7 @@ Veamos una definición básica de una función que suma dos números:
 .. code-block:: python
 
    >>> def suma(a, b):
-   ...    """ Esta función suma dos números""" 
+   ...    """ Esta función suma dos números"""
    ...    return a + b
    ...
 
@@ -301,7 +306,7 @@ memoria lista para ser utilizada.
 
 En otros lenguajes debemos ser muy específicos indicando el tipo de dato que
 regresa una función o indicar de alguna manera, por ejemplo, con ``void``, si la
-función no devuelve ningún valor.  
+función no devuelve ningún valor.
 
 Por ejemplo, en C:
 
@@ -314,22 +319,23 @@ Por ejemplo, en C:
 
 En Python no es necesario indicar el tipo de dato que regresa la función ni
 tampoco el tipo de dato de los parámetros que recibe. Entonces, el encabezado de
-la función se simplifica mucho, ya que solo indicamos con :python:`def` el inicio de la
-definición de la función. Indicamos el nombre (:python:`suma`) y entre paréntesis una
-lista opcional de parámetros separados por una coma (:python:`suma(a, b)`). Por último, 
-algo muy importante, el símbolo de dos puntos (``:``) que marca el inicio del
-bloque de código que define el cuerpo de la función.
+la función se simplifica mucho, ya que solo indicamos con :python:`def` el
+inicio de la definición de la función. Indicamos el nombre (:python:`suma`) y
+entre paréntesis una lista opcional de parámetros separados por una coma
+(:python:`suma(a, b)`). Por último, algo muy importante, el símbolo de dos
+puntos (``:``) que marca el inicio del bloque de código que define el cuerpo de
+la función.
 
-Como vimos anteriormente, el bloque del cuerpo de la función debe estar indentado 
-utilizando cuatro espacios. El bloque termina con la única instrucción :python:`return a + b` 
-indicando que queremos regresar como resultado la operación :python:`a + b`, la suma de 
-los dos números ``a`` y ``b``.
+Como vimos anteriormente, el bloque del cuerpo de la función debe estar
+indentado utilizando cuatro espacios. El bloque termina con la única instrucción
+:python:`return a + b` indicando que queremos regresar como resultado la
+operación :python:`a + b`, la suma de los dos números ``a`` y ``b``.
 
 Ejecución de funciones
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-Una vez definida la función, podemos ejecutarla de esta manera, utilizando 
+Una vez definida la función, podemos ejecutarla de esta manera, utilizando
 valores literales como parámetros:
 
 .. code-block:: python
@@ -339,10 +345,10 @@ valores literales como parámetros:
 
 En este ejemplo no estamos asignando el resultado de la suma a ninguna variable
 o imprimiendo el resultado. Sin embargo, el ejemplo está pensado para ejecutarse
-de manera interactiva utilizando el intérprete. En este caso, el
-resultado de la función se imprimiría automáticamente en la siguiente línea de
-la sesión. Por otro lado, si escribimos el código como un script y lo corremos
-no se imprimiría nada, pues no se ejecuta de manera interactiva.
+de manera interactiva utilizando el intérprete. En este caso, el resultado de la
+función se imprimiría automáticamente en la siguiente línea de la sesión. Por
+otro lado, si escribimos el código como un script y lo corremos no se imprimiría
+nada, pues no se ejecuta de manera interactiva.
 
 Para ver el resultado si ejecutamos el script, podríamos escribir algo como:
 
@@ -353,7 +359,7 @@ Para ver el resultado si ejecutamos el script, podríamos escribir algo como:
    resultado = suma(2, 4)
    print(resultado)
 
-   # Aún más compacto 
+   # Aún más compacto
    print(suma(0, 2))
 
 Hay un detalle importante en nuestro código. Por alguna razón estamos asegurando
@@ -365,8 +371,8 @@ continuación?
    >>> suma('hola', ' mundo')
    'hola mundo'
 
-El resultado sería :python:`'hola mundo'`, la concatenación de las dos cadenas de
-entrada. Esto resalta el punto que habíamos considerado anteriormente: no
+El resultado sería :python:`'hola mundo'`, la concatenación de las dos cadenas
+de entrada. Esto resalta el punto que habíamos considerado anteriormente: no
 debemos asumir que los nombres estarán atados a objetos de cierto tipo.
 
 Anotación de tipos
@@ -385,20 +391,20 @@ los correctos. Ejemplo:
    def suma(a: int, b: int) -> int:
        return a + b
 
-Aquí, ``a`` y ``b`` se anotan como enteros (:python:`int`), y ``-> int`` indica que la función
-devuelve un entero. Estas anotaciones son utilizadas por herramientas de
-edición y librerías para alertarnos de manera estática de posibles errores en
-nuestro código. En otra sección veremos el uso del método :python:`type()` incluido de
-fábrica para inspeccionar en tiempo de ejecución el tipo de dato de una
-variable, lo que nos permitirá verificar que los parámetros sean del tipo
-correcto. Por lo pronto, puedes investigar este método e intentar validar que
-solo se reciban y regresen valores enteros.
+Aquí, ``a`` y ``b`` se anotan como enteros (:python:`int`), y ``-> int`` indica
+que la función devuelve un entero. Estas anotaciones son utilizadas por
+herramientas de edición y librerías para alertarnos de manera estática de
+posibles errores en nuestro código. En otra sección veremos el uso del método
+:python:`type()` incluido de fábrica para inspeccionar en tiempo de ejecución el
+tipo de dato de una variable, lo que nos permitirá verificar que los parámetros
+sean del tipo correcto. Por lo pronto, puedes investigar este método e intentar
+validar que solo se reciban y regresen valores enteros.
 
 Las funciones siempre regresan un valor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-En el caso de que no especifiquemos una instrucción de :python:`return`, la función 
-regresará el valor de :python:`None` de manera automática.
+En el caso de que no especifiquemos una instrucción de :python:`return`, la
+función regresará el valor de :python:`None` de manera automática.
 
 Ejemplo de una versión interactiva de esta sección:
 
@@ -454,25 +460,25 @@ Enviamos a la función :python:`aplica(f, a)` la función `:python:`por_tres(a)`
 resultado el resultado de la función, en este caso :python:`6 * 3`. Este tema lo vamos a
 retomar cuando veamos el tema de programación funcional.
 
-Colecciones 
+Colecciones
 --------------------------
 
 .. sidebar:: Objetos inmutables y mutables.
-   
-   Son aquellos objetos que no pueden modificar su contenido una vez creados. 
-   Para "cambiar" el valor de un objeto tenemos que crear un nuevo objeto y actualizar la referencia. 
-   En el caso de los objetos *mutables*, cuando modificamos su contenido esto afecta 
-   a todas las referencias atadas al mismo.  
 
-El pionero de la computación y autor del lenguaje Pascal, `Niklaus Wirth`_ escribió 
-un libro titulado **Algoritmos + Estructuras de Datos = Programas**, la idea básica 
-del título sigue siendo muy poderosa y vigente:
+   Son aquellos objetos que no pueden modificar su contenido una vez creados.
+   Para "cambiar" el valor de un objeto tenemos que crear un nuevo objeto y
+   actualizar la referencia.  En el caso de los objetos *mutables*, cuando
+   modificamos su contenido esto afecta a todas las referencias atadas al mismo.
+
+El pionero de la computación y autor del lenguaje Pascal, `Niklaus Wirth`_
+escribió un libro titulado **Algoritmos + Estructuras de Datos = Programas**, la
+idea básica del título sigue siendo muy poderosa y vigente:
 
    "Un buen programa es el resultado de un algoritmo eficaz combinado con estructuras de datos adecuadas."
 
-Como programadores debemos saber elegir correctamente las estructuras de datos que 
-vamos a utlizar en nuestros programas ya que esto puede simplificar o complicar mucho 
-el diseno del programa.
+Como programadores debemos saber elegir correctamente las estructuras de datos
+que vamos a utlizar en nuestros programas ya que esto puede simplificar o
+complicar mucho el diseno del programa.
 
 Secuencias
 ^^^^^^^^^^
@@ -480,38 +486,40 @@ Secuencias
 .. figure:: ./images/secuencia.svg
    :align: left
    :alt: Un arreglo dinámico clásico con nodos ligados.
-   
-   Python internamente *no utiliza* listas ligadas como podríamos pensar. Utiliza bloques de memoria contiguos, implementandos mediante 
-   `arreglos dinámicos <https://es.wikipedia.org/wiki/Array_din%C3%A1mico>`__. Esto permite 
-   recorrer las listas mucho más rápido que en los casos que hay que moverse a 
-   distintas partes en la memoria. Una desventaja es que puede ser más dificil encontrar 
-   bloques más grandes donde quepa toda la lísta. 
 
-Pyhton incluye de forma nativa, estructuras de datos abstractas para 
+   Python internamente *no utiliza* listas ligadas como podríamos pensar.
+   Utiliza bloques de memoria contiguos, implementandos mediante `arreglos
+   dinámicos <https://es.wikipedia.org/wiki/Array_din%C3%A1mico>`__. Esto
+   permite recorrer las listas mucho más rápido que en los casos que hay que
+   moverse a distintas partes en la memoria. Una desventaja es que puede ser más
+   dificil encontrar bloques más grandes donde quepa toda la lísta.
+
+Pyhton incluye de forma nativa, estructuras de datos abstractas para
 gestionar colecciones secuenciales de objetos:
 
-Tupla :python:`tuple`                   
-   Es una secuencia **inmutable** de elementos. Los elementos pueden ser de 
+Tupla :python:`tuple`
+   Es una secuencia **inmutable** de elementos. Los elementos pueden ser de
    diferentes tipos inluidas otras colecciones.
 
 Cadenas de caracteres :python:`str`
-   Conceptualmente iguales a las tuplas pues también son **inmutables**, pero 
+   Conceptualmente iguales a las tuplas pues también son **inmutables**, pero
    los elementos son caracteres y se definen de una manera distinta.
 
-Listas :python:`list` 
-   Una secuencia **mutable** de elementos, con mayor funcionalidad que las 
+Listas :python:`list`
+   Una secuencia **mutable** de elementos, con mayor funcionalidad que las
    estructuras anteriores.
 
 .. _Niklaus Wirth:  https://es.wikipedia.org/wiki/Niklaus_Wirth
 
-Este tipo de objetos tienen su equivalente en otros lenguajes 
-por ejemplo, las listas se incluyen en C# con la clase genérica ``List<T>`` o  ``ArrayList<E>`` en Java.
+Este tipo de objetos tienen su equivalente en otros lenguajes por ejemplo, las
+listas se incluyen en C# con la clase genérica ``List<T>`` o  ``ArrayList<E>``
+pen Java.
 
-Los tres tipos de secuencias comparten cierta funcionalidad y tienen una 
+Los tres tipos de secuencias comparten cierta funcionalidad y tienen una
 sintaxis similar. Las operaciones que veremos a continuación, son aplicables a
 todas las colecciones tipo secuencia.
 
-Las tuplas se definien como una lista de elementos separados por comas, y se 
+Las tuplas se definien como una lista de elementos separados por comas, y se
 encierran entre paréntesis:
 
 .. code-block:: python
@@ -524,9 +532,9 @@ Las listas se definen igual solo que se encierran entre corchetes:
 
    >>> li = [32, 'abc', 3.26, (20,30), 'xyz',]
 
-Podemos también incluir al final una coma sin provocar problemas. 
-Esto nos permite copiar y pegar elementos sin tener que preocuparnos 
-por agregar o borrar la coma al final. 
+Podemos también incluir al final una coma sin provocar problemas.  Esto nos
+permite copiar y pegar elementos sin tener que preocuparnos por agregar o borrar
+la coma al final.
 
 Como ya vimos anteriormente las cadenas de caracteres se pueden definir
 de varias formas:
@@ -548,7 +556,7 @@ C#, Java, C.
    >>> tu[1]     # Segundo elemento de la tupla.
    'def'
 
-   >>> li = ["abc", 34, 4.34, 23] 
+   >>> li = ["abc", 34, 4.34, 23]
    >>> li[1]      # Segundo elemento de la lista.
    34
 
@@ -556,9 +564,9 @@ C#, Java, C.
    >>> st[1]   # Segundo elemento de la cadena.
    'e'
 
-También podemos utilizar índices negativos, estos nos permiten 
-indicar fácilmente la posición de los últimos elementos aunque 
-no conozcamos el tamaño del arreglo.  
+También podemos utilizar índices negativos, estos nos permiten indicar
+fácilmente la posición de los últimos elementos aunque no conozcamos el tamaño
+del arreglo.
 
 .. code-block:: python
 
@@ -568,10 +576,10 @@ no conozcamos el tamaño del arreglo.
 
 .. code-block:: python
 
-		>>> t[1] 
-		'abc'
+      >>> t[1]
+      'abc'
 
-Índice negativo: se cuenta de derecha a izquierda, iniciando en ``–1``.
+Índice negativo: se cuenta de derecha a izquierda, iniciando en ``-1``.
 
 Listas vs Tuplas
 ^^^^^^^^^^^^^^^^
@@ -583,7 +591,7 @@ podemos modificar el valor al que hace referencia:
 .. code-block:: python
 
    >>> li = ['abc', 23, 4.34, 23]
-   >>> li[1] = 45 
+   >>> li[1] = 45
    >>> li
    ['abc', 45, 4.34, 23]
 
@@ -599,16 +607,20 @@ Si intentamos esto con una tupla, no es posible ya que es inmutable:
       tu[2] = 3.14
    TypeError: object doesn't support item assignment
 
-Una manera de "modificar" una tupla o cualquier estructura inmutable es
-creando una nueva estructura con la modificación y reasignandola al nombre 
-nuevamente. 
+Una manera de "modificar" una tupla o cualquier estructura inmutable es creando
+una nueva estructura con la modificación y reasignandola al nombre nuevamente.
+
+.. information::
+   Regresaremos a este tema en la sección de programación funcional ya que la
+   inmutabilidad es celebrada en la programación funcional.
 
 .. code-block:: python
-   
+
    >>> t = (23, 'abc', 3.14, (2,3), 'def')
 
 .. important::
-   Gracias a que las **tuplas** son **inmutables**, estas estructuras son más rápidas y eficientes.  
+   Gracias a que las **tuplas** son **inmutables**, estas estructuras son más
+   rápidas y eficientes.
 
 Cortes (*slicing*)
 ^^^^^^^^^^^^^^^^^^^
@@ -616,81 +628,80 @@ Cortes (*slicing*)
 Una funcionalidad muy importante que nos brindad las secuencias son los cortes.
 Un corte, regresa una copia del contenedor incluyendo un subconjunto de los
 miembros originales. Un corte se puede especificar con dos índices. Se empieza
-a copiar desde el primer índice y se detiene antes del segundo. 
+a copiar desde el primer índice y se detiene antes del segundo.
 
 .. code-block:: python
 
    >>> t = (23, 'abc', 4.56, (2,3), 'def')
-   >>> t[1:4]	
-		('abc', 4.56, (2,3))
+   >>> t[1:4]
+   ('abc', 4.56, (2,3))
 
-También podemos utilizar índices negativos. Esto es de mucha ayuda para 
-referirnos a los últimos elementos aún cuando ignoremos el 
-número de elementos que tiene la secuencia.
+También podemos utilizar índices negativos. Esto es de mucha ayuda para
+referirnos a los últimos elementos aún cuando ignoremos el número de elementos
+que tiene la secuencia.
 
 .. code-block:: python
 
-   >>> t[1:-1]	
-		('abc', 4.56, (2,3))
+   >>> t[1:-1]
+   ('abc', 4.56, (2,3))
 
 .. figure:: ./images/hola.png
    :align: center
    :alt: Puntos de cortes de la cadena `"Hola"`
-   
+
    En la figura podemos ver los puntos de corte de la palabra :python:`"Hola"`.
-   Podemos observar que los puntos de corte están ubicados antes o 
-   después de los elementos en la secuencia y no coinciden con los índices
-   de los elementos.  
+   Podemos observar que los puntos de corte están ubicados antes o después de
+   los elementos en la secuencia y no coinciden con los índices de los
+   elementos.
 
 
 Cómo copiar una secuencia
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Para indicar que el corte inicial es desde el punto inicial o cero,
-simplemente se omite el valor, por ejemplo: :python:`lista[:21]`. Igual si queremos indicar que el 
-corte se hará hasta el último elemento también se omite el límite 
-superior :python:`lista[12:]`. 
+Para indicar que el corte inicial es desde el punto inicial o cero, simplemente
+se omite el valor, por ejemplo: :python:`lista[:21]`. Igual si queremos indicar
+que el corte se hará hasta el último elemento también se omite el límite
+superior :python:`lista[12:]`.
 
-Para regresar una copia de toda la secuencia simplemente omitimos 
-ambos límites :python:`[:]`. Por ejemplo, para regresar una copia de la 
-siguiente tupla:
+Para regresar una copia de toda la secuencia simplemente omitimos ambos límites
+:python:`[:]`. Por ejemplo, para regresar una copia de la siguiente tupla:
 
 
 .. code-block:: python
 
    >>> t = (23, 'abc', 4.56, (2,3), 'def')
-   >>> t[:]	
+   >>> t[:]
    (23, 'abc', 4.56, (2,3), 'def')
 
-Recordemos que si asignamos simplemente un nombre a otro, no estamos 
-regresando una copia. Estamos asignando la misma referencia a ambos nombres.
-En el caso de un objeto mutable como una lista, si hacemos un cambio utilizando 
-una referencia este cambio se reflejará en todas las referencias, lo cual 
-es normalmente un error. Veamos un ejemplo, para que quede clara esta idea:
+Recordemos que si asignamos simplemente un nombre a otro, no estamos regresando
+una copia. Estamos asignando la misma referencia a ambos nombres.  En el caso de
+un objeto mutable como una lista, si hacemos un cambio utilizando una referencia
+este cambio se reflejará en todas las referencias, lo cual es normalmente un
+error. Veamos un ejemplo, para que quede clara esta idea:
 
 .. code-block:: python
 
    >>> lista1 = [23, 'abc', 4.56, (2,3), 'def']
    >>> lista2 = lista1
    >>> lista1[0] = 'hola'
-   >>> lista1 
+   >>> lista1
    ['hola', 'abc', 4.56, (2,3), 'def']
    >>> lista2
    ['hola', 'abc', 4.56, (2,3), 'def']
 
-Como vemos en el ejemplo, al asignar :python:`lista2 = lista1` realmente 
-ambos nombres están atados al mismo objeto lista en la memoria. 
-Si hacemos un cambio en uno, por ej. :python:`lista1[0] = 'hola'`. Realmente 
-parece que el cambio se hace en ambas "copias", pensar esto es un 
-error ya que realmente ambos nombres aunque sean distintos hacen 
-referencia al mismo objeto. Si vemos el contenido de la :python:`lista2` será 
-igual a :python:`lista1` aunque aparentemente no la modificamos. 
+Como vemos en el ejemplo, al asignar :python:`lista2 = lista1` realmente ambos
+nombres están atados al mismo objeto lista en la memoria.  Si hacemos un cambio
+en uno, por ej. :python:`lista1[0] = 'hola'`. Realmente parece que el cambio se
+hace en ambas "copias", pensar esto es un error ya que realmente ambos nombres
+aunque sean distintos hacen referencia al mismo objeto. Si vemos el contenido de
+la :python:`lista2` será igual a :python:`lista1` aunque aparentemente no la
+modificamos.
 
 El operador `in`
 ^^^^^^^^^^^^^^^^
 
-El operador `in` establece una condición booleana para ver si un elemento está en un 
-estructura tipo secuencia. También se puede utilizar junto con `not`:
+El operador `in` establece una condición booleana para ver si un elemento está
+en un estructura tipo secuencia. También se puede utilizar junto con `not`:
 
 .. code-block:: python
 
@@ -731,9 +742,9 @@ El operador `+` produce una nueva secuencia cuyos valores son la concatenación 
    >>> "Hello" + " " + "World"
    "Hello World"
 
-En el caso del operador de producto `*` se produce una nueva secuencia 
-a partir de la original repetida `n` veces.  El valor de `n` es un entero, entonces 
-la sintaxis es `<secuencia> * int`. 
+En el caso del operador de producto `*` se produce una nueva secuencia a partir
+de la original repetida `n` veces.  El valor de `n` es un entero, entonces la
+sintaxis es `<secuencia> * int`.
 
 .. code-block:: python
 
@@ -749,11 +760,11 @@ la sintaxis es `<secuencia> * int`.
 Operaciones en listas
 ---------------------
 
-En esta sección vamos a ver algunas operaciones que solo 
-se incluyen en los objetos tipo lista ya que modifican de alguna manera
-la estructura o los elementos contenidos en ellas. La estructura 
-de las lístas es dinámica, así que puede cambiar de tamaño y 
-crecer hasta un límite impuesto solo por la memoria disponible.
+En esta sección vamos a ver algunas operaciones que solo se incluyen en los
+objetos tipo lista ya que modifican de alguna manera la estructura o los
+elementos contenidos en ellas. La estructura de las lístas es dinámica, así que
+puede cambiar de tamaño y crecer hasta un límite impuesto solo por la memoria
+disponible.
 
 Las operaciones más básicas y útiles son la de agragar un elemento al final
 de la lista, insertar un elemento en alguna posición o borrarlo:
@@ -781,11 +792,11 @@ Hay varias formas de borrar un elemento:
 
 .. code-block:: python
 
-   >>> del li[1] # Se elimina el 11 
+   >>> del li[1] # Se elimina el 11
    >>> li
    [1, "i", 3, 4, 5, "a"]
 
-La sintaxis cambia un poco ya que no es un método 
+La sintaxis cambia un poco ya que no es un método
 miembro de la lista, utiliza la palabra :python:`del`.
 
 Aunque esta forma es muy práctica, es preferible utilizar un método,
@@ -793,17 +804,17 @@ ya que pude llamarse utilizando herramientas de programación funcional,
 esto lo veremos en la sección de programación funcional. El método
 :python:`list.pop(índice)` regresa y elimina el elemento de la lista en la
 posición indicada por el índice, en caso de no recibir un parámetro elimina el
-último elemento de la lista:  
+último elemento de la lista:
 
 .. rubric::  :python:`pop(índice)`
 
 .. code-block:: python
 
-   >>> li = [1, 2, 3, 4] 
+   >>> li = [1, 2, 3, 4]
    >>> elemento_eliminado = li.pop(1)  # Elimina el elemento en el índice 1 ('2')
-   >>> li  
+   >>> li
    [1, 3, 4]
-   >>> elemento_eliminado  
+   >>> elemento_eliminado
    2
 
 En el caso de no enviar el índice como parámetro:
@@ -811,29 +822,29 @@ En el caso de no enviar el índice como parámetro:
 .. code-block:: python
 
    >>> elemento_eliminado = li.pop()  # Elimina el último elemento ('4')
-   >>> li  
+   >>> li
    [1, 3]
-   >>> elemento_eliminado  
+   >>> elemento_eliminado
    4
 
-.. danger:: ¿Qué pasará si ejecutamos :python:`li.pop()` y ya no hay elementos? 
+.. danger:: ¿Qué pasará si ejecutamos :python:`li.pop()` y ya no hay elementos?
 
 
-Otra manera de eliminar uno o varios elementos es mediante el 
-método :python:`list.remove(elemento)`. Este método elimina la primera 
-ocurrencia del elemento en la lista. Se lanza la excepción `ValueError` en 
-caso de que el elemento no se encuentre en la lista.  
+Otra manera de eliminar uno o varios elementos es mediante el método
+:python:`list.remove(elemento)`. Este método elimina la primera ocurrencia del
+elemento en la lista. Se lanza la excepción `ValueError` en caso de que el
+elemento no se encuentre en la lista.
 
 .. code-block:: python
 
-   >>> li = [1, 2, 3, 2, 4] 
+   >>> li = [1, 2, 3, 2, 4]
    >>> li.remove(2)  # Elimina el primer '2'
    >>> li :web
    [1, 3, 2, 4]
 
-.. tip:: 
-   Antes de intentar eliminar el `elemento` podemos verificar si este existe 
-   utilizando el operador :python:`in`. 
+.. tip::
+   Antes de intentar eliminar el `elemento` podemos verificar si este existe
+   utilizando el operador :python:`in`.
 
 .. rubric::  :python:`list.clear()`
 
@@ -861,32 +872,33 @@ Otras funciónes útiles para estas tareas son:
 
 .. rubric::  :python:`list.extend(lista)`
 
-Recordemos que el operador de adicición `+` crea una **nueva lista** a partir
-de concatenar dos listas existentes. Con esto se crea un nuevo objeto y una nueva referencia.
-Por otro lado :python:`list.extend()` modifica la estructura de la lista *in-place*, sin modificar 
-la referencia y que es el mismo objeto.
+Recordemos que el operador de adicición `+` crea una **nueva lista** a partir de
+concatenar dos listas existentes. Con esto se crea un nuevo objeto y una nueva
+referencia.  Por otro lado :python:`list.extend()` modifica la estructura de la
+lista *in-place*, sin modificar la referencia y que es el mismo objeto.
 
 .. code-block:: python
 
-   >>> li = [1, 2, 3, 2, 4] 
-   >>> li.extend([9, 8, 7])           
+   >>> li = [1, 2, 3, 2, 4]
+   >>> li.extend([9, 8, 7])
    >>>li
    [1, 2, 3, 4, 9, 8, 7]
 
 .. danger::
    Cuidado: `extend` recibe una lista, `append` recibe un solo elemento.
 
-No podemos lograr lo mismo con el método :python:`list.append(elemento)` ya 
-que este agregaría a la lista como el último elemento de esta. Veamos un ejemplo:
+No podemos lograr lo mismo con el método :python:`list.append(elemento)` ya que
+este agregaría a la lista como el último elemento de esta. Veamos un ejemplo:
 
 .. code-block:: python
 
-   >>> li = [1, 2, 3, 2, 4] 
+   >>> li = [1, 2, 3, 2, 4]
    >>> li.append([10, 11, 12])
    >>> li
    [1, 2, 3, 4, [10, 11, 12]]
 
-Otros métodos que alteran el órden de los elementos en la lista son los siguientes: 
+Otros métodos que alteran el órden de los elementos en la lista son los
+siguientes:
 
 .. code-block:: python
 
@@ -908,10 +920,10 @@ Otros métodos que alteran el órden de los elementos en la lista son los siguie
    >>> li
    [2, 5, 6, 8]
 
-En caso de que no haya un órden establecido o queramos modificar 
-la manera en la que se comparan los elementos para establecer el 
-órden, podemos enviar una función que se encarge de hacer esta tarea. 
-Veremos ejemplos de esto en la sección de programación funcional.
+En caso de que no haya un órden establecido o queramos modificar la manera en la
+que se comparan los elementos para establecer el órden, podemos enviar una
+función que se encarge de hacer esta tarea.  Veremos ejemplos de esto en la
+sección de programación funcional.
 
 .. code-block:: python
 
@@ -928,21 +940,26 @@ Diccionarios
 .. figure:: ./images/dict.svg
    :align: left
    :alt: Un diccionario como una colección de claves y sus corresponidientes valores.
-   
-Una estructura de datos muy importante en Python es el diccionario. Un diccionario es 
-un `arreglo asociativo <https://en.wikipedia.org/wiki/Associative_array>`__, también conocidos como mapas o almacenes clave-valor. En lugar 
-de almacenar los elementos de manera secuencial y acceder a estos mediante un índice los 
-diccionarios utilizan objeto inmutable como una `clave` la cual se asocia a un solo elemento 
-en la memoria al que vamos a llamar el `valor`.  Entonces un diccionario es un almacen de 
-pares `clave-valor`. La clave debe ser un valor inmutable (casí siempre son cadenas de caracteres) 
-ya que su contenido es utilizado para recuperar la ubicación en la memoria donde esta almacenado el elemento correspondiente. 
-Si sufriera el cambio más mínimo, la dirección que obtendría sería distinta y ya no encontraríamos 
-el elemento correspondiente.
 
-Los diccionarios se implementan normalmente utilizando una `función hash <https://es.wikipedia.org/wiki/Funci%C3%B3n_hash>`__, 
-estas funciones toman como entrada un objeto y regresan un `hash`, un valor seleccionado de manera 
-aleatoria con una distribución uniforme. Esto es importante ya que los valores de hash son 
-menos que la cantidad de objetos diferentes que podemos utilizar como clave. 
+Una estructura de datos muy importante en Python es el diccionario. Un
+diccionario es un `arreglo asociativo
+<https://en.wikipedia.org/wiki/Associative_array>`__, también conocidos como
+mapas o almacenes clave-valor. En lugar de almacenar los elementos de manera
+secuencial y acceder a estos mediante un índice los diccionarios utilizan objeto
+inmutable como una `clave` la cual se asocia a un solo elemento en la memoria al
+que vamos a llamar el `valor`.  Entonces un diccionario es un almacen de pares
+`clave-valor`. La clave debe ser un valor inmutable (casí siempre son cadenas de
+caracteres) ya que su contenido es utilizado para recuperar la ubicación en la
+memoria donde esta almacenado el elemento correspondiente.  Si sufriera el
+cambio más mínimo, la dirección que obtendría sería distinta y ya no
+encontraríamos el elemento correspondiente.
+
+Los diccionarios se implementan normalmente utilizando una `función hash
+<https://es.wikipedia.org/wiki/Funci%C3%B3n_hash>`__, estas funciones toman como
+entrada un objeto y regresan un `hash`, un valor seleccionado de manera
+aleatoria con una distribución uniforme. Esto es importante ya que los valores
+de hash son menos que la cantidad de objetos diferentes que podemos utilizar
+como clave.
 
 
 .. figure:: ./images/hash.svg
@@ -953,22 +970,26 @@ menos que la cantidad de objetos diferentes que podemos utilizar como clave.
 Funciones *Hash*
 ^^^^^^^^^^^^^^^^
 
-Vamos a suponer que tenemos un espacio de memoria muy limitada, y 
-solo tenemos ocho espacios de memoria. Ahora, queremos almacenar a cuatro estudiantes utilizando 
-un diccionario y el nombre del estudiante como la clave. Aunque el número de estudiantes aquí es menor, pensemos que estos estudiantes 
-podrían tener cualquier nombre y en ese caso si son muchos más los nombres que existen que el espacio disponible. 
-La función hash toma como parámetro el nombre y nos regresa un valor aleatorio de 
-los ocho posibles. Una buena función hash nos regresaría valores distribuidos a todo lo largo de 
-la memoria disponible. Sin embargo, toda función hash en alguún momento nos va a regresar 
-el mismo valor `hash` para dos objetos distintos, a esto le llamamos una colisión. La probabilidad de que esto suceda
-se va a incrementar mientras vayan quedando menos valores `hash` disponibles. Las implementaciones 
-de estructuras de este tipo, resuelven esta situación, pero si sucede mucho, el desempeño 
-del diccionario se verá afectado. 
+Vamos a suponer que tenemos un espacio de memoria muy limitada, y solo tenemos
+ocho espacios de memoria. Ahora, queremos almacenar a cuatro estudiantes
+utilizando un diccionario y el nombre del estudiante como la clave. Aunque el
+número de estudiantes aquí es menor, pensemos que estos estudiantes podrían
+tener cualquier nombre y en ese caso si son muchos más los nombres que existen
+que el espacio disponible.  La función hash toma como parámetro el nombre y nos
+regresa un valor aleatorio de los ocho posibles. Una buena función hash nos
+regresaría valores distribuidos a todo lo largo de la memoria disponible. Sin
+embargo, toda función hash en alguún momento nos va a regresar el mismo valor
+`hash` para dos objetos distintos, a esto le llamamos una colisión. La
+probabilidad de que esto suceda se va a incrementar mientras vayan quedando
+menos valores `hash` disponibles. Las implementaciones de estructuras de este
+tipo, resuelven esta situación, pero si sucede mucho, el desempeño del
+diccionario se verá afectado.
 
-Para definif un diccionario, lo hacemos de una manera similar a las secuencias. Es de nuevo 
-una lista de elementos separados por comas, solo que ahora los elementos son pares :python:`'clave:valor'`.
-También cambia el símbolo delimitador, ahora encerramos a los elementos entre llaves :python:`{ }`.
-Veamos un ejemplo: 
+Para definif un diccionario, lo hacemos de una manera similar a las secuencias.
+Es de nuevo una lista de elementos separados por comas, solo que ahora los
+elementos son pares :python:`'clave:valor'`.  También cambia el símbolo
+delimitador, ahora encerramos a los elementos entre llaves :python:`{ }`.
+Veamos un ejemplo:
 
 .. code-block:: python
 
@@ -984,25 +1005,25 @@ Veamos un ejemplo:
       ~^^^^^^^^
    KeyError: 'juan'
 
-Como vemos de manera similar a las secuencias se utilizand los corchetes para indicar 
-el elemento que queremos recuperar, pero en lugar de un índice debemos pasar 
-la clave correspondiente. La excepción de :python:`KeyError` es muy común, se lanza 
-cada vez que tratamos de recuperar un valor, pero la clave no existe en el diccionario. 
-En este caso :python:`'juan'` no es una clave válida. Esta en el diccionario que 
-definimos pero es un `valor` no una `clave`. Del mismo modo que con las lístas, podemos 
-utilizar el operador :python:`in` para revisar antes, y estar seguros que la clave se 
-encuentra en el diccionario. 
+Como vemos de manera similar a las secuencias se utilizand los corchetes para
+indicar el elemento que queremos recuperar, pero en lugar de un índice debemos
+pasar la clave correspondiente. La excepción de :python:`KeyError` es muy común,
+se lanza cada vez que tratamos de recuperar un valor, pero la clave no existe en
+el diccionario.  En este caso :python:`'juan'` no es una clave válida. Esta en
+el diccionario que definimos pero es un `valor` no una `clave`. Del mismo modo
+que con las lístas, podemos utilizar el operador :python:`in` para revisar
+antes, y estar seguros que la clave se encuentra en el diccionario.
 
-.. danger:: 
-   - Recuerda que solo podemos utilizar objetos inmutables como clave. 
+.. danger::
+   - Recuerda que solo podemos utilizar objetos inmutables como clave.
    - Al recuperar un valor la clave debe de existir en el diccionario.
 
-Para agregar un nuevo par :python:`'clave:valor'` simplemente
-pasamos la nueva llave entre los corchetes y asignamos el nuevo valor. 
-En caso de que la clave exista estaríamos reemplazando el valor anterior
-por uno nuevo. En el ejemplo a continuación agregamos una nueva clave `'id'`
-con el valor :python:`34`. Podemos recuperar la lista de las claves 
-incluidas en el diccionario con el método :python:`dict.keys()`.
+Para agregar un nuevo par :python:`'clave:valor'` simplemente pasamos la nueva
+llave entre los corchetes y asignamos el nuevo valor.  En caso de que la clave
+exista estaríamos reemplazando el valor anterior por uno nuevo. En el ejemplo a
+continuación agregamos una nueva clave `'id'` con el valor :python:`34`. Podemos
+recuperar la lista de las claves incluidas en el diccionario con el método
+:python:`dict.keys()`.
 
 .. code-block:: python
 
@@ -1018,7 +1039,7 @@ incluidas en el diccionario con el método :python:`dict.keys()`.
    >>> 'id' in d
    True
 
-Para borrar un par :python:`'clave:valor'` utilizamos la palabra 
+Para borrar un par :python:`'clave:valor'` utilizamos la palabra
 :python:`del` al igual que con las listas. Y del mismo modo podemos
 limpiar el diccionario para dejarlo vacio:
 
@@ -1033,12 +1054,12 @@ limpiar el diccionario para dejarlo vacio:
    >>> d
    {}
 
-.. danger:: 
-   Recuerda que los diccionarios utilizan una función hash por lo que 
+.. danger::
+   Recuerda que los diccionarios utilizan una función hash por lo que
    los valores no se almacenan de manera secuencial.
 
-Los métodos :python:`dict.values()` y :python:`dict.items()` nos 
-permiten regresar todos los elementos del diccionario. 
+Los métodos :python:`dict.values()` y :python:`dict.items()` nos
+permiten regresar todos los elementos del diccionario.
 
 .. code-block:: python
 
@@ -1052,22 +1073,25 @@ permiten regresar todos los elementos del diccionario.
    >>>
 
 .. attention::
-   Normalmente no recuperamos los elementos de un diccionario en forma 
-   secuencial.  Si necesitamos esa funcionalidad debemos evaluar el uso 
-   de una estructura tipo lista o tupla. 
+
+   Normalmente no recuperamos los elementos de un diccionario en forma
+   secuencial.  Si necesitamos esa funcionalidad debemos evaluar el uso
+   de una estructura tipo lista o tupla.
 
 Listas vs Diccionarios
 ^^^^^^^^^^^^^^^^^^^^^^
-Es importante conocer que tan eficente es una estructura de datos para 
+Es importante conocer que tan eficente es una estructura de datos para
 relizar ciertas tareas y así poder decidir si la utilizamos o no.
 
 .. important::
-   Aunque esta fuera del ámbito de este tema, es imortante que como 
-   programadores conozcamos  La notación `O grande <https://es.wikipedia.org/wiki/Cota_superior_asint%C3%B3tica#%C3%93rdenes_usuales_para_funciones>`__ (Big O notation) 
-   que nos permite de una manera muy compacta darnos una idea de la 
-   eficiencia de un algoritmo o estructura, en términos del 
-   tiempo del tiempo de ejecución y la cantidad de memoria que utiliza, 
-   en función del número de elementos que hay que procesar.
+
+   Aunque esta fuera del ámbito de este tema, es imortante que como
+   programadores conozcamos  La notación `O grande
+   <https://es.wikipedia.org/wiki/Cota_superior_asint%C3%B3tica#%C3%93rdenes_usuales_para_funciones>`__
+   (Big O notation) que nos permite de una manera muy compacta darnos una idea
+   de la eficiencia de un algoritmo o estructura, en términos del tiempo del
+   tiempo de ejecución y la cantidad de memoria que utiliza, en función del
+   número de elementos que hay que procesar.
 
 Podemos resumir el desempeño de ambas estructuras (en cuanto a tiempo de ejecución) de la siguiente manera:
 
@@ -1077,17 +1101,17 @@ Listas
    - Buscar un elemento por su valor tiene una complejidad O(n) (esto es lento para listas muy grandes).
    - Insertar un valor al final (``append``) es rápido en promedio O(1). Esto se debe a que se reserva espacio con anterioridad.
    - Insertar o eliminar un valor en alguna posición (índice) es O(n) porque hay que mover elementos.
-   - Iteración secuencial muy rápida ya que los valores están contiguos en la memoria e incluso se puede implementar algo con memoria caché. 
+   - Iteración secuencial muy rápida ya que los valores están contiguos en la memoria e incluso se puede implementar algo con memoria caché.
 
 Diccionarios
    - Se implementan como funciones hash.
-   - Recuperación del valor utilizando la clave es muy rápida, en promedio O(1). 
+   - Recuperación del valor utilizando la clave es muy rápida, en promedio O(1).
    - Insertar o eliminar un valor es muy rápido O(1) en promedio.
-   - Iteración secuencial es también rápida ya que cada elemento es O(1) asimtóticamente igual que las listas, pero en la práctica las listas son más rápidas para esta tarea. 
+   - Iteración secuencial es también rápida ya que cada elemento es O(1) asimtóticamente igual que las listas, pero en la práctica las listas son más rápidas para esta tarea.
 
 
 Expresiones lógicas
-------------------- 
+-------------------
 
 Recordemos que :python:`True` y :python:`False` son valores literales. Pero
 hay otros valores equivalentes:
@@ -1095,45 +1119,45 @@ hay otros valores equivalentes:
 - :python:`False` : Cero, :python:`None`, contenedores u objetos vacíos.
 - :python:`True` : Números distintos a cero, objetos no vacíos.
 
-Los operadores de comparación son los mismos a los que estamos acostumbrados: ``==``, ``!=``, ``<``, ``<=``, etc.
-El operador ``==`` regresa verdadero si ambos operandos tienen el mismo valor.
-Por ejemplo, :python:`x == y` regresa :python:`True` si ambos objetos tienen el mismo valor. 
-Para evaluar si :python:`x` y :python:`y` son el mismo objeto, hacen referencia al mismo 
-objeto en memoria, utilizamos el operador :python:`is`.  
+Los operadores de comparación son los mismos a los que estamos acostumbrados:
+``==``, ``!=``, ``<``, ``<=``, etc.  El operador ``==`` regresa verdadero si
+ambos operandos tienen el mismo valor.  Por ejemplo, :python:`x == y` regresa
+:python:`True` si ambos objetos tienen el mismo valor.  Para evaluar si
+:python:`x` y :python:`y` son el mismo objeto, hacen referencia al mismo objeto
+en memoria, utilizamos el operador :python:`is`.
 
-Los operadores booleanos  :python:`and` y :python:`or` no regresan necesariamente :python:`True` o 
-:python:`False`. Lo que regresan es el valor de una de sus sub-expresiones. Este valor podría no ser booleano.
-Veremos primero dos casos básicos:
+Los operadores booleanos  :python:`and` y :python:`or` no regresan
+necesariamente :python:`True` o :python:`False`. Lo que regresan es el valor de
+una de sus sub-expresiones. Este valor podría no ser booleano.  Veremos primero
+dos casos básicos:
 
-- :python:`x and y and z`: 
+- :python:`x and y and z`:
     * Si todas las expresiones son verdaderas, regresa el valor de `z`.
     * De otro modo, regresa el valor de la primera expresión falsa.
 
-- :python:`x or y or z`: 
+- :python:`x or y or z`:
   * Si todas son falsas, regresa el valor de la expresión `z`.
   * De otro modo, regresa el valor de la primera expresión verdadera.
 
 .. important::
-   :python:`and` y :python:`or` utilizan evaluación lazy, así que no se siguen evaluando 
-   las siguientes sub-expresiones, al resolver la expresión lógica.
+
+   :python:`and` y :python:`or` utilizan evaluación lazy, así que no se siguen
+   evaluando las siguientes sub-expresiones, al resolver la expresión lógica.
 
 Control de flujo
 ----------------
 
-En esta sección repasaremos la sintáxis básica de los elementos
-del programa que nos sirven para controlar el flujo de nuestros 
-algoritmos. 
-
+En esta sección repasaremos la sintáxis básica de los elementos del programa que
+nos sirven para controlar el flujo de nuestros algoritmos.
 
 .. rubric::  Condiciones
 
-En el siguiente ejemplo vemos un ejemplo del uso de condicionales 
-en Python. Algunos puntos importantes son la falta de paréntesis 
-para indicar la condición y el uso del doble punto `:` para marcar 
-el inicio del bloque. De nuevo es imortante notar la indentación y 
-el uso de la construcción :python:`elif`. También vemos como se 
-evalúa la expresión inmediatamente al momento de ser declarada de 
-manera interactiva:
+En el siguiente ejemplo vemos un ejemplo del uso de condicionales en Python.
+Algunos puntos importantes son la falta de paréntesis para indicar la condición
+y el uso del doble punto `:` para marcar el inicio del bloque. De nuevo es
+imortante notar la indentación y el uso de la construcción :python:`elif`.
+También vemos como se evalúa la expresión inmediatamente al momento de ser
+declarada de manera interactiva:
 
 .. code-block:: python
 
@@ -1150,9 +1174,9 @@ manera interactiva:
 
 .. rubric::  Ciclos :python:`while`
 
-De nuevo se expresa la condición sin paréntesis y se utiliza 
-el doble punto ``:`` separar la condición del ciclo. Se itera 
-en el ciclo mientras la condición sea verdadera.    
+De nuevo se expresa la condición sin paréntesis y se utiliza el doble punto
+``:`` separar la condición del ciclo. Se itera en el ciclo mientras la condición
+sea verdadera.
 
 .. code-block:: python
 
@@ -1164,48 +1188,50 @@ en el ciclo mientras la condición sea verdadera.
    3  en el ciclo
    4  en el ciclo
 
-Dentro del bloque puedes utilizar la palabra :python:`break` para salir del ciclo completamente, 
-sin evaluar nuevamente la condición. En cambio si utilizad :python:`continue`, se termina la 
-iteración actual y se evalúa inmediatamente la condición para ir a la siguiente iteración.
+Dentro del bloque puedes utilizar la palabra :python:`break` para salir del
+ciclo completamente sin evaluar nuevamente la condición. En cambio, si
+utilizamos :python:`continue`, se termina la iteración actual y se evalúa
+inmediatamente la condición para ir a la siguiente iteración.
 
 
 .. rubric::  Ciclos :python:`for`
 
 Un ciclo :python:`for` recorre cada uno de los elementos de una colección, o
 cualquier objeto `iterable` pasando el objeto al bloque sobre el cual se está
-iterando. El ciclo termina cuando se termina de recorrer el iterable. Esto 
-es muy diferente al ciclo `for` de otros lenguajes en los que se evalúa una condición 
-para evaluar si se debe continual con la siguiente iteración. Este 
-tipo de iteraciones resulta más natural la mayoría de las veces. Otros lenguajes 
-de programación han agregado esta funcionalidad. Por ejemplo, C# cuenta con la construcción 
-``foreach``. La sintáxis sería: 
+iterando. El ciclo termina cuando se termina de recorrer el iterable. Esto es
+muy diferente al ciclo `for` de otros lenguajes en los que se evalúa una
+condición para evaluar si se debe continual con la siguiente iteración. Este
+tipo de iteraciones resulta más natural la mayoría de las veces. Otros lenguajes
+de programación han agregado esta funcionalidad. Por ejemplo, C# cuenta con la
+construcción ``foreach``. La sintáxis sería:
 
-.. code-block:: python 
+.. code-block:: python
 
    for <elemento> in <colección>:
       <sentencias>
 
 <colección>
-   Si <colección> es una lista o tupla, el ciclo for recorre cada elemento de la colección.
-   Si <colección> es una cadena, entonces el ciclo  recorre cada carácter de la cadena.  
+   - Si <colección> es una lista o tupla, el ciclo for recorre cada elemento de la colección.
+   - Si <colección> es una cadena, entonces el ciclo  recorre cada carácter de la cadena.
+
 <elemento>
-   Es un nobre local para referirnos al objeto de la colección que estamos visitando en 
-   la iteración actual.
-   Puede ser un patrón para desempar elementos del contenedor. Veremos un ejemplo de esto 
-   a continuación.
+   - Es un nobre local para referirnos al objeto de la colección que estamos visitando en la iteración actual.
+   - Puede ser un patrón para desempar elementos del contenedor. Veremos un ejemplo de esto a continuación.
+
 <sentencias>
    Es el bloque de código en python que queremos ejecutar en cada iteración.
 
 Veamos dos ejemplos:
 
-Primero veamos el caso de iterar utilizando colección *iterable* a 
-una cadena de caracteres. Recordemos que una cadena es básicamente una tupla, también inmutable
-pero que tiene en cada posición un caracter. Entonces el código a continuación imprimiría 
-un caracter en cada iteración. Como ya habras notado el método `str.print( )` da un salto de
-línea en cada impresión. En la sección dedicada a operaciones con cadenas de texto veremos 
-con más detalle los métodos de impresión.   
+Primero veamos el caso de iterar utilizando colección *iterable* a una cadena de
+caracteres. Recordemos que una cadena es básicamente una tupla, también
+inmutable pero que tiene en cada posición un caracter. Entonces el código a
+continuación imprimiría un caracter en cada iteración. Como ya habras notado el
+método `str.print( )` da un salto de línea en cada impresión. En la sección
+dedicada a operaciones con cadenas de texto veremos con más detalle los métodos
+de impresión.
 
-.. code-block:: python 
+.. code-block:: python
 
    >>> for c in 'hola':
    ...     print(c)
@@ -1215,34 +1241,37 @@ con más detalle los métodos de impresión.
    l
    a
 
-Como segundo ejemplo veremos el caso en el que `<colección>` a su vez contiene elementos compuestos. Por ejemplo,
-una lista de sequencias o diccionarios. En este caso podemos utilizar a `<elemento>` como una plantilla de la 
-estructura que nos sirver para desempacar los elementos incluidos en `<colección>`:
+Como segundo ejemplo veremos el caso en el que `<colección>` a su vez contiene
+elementos compuestos. Por ejemplo, una lista de sequencias o diccionarios. En
+este caso podemos utilizar a `<elemento>` como una plantilla de la estructura
+que nos sirver para desempacar los elementos incluidos en `<colección>`:
 
-.. code-block:: python 
+.. code-block:: python
 
    >>> for (a, b) in [(1,2), (2,3), (3,4)]:
    ...     print(a + b)
-   ...     
+   ...
    3
    5
    7
 
-En el ejemplo tenemos una `<colección>` de tuplas con dos enteros cada una. 
-Todas las tuplas tienen la misma estructura por lo que podemos hacer una 
-plantilla que empate con esta estructura. Vemos como :python:`(a, b)` puede 
-recibir a :python:`(1, 2)`, en este caso :python:`a` se ata al entero :python:`1` y 
-:python:`b` se ata al entero :python:`2`. Una vez desempacados los valores 
-los podemos utilizar en el bloque de código a cada uno de manera independiente.
+En el ejemplo tenemos una `<colección>` de tuplas con dos enteros cada una.
+Todas las tuplas tienen la misma estructura por lo que podemos hacer una
+plantilla que empate con esta estructura. Vemos como :python:`(a, b)` puede
+recibir a :python:`(1, 2)`, en este caso :python:`a` se ata al entero
+:python:`1` y :python:`b` se ata al entero :python:`2`. Una vez desempacados los
+valores los podemos utilizar en el bloque de código a cada uno de manera
+independiente.
 
-Esto contrasta con la opción de recibir en un `<elemento>` que solo sea un nombre. 
-En este caso tenemos que hacer referencia a los elementos individuales "manualmente":
+Esto contrasta con la opción de recibir en un `<elemento>` que solo sea un
+nombre.  En este caso tenemos que hacer referencia a los elementos individuales
+"manualmente":
 
-.. code-block:: python 
+.. code-block:: python
 
    >>> for tupla in [(1,2), (2,3), (3,4)]:
    ...     print(tupla[0] + tupla[1])
-   ...     
+   ...
    3
    5
    7
@@ -1253,7 +1282,7 @@ En este caso tenemos que hacer referencia a los elementos individuales "manualme
 La manera clásica de hacer un ciclo `for` en otros lenguajes de programación
 imperativa sería algo como
 
-.. code-block:: c 
+.. code-block:: c
 
    #include <stdio.h>
 
@@ -1265,46 +1294,46 @@ imperativa sería algo como
       return 0;
    }
 
-donde utilizamos a un entero llamado `i` por convención, ya que normalmente 
+donde utilizamos a un entero llamado `i` por convención, ya que normalmente
 nos sirve de índice de la iteración
 
 .. math::
-    \sum_{i=1}^{n} i. 
+    \sum_{i=1}^{n} i.
 
 En el caso de Python, este tipo de ciclos se hace de una manera consistente.
-Utilizamos una secuencia de enteros prefabricada con los índices que ocupamos. 
+Utilizamos una secuencia de enteros prefabricada con los índices que ocupamos.
 Para el caso anterior podríamos hacer algo como:
 
 .. code-block:: python
 
    >>> for i in [1, 2, 3, 4]:
-   ...     print(i) 
-   ... 
+   ...     print(i)
+   ...
    1
    2
    3
    4
 
-Aunque esta es una solución funcional, no sería muy práctica en 
-el caso de que ocupemos iterar de cero a un millón. Para esto 
-en Python utilizamos un método de fabrica que genera esta lista 
-de índices: 
+Aunque esta es una solución funcional, no sería muy práctica en el caso de que
+ocupemos iterar de cero a un millón. Para esto en Python utilizamos un método de
+fabrica que genera esta lista de índices:
 
 .. code-block:: python
 
    >>> for i in range(1, 5):
    ...     print(i)
-   ... 
+   ...
    1
    2
    3
    4
 
 El método :python:`range()` nos regresa un **objeto iterable** e inmutable que
-funciona de manera similar a un `generador <https://es.wikipedia.org/wiki/Generador_(inform%C3%A1tica)>`__
-(no lo es). Es decir, :python:`range()` no
-genera y almacena inmediatamente todos los valores de los índices en la
-memoria, más bien los va generando bajo demanda. Esto es muy eficiente. 
+funciona de manera similar a un `generador
+<https://es.wikipedia.org/wiki/Generador_(inform%C3%A1tica)>`__ (no lo es). Es
+decir, :python:`range()` no genera y almacena inmediatamente todos los valores
+de los índices en la memoria, más bien los va generando bajo demanda. Esto es
+muy eficiente.
 
 Si creamos un objeto iterable de manera interactiva:
 
@@ -1313,18 +1342,18 @@ Si creamos un objeto iterable de manera interactiva:
    >>> range(5)
    range(0, 5)
 
-Vemos que no regresa una lista con los índices, regresa el objeto iterable. 
-Cuando pasamos solo un parámetro a la función el iterable va de cero a uno 
-menos del valor que pasamos. Esto es lo que hacemos normalmente en los 
-ciclos que creamos para recorrer una secuencia de la manera tradicional.
-Si queremos ver los índices como una lista podemos utilizar el constructor de `list()`:
+Vemos que no regresa una lista con los índices, regresa el objeto iterable.
+Cuando pasamos solo un parámetro a la función el iterable va de cero a uno menos
+del valor que pasamos. Esto es lo que hacemos normalmente en los ciclos que
+creamos para recorrer una secuencia de la manera tradicional.  Si queremos ver
+los índices como una lista podemos utilizar el constructor de `list()`:
 
 .. code-block:: python
 
    >>> list(range(5))
    [0, 1, 2, 3, 4]
 
-Si queremos generar los índices saltándonos algunos números enviamos 
+Si queremos generar los índices saltándonos algunos números enviamos
 el salto como tercer parámetro:
 
 .. code-block:: python
@@ -1343,52 +1372,52 @@ incluso podemos generar índices a la inversa:
 Paso de parámetros utilizando estructuras
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Python no tiene sobrecargado de funciones (que haya dos o más funciones con el mismo nombre). 
-De hecho, si declaras dos funciones Python simplemente reemplaza la primera definición con 
-la segunda: 
+Python no tiene sobrecargado de funciones (que haya dos o más funciones con el
+mismo nombre).  De hecho, si declaras dos funciones Python simplemente reemplaza
+la primera definición con la segunda:
 
 .. code-block:: python
 
    >>> def imprime_saludo(nombre):
    ...     print('Hola, soy ', nombre)
-   ...     
-   >>> imprime_saludo('Mario') 
+   ...
+   >>> imprime_saludo('Mario')
    Hola, soy  Mario
    >>> def imprime_saludo(nombre):
    ...     print('Hola')
-   ...     
+   ...
    >>> imprime_saludo('Mario')
    Hola
-   >>> 
+   >>>
 
 .. Danger::
-   La facilidad para redefinir funciones en Python puede ser peligroso 
-   ya que sin querer podríamos redefinir un método de alguna librería o 
-   que haya escrito otro programador. En otros lenguajes debemos de etiquetar 
-   a nuestras funciones para permitir que se pueda redefinir.
 
-Podemos simular el sobrecargado de funciones utilizando parámetros opcionales 
+   La facilidad para redefinir funciones en Python puede ser peligroso ya que
+   sin querer podríamos redefinir un método de alguna librería o que haya
+   escrito otro programador. En otros lenguajes debemos de etiquetar a nuestras
+   funciones para permitir que se pueda redefinir.
+
+Podemos simular el sobrecargado de funciones utilizando parámetros opcionales
 con un valor por defecto:
 
 .. code-block:: python
 
    >>> def imprime_saludo(nombre, saludo='Hola, soy'):
    ...     print(saludo, nombre)
-   ...     
+   ...
    >>> imprime_saludo('Mario')
    Hola, soy Mario
    >>> imprime_saludo('Mario', '¿Qué tal?, me llamo ' )
    ¿Qué tal?, me llamo  Mario
 
-En el ejemplo el parámetro ``saludo`` es opcional. En caso
-de que no se envíe un argumento tomará la cadena `'Hola, soy'`.
-El parámetro `nombre` es obligatorio ya que no tiene un valor 
-por defecto. Primero van los parámetros obligatorios y luego 
-los opcionales.
+En el ejemplo el parámetro ``saludo`` es opcional. En caso de que no se envíe un
+argumento tomará la cadena `'Hola, soy'`.  El parámetro `nombre` es obligatorio
+ya que no tiene un valor por defecto. Primero van los parámetros obligatorios y
+luego los opcionales.
 
-Otra flexibilidad que nos ofrece el lenguaje es la capadidad de 
-las funciones para recibir un número arbitrario de argumentos. 
-Los argumentos pueden ser posicionales o utilizando nombres: 
+Otra flexibilidad que nos ofrece el lenguaje es la capadidad de las funciones
+para recibir un número arbitrario de argumentos.  Los argumentos pueden ser
+posicionales o utilizando nombres:
 
 .. rubric::  Secuencia de argumentos
 
@@ -1396,12 +1425,12 @@ Los argumentos pueden ser posicionales o utilizando nombres:
 
    >>> def imprime_args(*argumentos):
    ...     print(argumentos)
-   ...     
+   ...
    >>> imprime_args(1, 'hola', 34.2)
    (1, 'hola', 34.2)
-   >>> 
+   >>>
 
-Si queremos podemos indicar parámetros posicionales pero estos deben ir antes de 
+Si queremos podemos indicar parámetros posicionales pero estos deben ir antes de
 la secuencia:
 
 .. code-block:: python
@@ -1409,24 +1438,26 @@ la secuencia:
    >>> def imprime_args(param1, param2, *argumentos):
    ...     print(argumentos)
    ...     print(param1, param2)
-   ...     
+   ...
    >>> imprime_args(1, 'hola', 34.2)
    (34.2,)
    1 hola
 
 .. important::
-   En ejemplo vemos un detalle importante. Cuando una tupla tiene un solo 
-   elemento se le agrega una coma para que no se confunda con una expresión entre paréntesis.
+
+   En ejemplo vemos un detalle importante. Cuando una tupla tiene un solo
+   elemento se le agrega una coma para que no se confunda con una expresión
+   entre paréntesis.
 
 Podemos también enviar una tupla con argumentos de una función con parámetros posicionales:
 
 .. code-block:: python
 
-   >>> def imprime_args(a, b, c):                                                                                                                                                        
+   >>> def imprime_args(a, b, c):
    ...     print(a, c, b)
-   ... 
+   ...
    >>> tupla = (1, 'hola', 34.2)
-   >>> imprime_args(*tupla) 
+   >>> imprime_args(*tupla)
    1 34.2 hola
 
 Fíjate como se debe enviar la tupla anteponiendo un asterísco :python:`*tupla`.
@@ -1436,37 +1467,37 @@ Fíjate como se debe enviar la tupla anteponiendo un asterísco :python:`*tupla`
    >>> def imprime_kwargs(**kwargs):
    ...     print(kwargs)
    ...     if 'id' in kwargs: print(kwargs['id'])
-   ...     
+   ...
    >>> imprime_kwargs(id=100, nombre='Juan', edad=37)
    {'id': 100, 'nombre': 'Juan', 'edad': 37}
    100
 
-Al igual que con los parámetros por posición, también se puede usar `**` al llamar la función. 
-Y ahora pasamos un diccionario.
+Al igual que con los parámetros por posición, también se puede usar `**` al
+llamar la función.  Y ahora pasamos un diccionario.
 
 >>> def imprime_args(a, b, c):
 ...     print(a, c, b)
-...     
->>> dic = {'a':123, 'c':(2,3), 'b':'Hola'} 
+...
+>>> dic = {'a':123, 'c':(2,3), 'b':'Hola'}
 >>> imprime_args(**dic)
 123 (2, 3) Hola
 
 .. tip::
-   Se utilizan por convención los nombres de ``args`` (argumentos) y 
-   ``kwargs`` (argumentos por *key words*), pero esto no es obligatorio y 
-   tu puedes utilizar cualquier nombre.
+
+   Se utilizan por convención los nombres de ``args`` (argumentos) y ``kwargs``
+   (argumentos por *key words*), pero esto no es obligatorio y tu puedes
+   utilizar cualquier nombre.
 
 Recolección automática de basura
 --------------------------------
 
-Python cuenta con un mecanismo de recolección de basura automático, 
-un sistema que elimina aquellos objetos que ya no están siendo 
-referenciados por algún nombre.  
+Python cuenta con un mecanismo de recolección de basura automático, un sistema
+que elimina aquellos objetos que ya no están siendo referenciados por algún
+nombre.
 
-Python utiliza la técnica de conteo de referencias. Cada objeto lleva
-la cuenta de cuantos nombres hacen referencia apuntan a él. Cuando 
-llega a cero, el objeto se elimina, recuperando espacio de memoria.
-Veamos un ejemplo: 
+Python utiliza la técnica de conteo de referencias. Cada objeto lleva la cuenta
+de cuantos nombres hacen referencia apuntan a él. Cuando llega a cero, el objeto
+se elimina, recuperando espacio de memoria.  Veamos un ejemplo:
 
    >>> x = 12 # 'x' apunta a 12
    >>> y = [1, 2, 3] # 'y' apunta a la lista, cada elemento de la lista también apunta al entero correspondiente
@@ -1475,7 +1506,7 @@ Veamos un ejemplo:
    [1, 2, 3]
    >>> y
    [1, 2, 3]
-   >>> del x 
+   >>> del x
    >>> del y # Ningún objeto está atado a la lista. La lista se elimina.
    >>> x # El nombre 'x' ya se borró, se lanza una excepción
    Traceback (most recent call last):
@@ -1483,7 +1514,7 @@ Veamos un ejemplo:
       x
    NameError: name 'x' is not defined
 
-.. Danger:: 
-   La técnida de conteo no puede detectar casos en los que dos objetos se referencían 
+.. Danger::
+   La técnida de conteo no puede detectar casos en los que dos objetos se referencían
    mutuamente, pero nadie hace referencia a ninguno de los dos. Para esto Python utiliza
    un módulo especial que los detecta y recupera la memoria.
