@@ -18,6 +18,7 @@ pyBook documentation
    :numbered:
 
    fundamentos
+   funcional
 
 .. toctree::
    :maxdepth: 2
