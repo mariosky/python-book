@@ -19,10 +19,10 @@ pyBook documentation
 
    fundamentos
    funcional
+   strings
 
 .. toctree::
    :maxdepth: 2
    :caption: Anexos:
 
    instalación
-   

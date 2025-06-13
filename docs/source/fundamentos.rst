@@ -610,7 +610,7 @@ Si intentamos esto con una tupla, no es posible ya que es inmutable:
 Una manera de "modificar" una tupla o cualquier estructura inmutable es creando
 una nueva estructura con la modificación y reasignandola al nombre nuevamente.
 
-.. information::
+.. important::
    Regresaremos a este tema en la sección de programación funcional ya que la
    inmutabilidad es celebrada en la programación funcional.
 
@@ -1144,8 +1144,8 @@ dos casos básicos:
    :python:`and` y :python:`or` utilizan evaluación lazy, así que no se siguen
    evaluando las siguientes sub-expresiones, al resolver la expresión lógica.
 
-Control de flujo
-----------------
+Estructuras de control
+----------------------
 
 En esta sección repasaremos la sintáxis básica de los elementos del programa que
 nos sirven para controlar el flujo de nuestros algoritmos.
