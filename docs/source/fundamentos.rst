@@ -1515,6 +1515,6 @@ se elimina, recuperando espacio de memoria.  Veamos un ejemplo:
    NameError: name 'x' is not defined
 
 .. Danger::
-   La técnida de conteo no puede detectar casos en los que dos objetos se referencían
+   La técnica de conteo no puede detectar casos en los que dos objetos se referencían
    mutuamente, pero nadie hace referencia a ninguno de los dos. Para esto Python utiliza
    un módulo especial que los detecta y recupera la memoria.
