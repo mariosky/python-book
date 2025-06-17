@@ -7,13 +7,13 @@ Programación Funcional
 
 A Python se le considera un lenguaje multiparadigma ya que tiene soporte para
 varios estilos de programación.
- 
+
 .. rubric::  Programación procedural
 
 En un inicio hemos seguido un paradigma de programación predominantemente
 **imperativo**. Este es un estilo muy báscio pues nuestros programas capturan su
 estado utilizando variables y estructuras, y el flujo de nuestro programa avanza
-ejecutando instrucciones paso a paso utilizando estructuras de control. 
+ejecutando instrucciones paso a paso utilizando estructuras de control.
 
 Hasta este momento en el que estamos conociendo las características básicas del
 lenguaje Python este estilo de programación es adecuado e incluso práctico ya
@@ -22,12 +22,12 @@ que utilizaríamos en proyectos empresariales dónde necesitamos descomponer la
 complejidad de un sistema. En este caso podemos utilizar variables globales ya
 que no es mucho problema buscar en el código y ver qué modifica a qué.
 
-.. code-block:: python 
+.. code-block:: python
 
    >>> x = 0 # variable local
    >>> for i in range(5):
    ...     x+= i # se modifica variable local
-   ... 
+   ...
    >>> x
    10
 
@@ -100,6 +100,7 @@ herencia.  El lenguaje también perimite de manera naturar utilizar polimorfismo
    Aunque no hemos utilizado o mencionado conceptos de programación orientada a
    objetos (esto lo haremos en la sección correspondiente) este es un paradigma que
    Python implementa ampleamente.
+
 .. rubric::  Programación funcional
 
 Python nos permite utilizar algunas carácteristicas del paradigma funcional
@@ -111,13 +112,13 @@ recordando lo de "las funciones son ciudadanos de primera clase":
 
    >>> def triplíca(x):
    ...     return x*x*x
-   ... 
+   ...
    >>> def llama_funcion(f, x):
    ...     return f(x)
-   ... 
+   ...
    >>> print(llama_funcion(triplíca, 3))
    27
-   >>> 
+   >>>
 
 En esta sección nos vamos a enfocar en las principales características de la
 programación funcional y como se implementan en Python.
@@ -125,17 +126,22 @@ programación funcional y como se implementan en Python.
 Programación Funcional
 -----------------------
 
-El paradigma no tienen una definición estandarizada, pero normalmente un
-lenguaje que sigue el paradigma funcional tiene o promueve las siguientes carácteristicas.
-
-Principales características:
+El paradigma no tiene una definición estandarizada, las funciones siguen siendo
+un mecanismo de modularidad y reutilización de código, pero desincentivando el
+uso de los elementos imperativos que encontramos en el paradígma procedural.
+Este estilo de programación surge de ambientes académicos, como una evolución
+del cálculo lambda sobre el cual se inspira el diseño de Lisp y recientemente
+teoría de categorías con el lenguaje Haskell (lenguaje funcional puro). Otros
+lenguajes representativos con características funcinales son: Clojure, Scala y
+Erlang/Elixir.  Normalmente un lenguaje que sigue el paradigma funcional tiene o
+promueve las siguientes carácteristicas.
 
 .. rubric::  Las funciones son objetos
 
 Las funciones se pueden asignar a variables, pasar como argumentos y devolver
 como resultado de otras funciones. Ya hemos visto varios ejemplos de esta funcionalidad.
 
-.. rubric::  Las funciones no tienen efectos secundarios
+.. rubric::  Funciones puras
 
 Si seguimos la definición de una función matemática estas tienen algunas
 propiedades importantes que nos permiten generalizar y establecer reglas para
@@ -143,16 +149,17 @@ verificar que las operaciones que realizamos con ellas son correctas (en un
 contexto matemático). Hay dos carácteristicas que son
 deseables también en las funciones que escribimos en nuestros programas (sean funcionales o no):
 
-Para un mismo parámetro la función nos debería regresar exactamente el mismo
-resultado. Incluso podríamos reemplazar directamente a la función (con el
-parámetro correspondiente) por su valor de regreso y esto no debería tener
-ningún efecto en el funcionamiento de nuestros programas. A esto se le llama transparencia
-referencial.
+- Evaluar una función no debe modificar el comportamiento de otras funciones o el
+  suyo propio, no debe tener *efectos secundarios*. Decimos que una función tiene
+  efectos secundarios cuando modifica algún estado externo, por ejemplo, cuando
+  moficamos un archivo, una base de datos o una variable global.
 
-Evaluar una función no debe modificar el comportamiento de otras funciones o el
-suyo propio, no debe tener *efectos secundarios*. Decimos que una función tiene
-efectos secundarios cuando modifica algún estado externo, por ejemplo, cuando
-moficamos un archivo, una base de datos o una variable global.
+- Para un mismo parámetro la función nos debería regresar exactamente el mismo
+  resultado. Incluso podríamos reemplazar directamente a la función (con el
+  parámetro correspondiente) por su valor de regreso y esto no debería tener
+  ningún efecto en el funcionamiento de nuestros programas. A esto se le llama transparencia
+  referencial.
+
 
 .. rubric::  Inmutabilidad como principio
 
@@ -167,9 +174,9 @@ El la programación funcional es común que escribamos funciones generadoras cuy
 propósito sea precisamente generar nuevas funciones. Las funciones generadas
 incluso pueden hacer referencia a objetos que se definieron en el contexto de la
 función generadora (aunque esta función ya se ejecutó).  A este concepto se le
-llama clausura (clousure). También se utilizan **funciones anónimas** cuyo propósito 
-es generar una función al mismo tiempo que se envía como argumento o se regresa 
-como resultado. 
+llama clausura (clousure). También se utilizan **funciones anónimas** cuyo propósito
+es generar una función al mismo tiempo que se envía como argumento o se regresa
+como resultado.
 
 .. rubric::  Evita ciclos con recursividad
 
@@ -180,9 +187,54 @@ recursividad.
 
 .. rubric::  Evaluación `Lazy`
 
+Los lenguajes pueden realizar evaluación estricta (en inglés se les conoce com eager) o evaluación
+no estricta (lazy). En la evaluación estricta, todos los componentes y subcomponentes
+de una expresión son evaluados. En la evaluación no estricta, no se evaluan los términos
+hasta que sea absolutamente necesario. Por ejemplo, la siguiente instrucción
+en Python falla, debido que hay una división entre cero en el tercer elemento
+de la lista:
 
-Funciones puras
----------------
+.. code-block:: python
+
+   >>> print(len([1,2,3/0]))
+   Traceback (most recent call last):
+   File "<python-input-10>", line 1, in <module>
+      print(len([1,2,3/0]))
+                     ~^~
+   ZeroDivisionError: division by zero
+   >>>
+
+Si se utilizara evaluación no estricta, la instrucción no fallaría ya que
+no es necesario realizar la división para conocer el tamaño de la lista.
+
+Python utiliza evaluación no estrícta en el uso de operadores lógicos,
+por ejemplo aquí no hay problema aunque también se incluye la división
+entre cero en la instrucción:
+
+.. code-block:: python
+
+   >>> if True or 3/0: print('True')
+   ...
+   True
+
+En los lenguejes funcionales que utilizan evaluación `lazy`, se pueden
+definir estructuras como listas infinitas sin problema, por ejemplo, en
+Haskell:
+
+
+.. code-block:: haskell
+
+   naturales = [0..]           -- lista infinita
+   take 5 naturales            -- [0,1,2,3,4]
+
+En el resto del capítulo vamos a ver ejemplos en Python del uso
+de algunos elementos de programación funcional.
+
+.. note::
+
+   Este capitulo solo toca la superficie del tema, para más información te
+   recomiendo otros libros:
+
 
 Funciones lambda
 ----------------
