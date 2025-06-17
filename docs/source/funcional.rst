@@ -341,9 +341,8 @@ se recomienda utilizar una función convencional.
       >>> (lambda a, b: a + b)(2,3)
       5
 
-
-:python:`map()`, :python:`filter()`, :python:`reduce()`
--------------------------------------------------------
+Funciones de órden superior incluidas en Python
+-----------------------------------------------
 
 :python:`map()`
 ^^^^^^^^^^^^^^^
@@ -434,6 +433,96 @@ Podemos anidar las funciones:
    >>> list(map(lambda p: p[1], filter(lambda p: p[2]>2023, peliculas)))
    ['How to Train Your Dragon', 'The Substance']
 
+
+:python:`reduce()`
+^^^^^^^^^^^^^^^^^^^
+
+Otra función de incluida en el módulo ``functools`` es función
+:python:`reduce()`. Esta función es muy útil ya que **reduce** a un solo valor,
+una secuencia dada, aplicando una función acumuladora que toma como argumentos
+dos argumentos sucesivos. Esto se explica mejor con un ejemplo:
+
+.. code-block:: python
+
+   >>> from functools import reduce
+   >>> parámetros = (0, 1, 2, 3, 4)
+   >>> reduce(lambda x, y: x+y, parámetros)
+   10
+
+Este código es equivalente al código que hicimos en el ejemplo
+del paradigma imperativo. Suma un rango de enteros consecutivos.
+Lo que hace el método :python:`reduce()` es tomar los dos
+primeros elementos y los pasa como argumentos al método reductor (en este caso la suma).
+Este resultado es enviado como argumento junto con el elemento que sigue,
+y así sucesivamente. Por ejemplo:
+
+.. math::
+
+   ((((0 + 1) + 2) + 3) + 4)
+
+Esta función no está incluida de fábrica, por esta razón
+debemos de importar el módulo (librería) que la incluye:
+
+.. code-block:: python
+
+   >>> from functools import reduce
+
+A diferencia de los métodos anteriores :python:`reduce()` no
+regresa un **iterador**, regresa un solo valor.
+
+:python:`zip()`
+^^^^^^^^^^^^^^^
+
+Aunque la función :python:`zip()` no es considerada una función de órden
+superior ya que no toma como argumento o produce una función, si es una
+función utilizada en el estilo de programación funcional, ya que nos
+evita crear ciclos y secuencias mutables para generar un nuevo iterable que
+es una combinación de varias secuencias. De nuevo, veamos un ejemplo:
+
+.. code-block:: python
+
+   >>> ids = [1, 3, 10]
+   >>> años = [2025, 2013, 2025]
+   >>> titulos = ['How to Train Your Dragon', 'Prisoners', 'The Substance']
+
+   >>> zip(ids, titulos, años)
+   <zip object at 0x0000022FCE9AFE40>
+   >>> list(zip(ids, titulos, años))
+   [(1, 'How to Train Your Dragon', 2025), (3, 'Prisoners', 2013), (10, 'The Substance', 2025)]
+
+Como vemos, la función :python:`zip()` toma en paralelo, un elemento de
+cada secuencia y con ellos crea tuplas que regresa en un iterable.
+La función se detiene en caso de que alguna secuencia ya no tenga elementos
+para consumir.
+
+Podemos volver a separar cada
+
+.. code-block:: python
+
+   >>> z = list(zip(ids, titulos, años))
+   >>> zip(*z)
+   <zip object at 0x0000022FCE9AF7C0>
+   >>> list(zip(*z))
+   [(1, 3, 10), ('How to Train Your Dragon', 'Prisoners', 'The Substance'), (2025, 2013, 2025)]
+   >>>
+
+
+:python:`enumerate()`
+^^^^^^^^^^^^^^^^^^^^^
+
+Por último tenemos a :python:`enumerate()`, esta función toma como parámetro
+una secuencia y para cada elemento regresa una tupla con un índice  como primer
+elemento:
+
+.. code-block:: python
+
+   >>> titulos = ['How to Train Your Dragon', 'Prisoners', 'The Substance']
+   >>> for i, t in enumerate(titulos):
+   ...    print(i, t)
+   ...
+   0 How to Train Your Dragon
+   1 Prisoners
+   2 The Substance
 
 
 Listas por comprensión
