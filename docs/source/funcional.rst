@@ -235,12 +235,206 @@ de algunos elementos de programación funcional.
    Este capitulo solo toca la superficie del tema, para más información te
    recomiendo otros libros:
 
-
 Funciones lambda
 ----------------
 
+Cuando queremos definir una función al mismo tiempo que la envíamos como
+parámetro, la más práctico es que pasemos una función lambda. Las funciones lambda son
+simplemente funciones anónimas que son utilizadas para enviarse como parámetro
+y no tenemos la intención de rutilizar dicha función en otros contextos.
+
+Veámoslo con un ejemplo. Vamos a suponer que tenemos una lista
+de películas y los datos de cada película los guardamos simplmente en
+una tupla:
+
+.. code-block:: python
+
+   >>> peliculas = [
+   ...    ('1', 'How to Train Your Dragon', 2025, ('Action', 'Family', 'Fantasy'), '2h 5m', 80),
+   ...    ('3', 'Prisoners', 2013, ('Drama', 'Thriller', 'Crime'), '2h 33m', 81),
+   ...    ('10', 'The Substance', 2024, ('Drama', 'Horror', 'Science Fiction'), '2h 21m', 71),
+   ...             ]
+
+Si ordenamos la lista *in place* y luego la imprimimos, vemos que el órden se
+establece ordenando por el primer elemento de la tupla y en este caso como son
+cadenas de caracteres se ordenan lexicográficamente por el identificador.
+
+.. code-block:: python
+
+   >>> peliculas.sort()
+   >>> for p in peliculas:
+   ...    print(p)
+   ...
+   ('1', 'How to Train Your Dragon', 2025, ('Action', 'Family', 'Fantasy'), '2h 5m', 80)
+   ('10', 'The Substance', 2024, ('Drama', 'Horror', 'Science Fiction'), '2h 21m', 71)
+   ('3', 'Prisoners', 2013, ('Drama', 'Thriller', 'Crime'), '2h 33m', 81)
+
+
+Si queremos ordenar la lista, por año debemos pasar como argumento una función
+que tome como parámetro una lista y nos regrese el elemento sobre el cual queremos ordenar los elementos.
+
+Esta función puede ser la siguiente:
+
+.. code-block:: python
+
+   >>> def select_año(pelicula):
+   ...    return pelicula[2]
+   ...
+
+La función toma como argumento la tupla con la información de la película y nos regresa el tercer elemento.
+
+.. code-block:: python
+
+   >>> peliculas.sort(key=select_año)
+   >>> for p in peliculas:
+   ...    print(p)
+   ...
+   ('3', 'Prisoners', 2013, ('Drama', 'Thriller', 'Crime'), '2h 33m', 81)
+   ('10', 'The Substance', 2024, ('Drama', 'Horror', 'Science Fiction'), '2h 21m', 71)
+   ('1', 'How to Train Your Dragon', 2025, ('Action', 'Family', 'Fantasy'), '2h 5m', 80)
+
+En lugar de tener que definir la función `select_año`, podemos enviar una función anónima
+escrita de una manera mucho más compacta. Por ejemplo, para ordenar por
+título, podriamos llamar a `peliculas.sort()` utilizando la palabra `lamda` de esta manera:
+
+.. code-block:: python
+
+   >>> peliculas.sort(key=lambda peliculas: peliculas[1])
+   >>> for p in peliculas:
+   ...    print(p)
+   ...
+   ('1', 'How to Train Your Dragon', 2025, ('Action', 'Family', 'Fantasy'), '2h 5m', 80)
+   ('3', 'Prisoners', 2013, ('Drama', 'Thriller', 'Crime'), '2h 33m', 81)
+   ('10', 'The Substance', 2024, ('Drama', 'Horror', 'Science Fiction'), '2h 21m', 71)
+
+Las funciones lambda siguien esta sintaxis en Python:
+
+.. code-block:: python
+
+   lambda <lista de parámetros> : <cuerpo de la función>
+
+<lista de parámetros>
+   Es una lista opcional de parámetros separados por una coma.
+   Al igual que en una función regular el símbolo de dos puntos `:` separa al
+   cuerpo de la lísta de parámetros.
+
+<cuerpo de la función>
+   El cuerpo de la función debe ser solo una línea de código
+   y es el valor que regresa la función.
+
+Al ser una versión anónima y compacta de una función, es recomendable utilizarlas
+para código que sea fácilmente entendible. En caso de requerir algo más elaborado
+se recomienda utilizar una función convencional.
+
+.. note::
+   Recordemos que las funciones `lambda` son objetos, por lo que podemos regresarlas
+   como valor de retorno de otra función o incluso ejecutarlas al mismo tiempo que las
+   definimos:
+
+   .. code-block:: python
+
+      >>> def crea_suma():
+      ...    return lambda a, b: a + b
+      ...
+      >>> crea_suma()(2,3)
+      5
+      >>> (lambda a, b: a + b)(2,3)
+      5
+
+
 :python:`map()`, :python:`filter()`, :python:`reduce()`
 -------------------------------------------------------
+
+:python:`map()`
+^^^^^^^^^^^^^^^
+
+El método :python:`map()` incluido de fábrica incorpora un estilo
+funcional que es muy utilizado en Python. Veamos un ejemplo donde comparamos
+un programa con un estilo *imperativo* versus la versón *funcional*:
+
+Tenemos la tarea de producir una nueva lista que contenga solo los títulos de las
+películas extraídos de la lista `peliculas` creada anteriormente. Una manera
+imperativa para ralizar esta tarea sería la siguiente:
+
+.. code-block:: python
+
+   >>> peliculas
+   [('1', 'How to Train Your Dragon', 2025, ('Action', 'Family', 'Fantasy'), '2h 5m', 80), ('3', 'Prisoners', 2013, ('Drama', 'Thriller', 'Crime'), '2h 33m', 81), ('10', 'The Substance', 2024, ('Drama', 'Horror', 'Science Fiction'), '2h 21m', 71)]
+   >>> titulos = []
+   >>> for p in peliculas:
+   ...    titulos.append(p[1])
+   ...
+   >>> titulos
+   ['How to Train Your Dragon', 'Prisoners', 'The Substance']
+   >>>
+
+Vamos a tratar de reconocer algunos elementos de este código que no concuerdan
+con el paradigma funcional:
+
+   - Declaramos a ``titulos``, recordemos que es un objeto mutable. Esto no es recomendado en el paradigma.
+   - Tenemos un ciclo ``for`` que de manera explicita (imperativa) modificamos el estado (mutamos) de la lista. Esto
+     es mejor que el estilo mucho más imperativo de utilizar un índice el cual vamos modificando en cada iteración.
+   - Podemos decir que el bloque dentro del ciclo tiene 'efectos colaterales' ya que modifica el estado de la lista.
+
+
+Ahora vamos a resolver el mismo problema pero siguiendo un estilo funcional. Una
+manera de relizar esto es utilizando la función :python:`map()` la cual sirve
+precisamente para este tipo de problemas. Esta función genera un objeto tipo
+:python:`map` el cual es **iterable** pero **inmutable**. La función toma como primer
+parámetro una función la cual se aplica de manera secuencial a al iterable que
+se pasa como segundo parámetro y con esto se genera el objeto :python:`map` antes
+mencionado.
+
+Por ejemplo:
+
+.. code-block:: python
+
+   >>> map(int, ['1', '2', '3', '4'])
+   <map object at 0x0000022FCEE461A0>
+   >>> list(map(int, ['1', '2', '3', '4']))
+   [1, 2, 3, 4]
+
+En este ejemplo :python:`map()` toma al métod ``int`` y lo aplica a todos
+los elementos de la lista. Vemos como la lista contiene enteros pero
+expresado como cadenas de texto. La función regresa un objeto tipo :python:`map`.
+Para visualizarlo podemos construir una lista a partir del objeto :python:`map`.
+
+Utilicemos map para resolver el problema anterior:
+
+.. code-block:: python
+
+   >>> list(map(lambda p: p[1], peliculas))
+   ['How to Train Your Dragon', 'Prisoners', 'The Substance']
+
+Veamos las características funcionales de este código:
+   - No utiliza objetos mutables para la generación de la lísta. En este caso no es
+     necesario tener que definir la lista ``titulos``.
+   - No utiliza ciclos para ir mutando el estado de la lista intermedia ``titulos``.
+   - Utiliza la función :python:`map()` la cual recibe como parámetro una función anónima (las funciones son objetos).
+   - Se sigue además un estilo declarativo muy compacto.
+
+:python:`filter()`
+^^^^^^^^^^^^^^^^^^^
+
+De manera similar a :python:`map()`, la función toma como primer parámetro una función de prueba que sirver para filtrar
+elementos del iterable que se recibe como segundo argumento. La función de prueba debe regresar verdadero para
+que el elemento se incluya en el resultado. Por ejemplo, para regresar las películas más recientes
+que el año 2023. Podemos hacer lo siguiente:
+
+.. code-block:: python
+
+   >>> list(filter(lambda p: p[2]>2023, peliculas))
+   [('1', 'How to Train Your Dragon', 2025, ('Action', 'Family', 'Fantasy'), '2h 5m', 80), ('10', 'The Substance', 2024, ('Drama', 'Horror', 'Science Fiction'), '2h 21m', 71)]
+   >>>
+
+Podemos anidar las funciones:
+
+.. code-block:: python
+
+   >>> list(map(lambda p: p[1], filter(lambda p: p[2]>2023, peliculas)))
+   ['How to Train Your Dragon', 'The Substance']
+
+
 
 Listas por comprensión
 ----------------------
