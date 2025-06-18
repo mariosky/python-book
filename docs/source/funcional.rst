@@ -528,5 +528,107 @@ elemento:
 Listas por comprensión
 ----------------------
 
+Una de las construcciones sintácticas que yo considero más poderosas de
+python son la definición de secuencias por comprensión. Este concepto tiene
+origen en el lenguaje Haskell que a su vez lo toma de la teoría de matemática
+de conjuntos por compresión. Por ejemplo, en notación de conjuntos podemos
+definir un conjunto a partir de otro de esta manera:
+
+.. math::
+
+   \{ x^2 \mid x \in \mathbb{N},\ x \text{ es par} \}
+
+En este caso se especifica que el conjunto de los números naturales pares
+elevados al cuadrado. Si te fijas la definición:
+
+- Parte de un conjunto inicial: los números naturales.
+- Tiene una condición: solo los números pares.
+- Aplica una operación al conjunto filtrado por la condición: el número al cuadrado.
+
+En Haskell la sintáxis es muy parecida:
+
+.. code-block:: haskell
+
+   [x * x | x <- [1..10], even x]
+
+Veamos como se define esta nueva lista por compresión en Python:
+
+.. code-block:: python
+
+   >>> [ x * x for x in range(1, 11) if not x % 2 ]
+   [4, 16, 36, 64, 100]
+
+La sintáxis es muy concisa:
+
+.. code-block:: python
+
+   [ <expresión> for <identificadores> in <iterable> <condición opcional> ]
+
+<iterable>
+   Empezamos por especificar la secuencia o iterable original.
+
+<identificadores>
+   Después extraemos a los elementos a un nombre o a un patrón que desempaque varios nombres.
+
+<condición opcional>
+   Podemos agregar una condición utilizando a los identificadores.
+
+<expresión>
+   Alguna operación sobre los nombres extraídos del iterable
+
+Esta es una manera muy concisa de procesar datos están almacenados en un iterable.
+Por ejemplo, en la sección anterior utilizamos las funciones :python:`map()` y :python:`filter()`
+para extraer de nuestra lista de películas los títulos de las películas posteriores al año
+2023:
+
+.. code-block:: python
+
+   >>> list(map(lambda p: p[1], filter(lambda p: p[2]>2023, peliculas)))
+   ['How to Train Your Dragon', 'The Substance']
+
+Utilizando listas por comprensión esto sería más conciso:
+
+.. code-block:: python
+
+   >>> [p[1] for p in peliculas if p[2] > 2023]
+   ['How to Train Your Dragon', 'The Substance']
+
+Podemos desempacar los elementos para utilizar nombres en lugar de índices:
+
+.. code-block:: python
+
+   >>> [título for id, título, año, categoría, duración, rating  in peliculas if año > 2023]
+   ['How to Train Your Dragon', 'The Substance']
+
+Las expresiones pueden incluir funciones:
+
+.. code-block:: python
+
+   >>> argumentos = ((1,2), (2,4), (3,4))
+   >>> suma = lambda a, b: a + b
+   >>> [suma(x, y) for (x, y) in argumentos]
+   [3, 6, 7]
+
+Se pueden anidar las comprensiones:
+
+.. code-block:: python
+
+   >>> [str(elemento*2) for elemento in [ a ** 2 for a in range(4) ] ]
+   ['0', '2', '8', '18']
+
+También podemos utilizar la comprensión para cambiar de estructura:
+
+.. code-block:: python
+
+   >>> [{'id':id, 'título':título, 'año':año} for id, título, año, _, _, _  in peliculas][0]
+   {'id': '1', 'título': 'How to Train Your Dragon', 'año': 2025}
+
+En este ejemplo utilizamos algunos elementos nuevos:
+- Uso de un indicador de posición `_` solo para que funcione el desempacado de elementos.
+- Para no mostrar todos los elementos se genera la lista, pero al mismo tiempo nos quedamos solo con el primer elemento :python:`[0]`
+
+
+
+
 Expresiones Generadoras
 -----------------------
