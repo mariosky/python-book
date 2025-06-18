@@ -627,7 +627,15 @@ En este ejemplo utilizamos algunos elementos nuevos:
 - Uso de un indicador de posición `_` solo para que funcione el desempacado de elementos.
 - Para no mostrar todos los elementos se genera la lista, pero al mismo tiempo nos quedamos solo con el primer elemento :python:`[0]`
 
+Utilizando comprensión podemos crear otras estructuras como diccionarios o
+conjuntos:
 
+.. code-block:: python
+
+   >>> {x: x**2 for x in range(5)}       # diccionario por comprensión
+   {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+   >>> {x**2 for x in range(5)}          # conjunto por comprensión
+   {0, 1, 4, 9, 16}
 
 
 Expresiones Generadoras
