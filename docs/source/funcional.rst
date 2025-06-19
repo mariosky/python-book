@@ -525,6 +525,63 @@ elemento:
    2 The Substance
 
 
+Clausuras
+---------
+
+Las **funciones de órden superior** pueden recibir argumentos o declarar variables
+locales, las cuales pueden ser referenciadas por funciones internas que ellas mismas crean
+y devuelven.
+
+Por ejemplo, vamos a programar la función :python:`clausura(factor)`. Esta
+función recibe el argumento :python:`factor`, que será utilizado por la función interna
+(:python:`multiplica(x)`) para multiplicarla por :python:`x`.  Veamos el
+ejemplo:
+
+.. code-block:: python
+
+   >>> def clausura(factor):
+   ...    def multiplica(x):
+   ...       return factor * x
+   ...    return multiplica
+   ...
+   >>> por_siete = clausura(7)
+   >>> por_siete(5)
+   35
+
+En este ejemplo, la variable local :python:`factor` (definida como un parámetro
+de :python:`clausura`) es utilizada por la función interna
+:python:`multiplica(x)`.  Gracias a esto, podemos crear diferentes funciones
+que multipliquen :python:`x` por su propio :python:`factor`.
+
+Ahora bien, cuando la función de orden superior :python:`clausura(factor)`
+termina su ejecución, uno pensaría que sus variables locales deberían
+desaparecer. Sin embargo, en este caso no sucede así. ¿Por qué?
+
+Lo que ocurre es que la función :python:`clausura` retorna una **clausura**:
+una función que recuerda el **entorno léxico** en el que fue creada. Así,
+la función resultante (:python:`por_siete`) sigue teniendo acceso al valor
+de :python:`factor`, aunque el cuerpo de :python:`clausura` ya se haya
+ejecutado y destruido.
+
+Este mecanismo se parece al **encapsulamiento** en la programación orientada
+a objetos. En ese paradigma, se pasan argumentos a un constructor, y esos
+valores quedan guardados dentro del objeto que crean. Aquí sucede algo similar: es
+como si construyéramos funciones personalizadas con sus propios
+"atributos" internos.
+
+En Python incluso es posible ver los datos de las variables que recuerda cierta
+función:
+
+.. code-block:: python
+
+   >>> por_siete.__closure__[0].cell_contents
+   7
+
+La clausuras son importantes en el paradigma funcional ya que nos permiten
+tener funciones que mantienen un estado interno sin tener que utilizar
+clases.
+
+
 Listas por comprensión
 ----------------------
 
