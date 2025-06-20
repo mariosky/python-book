@@ -1,3 +1,4 @@
 pybook.pdf
 venv
 build
+.DS_Store
