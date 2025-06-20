@@ -14,13 +14,13 @@ herramientas. Aunque el lenguaje no es el más rápido para el procesamiento
 el ecosistema compensa esta desventaja, además se puede utilizar cómputo 
 distribuido y multiprocesamiento en caso de ser necesario.
 
-Operaciones básicas con cadenas de caracteres
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 Ya hemos visto que las cadenasd de caracteres son  secuencias inmutables parecidas a las 
 tuplas y por lo tanto pueden utilizar los métodos que se aplican a estas. Pero además 
 se incluyen muchas funciones útiles para operar sobre este tipo de datos. 
 Veamos primero las funciones básicas para crear y leer cadenas de caracteres:
+
+Operaciones básicas crear y codificar de caracteres
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. rubric:: :python:`str(objeto='', encoding='utf-8', errors='strict')`
 
@@ -124,17 +124,77 @@ En este ejemplo hemos visto como aunque Python utiliza por defecto una codificac
 y que puede representar muchos tipos de caracteres, hay que tener cuidado al leer o escribir 
 datos codificados en otros formatos. 
 
-.. rubric:: split
+.. rubric:: :python:`string.split(separator, maxsplit)`
 
-.. rubric:: join 
+El método :python:`split` crea una nueva lista,  cortando en pedacitos la cadena original.
+Los cortes se hacen utilizando un *separador*, por defecto el separador es uno o más espacios en blanco.
+Veamos un ejemplo:
+
+    >>> 'Hola, ¿qué tal?, esta es una    palabra   separada con algunos espacios.' 
+    'Hola, ¿qué tal?, esta es una    palabra   separada con algunos espacios.'
+    >>> texto = 'Hola, ¿qué tal?, esta es una    palabra   separada con algunos espacios.' 
+    >>> texto.split()
+    ['Hola,', '¿qué', 'tal?,', 'esta', 'es', 'una', 'palabra', 'separada', 'con', 'algunos', 'espacios.']
+
+El objeto utiliza el espacio como separador. Fíjate como elimina múltiples espacios.
+
+    >>> texto.split(',')
+    ['Hola', ' ¿qué tal?', ' esta es una    palabra   separada con algunos espacios.']
+    >>> texto.split(' ') # El separador es un espacio 
+    ['Hola,', '¿qué', 'tal?,', 'esta', 'es', 'una', '', '', '', 'palabra', '', '', 'separada', 'con', 'algunos', 'espacios.']
+
+En caso de incluir el caracter de espacio ` ` como separador, se agregan a la lista cadenas vacías.
+Cuando veamos el tema de expresiones regulares vamos a ver como atacar este tipo de casos.
+
+.. rubric:: :python:`string.join(iterable)`
+
+Por otro lado, si tenemos una lista de cadenas de caracteres, podemos construir una sola cadena concatenando 
+los elementos de la lista. En este caso, el objeto que realiza la operación es el caracter separador, que en 
+esta operación se debería llamar caracter de unión: 
+
+    >>> lista = texto.split()
+    >>> lista
+    ['Hola,', '¿qué', 'tal?,', 'esta', 'es', 'una', 'palabra', 'separada', 'con', 'algunos', 'espacios.']
+    >>> '#'.join(lista) 
+    'Hola,#¿qué#tal?,#esta#es#una#palabra#separada#con#algunos#espacios.'
+    >>> 
 
 .. rubric:: replace 
+
+Podemos crear una nueva cadena de texto reemplazando uno o más caracteres del texto original: 
+    >>> texto = 'Estudio en el Tec' 
+    >>> texto = texto.replace('Tec', 'TecNM')  
+    >>> texto
+    'Estudio en el TecNM'
+
+.. attention:: 
+    Recuerda que debemos reasingar el texto generado por :python:`str.replace()` 
+    al nombre ``texto`` ya que las cadenas de caracteres son **inmutables**.
 
 Formato
 ^^^^^^^
 
 Expresiones regulares
 ^^^^^^^^^^^^^^^^^^^^^
+
+texto = "Hola    mundo   con   muchos   espacios"
+palabras = texto.split()  # Sin argumento, split() usa espacios por defecto
+print(palabras)
+# Salida: ['Hola', 'mundo', 'con', 'muchos', 'espacios']
+
+texto2 = "uno, , dos,, tres,,,"
+palabras2 = texto2.split(",")
+print(palabras2)
+# Salida: ['uno', '', ' dos', '', ' tres', '', '', '']
+
+import re
+palabras3 = re.split(r"\s+", texto)
+print(palabras3)
+# Salida: ['Hola', 'mundo', 'con', 'muchos', 'espacios']
+
+palabras4 = re.split(r",+", texto2)
+print(palabras4)
+# Salida: ['uno', ' dos', ' tres', '']`
 
 Tokenización 
 ^^^^^^^^^^^^
