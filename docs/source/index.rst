@@ -20,6 +20,8 @@ pyBook documentation
    fundamentos
    funcional
    strings
+   archivos
+   oop
 
 .. toctree::
    :maxdepth: 2
