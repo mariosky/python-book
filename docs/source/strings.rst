@@ -254,33 +254,11 @@ se puede enviar un diccionario, anteponiendo ``**``:
 >>> 'Mi nombre es {nombre}, no confundir con {nombre_falso}'.format(**d) 
 'Mi nombre es Mud, no confundir con Bill'
 
+.. note:: 
+    Puedes consultar la documentación del Python para ver en detalle 
+    otros métodos de la clase :python:`str` en 
+    `docs.python.org <https://docs.python.org/es/3.13/library/stdtypes.html#string-methods>`_
 
-
-Expresiones regulares
-^^^^^^^^^^^^^^^^^^^^``
-
-texto = "Hola    mundo   con   muchos   espacios"
-palabras = texto.split()  # Sin argumento, split() usa espacios por defecto
-print(palabras)
-# Salida: ['Hola', 'mundo', 'con', 'muchos', 'espacios']
-
-texto2 = "uno, , dos,, tres,,,"
-palabras2 = texto2.split(",")
-print(palabras2)
-# Salida: ['uno', '', ' dos', '', ' tres', '', '', '']
-
-import re
-palabras3 = re.split(r"\s+", texto)
-print(palabras3)
-# Salida: ['Hola', 'mundo', 'con', 'muchos', 'espacios']
-
-palabras4 = re.split(r",+", texto2)
-print(palabras4)
-# Salida: ['uno', ' dos', ' tres', '']`
-
-Tokenización
-^^^^^^^^^^^^
-
-
-
+    También es recomendable revisar la librería de expresiones regulares:
+    `Regular Expresions <https://docs.python.org/es/3.13/library/re.html>`_
 
