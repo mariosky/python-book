@@ -695,5 +695,10 @@ conjuntos:
    {0, 1, 4, 9, 16}
 
 
+Iteradores e Iterables
+----------------------
+
+
+
 Expresiones Generadoras
 -----------------------
