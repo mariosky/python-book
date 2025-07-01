@@ -196,67 +196,67 @@ Pero en ocasiones queremos darle un formato al texto que vamos a imprimt en la
 terminal o en algún archivo. Al igual que otros lenguajes Python tiene la
 capacidad de construir cadenas de texto a partir de una plantilla. La plantilla
 es una cadena de texto con el prefijo ``f`` o ``F``, que incluye **expresiones
-de interpolación** entre llaves ``{expresión}``.  Las expresiones de interpolación, 
-pueden ser vistas como unos marcadores de posición (placeholders) que se reemplazan 
+de interpolación** entre llaves ``{expresión}``.  Las expresiones de interpolación,
+pueden ser vistas como unos marcadores de posición (placeholders) que se reemplazan
 con el resultado de la evaluación de las expresiones. Las expresiones pueden ser tan
 sencillas como una variable o una expresión de Python más elaborada:
 
->>> f'Hola, me llamo {nombre.capitalize()}' 
+>>> f'Hola, me llamo {nombre.capitalize()}'
 'Hola, me llamo Ana'
 
-Podemos utilizar llaves dobles ``{{ }}`` para imprimir las 
-llaves y no interpretar la expresión interna (se genera texto literal). 
+Podemos utilizar llaves dobles ``{{ }}`` para imprimir las
+llaves y no interpretar la expresión interna (se genera texto literal).
 
->>> f'Mi nombre tiene {len(nombre)} letras' 
+>>> f'Mi nombre tiene {len(nombre)} letras'
 'Mi nombre tiene 3 letras'
->>> f'La expresión: {{len(nombre)}} se reemplaza por: {len(nombre)}' 
+>>> f'La expresión: {{len(nombre)}} se reemplaza por: {len(nombre)}'
 'La expresión: {len(nombre)} se reemplaza por: 3'
 
 Si la expresión incluye algún nombre no definido o una expresión no válida, el
 interprete nos da un error:
 
->>> f'Hola, me apellido {apellido.capitalize()}' 
+>>> f'Hola, me apellido {apellido.capitalize()}'
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 NameError: name 'apellido' is not defined
 
 Después de la expresión, podemos agregar dos puntos que antecedan a una
 especificadión de formato.  Por ejemplo, para indicar el número de decimales que
-deseamos mostrar para un valor flotante: 
+deseamos mostrar para un valor flotante:
 
 >>> pi = 3.141592653589793238
->>> f'Los primeros cinco digitos de pi son: {pi:.5f}' 
+>>> f'Los primeros cinco digitos de pi son: {pi:.5f}'
 'Los primeros cinco digitos de pi son: 3.14159'
 
 
 .. rubric:: El método :python:`str.format()`
 
-La clase ``str`` incluye el método ``format()`` para dar 
-formato a la cadena. Se consideran también marcadores de posición, los cuales 
-se reemplazan con los valores enviados como argumentos al método. 
+La clase ``str`` incluye el método ``format()`` para dar
+formato a la cadena. Se consideran también marcadores de posición, los cuales
+se reemplazan con los valores enviados como argumentos al método.
 
->>> 'Mi nombre es {}, no confundir con {}'.format('Mud', 'Bill') 
+>>> 'Mi nombre es {}, no confundir con {}'.format('Mud', 'Bill')
 'Mi nombre es Mud, no confundir con Bill'
 
 Se puede utilizar un índice:
 
->>> 'Mi nombre es {1}, no confundir con {0}'.format('Bill', 'Mud') 
+>>> 'Mi nombre es {1}, no confundir con {0}'.format('Bill', 'Mud')
 'Mi nombre es Mud, no confundir con Bill'
 
 o también argumentos con nombre:
 
->>> 'Mi nombre es {nombre}, no confundir con {nombre_falso}'.format(nombre_falso='Bill', nombre='Mud') 
+>>> 'Mi nombre es {nombre}, no confundir con {nombre_falso}'.format(nombre_falso='Bill', nombre='Mud')
 'Mi nombre es Mud, no confundir con Bill'
 
 se puede enviar un diccionario, anteponiendo ``**``:
 
 >>> d = {'nombre':'Mud', 'nombre_falso':'Bill'}
->>> 'Mi nombre es {nombre}, no confundir con {nombre_falso}'.format(**d) 
+>>> 'Mi nombre es {nombre}, no confundir con {nombre_falso}'.format(**d)
 'Mi nombre es Mud, no confundir con Bill'
 
-.. note:: 
-    Puedes consultar la documentación del Python para ver en detalle 
-    otros métodos de la clase :python:`str` en 
+.. note::
+    Puedes consultar la documentación del Python para ver en detalle
+    otros métodos de la clase :python:`str` en
     `docs.python.org <https://docs.python.org/es/3.13/library/stdtypes.html#string-methods>`_
 
     También es recomendable revisar la librería de expresiones regulares:
