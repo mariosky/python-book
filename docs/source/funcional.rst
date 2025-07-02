@@ -694,8 +694,8 @@ conjuntos:
    >>> {x**2 for x in range(5)}          # conjunto por comprensión
    {0, 1, 4, 9, 16}
 
-.. Important:: 
-   Otros temas de importancia para implementar la programación funcional en 
+.. Important::
+   Otros temas de importancia para implementar la programación funcional en
    python son los siguientes:
 
       - Iteradores e Iterables

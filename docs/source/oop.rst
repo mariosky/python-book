@@ -36,7 +36,7 @@ diferencias entre paradigmas en términos de programación.
     pero al igual que el lenguaje es algo libre e híbrido.
 
 Ámbitos y espacios de nombres en Python
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+***************************************
 La documentación oficial de Python aborda este importante tema en la sección
 de definición de  `clases <https://docs.python.org/es/3.13/tutorial/classes.html#python-scopes-and-namespaces>`_.
 En este libro vamos a seguir la misma estructura ya que es una manera interesante
@@ -99,7 +99,8 @@ fuera. Solo las instrucciones dentro del ámbito pueden hacerlo.  Este es un
 principio importante de la programación estructurada y la programación orientada
 a objetos:
 
-**Ocultación de la información (information hiding)**
+Ocultación de la información (information hiding)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
    Es un principio por el cual se separan los detalles de implementación de los
    detalles de uso, de modo que los componentes de un programa solo acceden a lo
@@ -134,5 +135,180 @@ llamar a la función y se eliminan cuando la función regresa o se lanza alguna 
 También hay ambitos de nombres que tienen una vida más duradera, por ejemplo, los
 nombres de fabrica (``builtins``), se crean al iniciar el intérprete y nunca se destruyen.
 
+Visibilidad y Encapsulamiento en un Módulo
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Este concepto de ocultar o encapsular la información es importante en la programación
+estructurada al momento de descomponer la funcionalidad de nuestros programas. Podemos seguir un
+diseño descendente (top-down) dividiendo el problema que atacamos en diversos subproblemas y estos
+a su vez en otros más pequeños. En Python podemos organizar nuestro código en módulos (ver sección de modulos)
+en los cuales pueden contener funciones las cuales a su vez pueden definir funciones internas.
+El punto clave es que las funciones internas **no son accesibles** desde fuera de su función contenedora.
+Sin embargo, las funciones anidadas tienen acceso al contexto de las funciones que las contienen.
+Esta estructura se muestra en la siguiente figura:
+
+.. figure:: ./images/visibilidad.svg
+   :align: left
+   :alt: Visibilidad y Encapsulamiento.
+
+En el lado izquierdo podemos observar la estructura jerárquica dentro de un módulo (azul claro)
+en Python esto puede ser un archivo ``.py``. Dentro del módulo hay funciones principales:
+en este caso la Función A y Función B (rosadas). A su vez cada función principal puede contener internamente otras
+funciones (lavanda):
+
+- La ``Función A`` contiene las funciones ``a`` y ``a2``
+- La ``Función B`` contiene a la ``función b``
+
+Este es un modelo anidado de funciones, donde las funciones internas solo son visibles
+desde las funciones que las contienen. Del lado derecho se ve en detalle este concepto de
+visibilidad:
+
+El flujo está hacia abajo lo vemos como una "caja negra": los niveles superiores
+no conocen los detalles internos de los niveles inferiores (encapsulamiento).
+Ahora, las flechas discontínuas nos muestran la visibilidad permitida: las
+funciones internas (a, a2, b) pueden "ver" o acceder a los nombres locales de
+las funciones que las contienen (A, B), y estas a su vez a los nombres de los
+módulos.
+
+Veamos un ejemplo. Al iniciar en intérprete estamos al nível de un módulo.
+Vamos a definir un nombre a este nivel:
+
+>>> x = 123
+
+Ya ahora una función a este nivel, la cual internamente tiene dos funciones:
+
+>>> def Función_A():
+...     A = 333
+...     def función_a():
+...         print(x)
+...         print(A)
+...     def función_a2():
+...         x = 1
+...     función_a()
+...     función_a2()
+
+La función incluye un nombre ``A`` local y fíjate que dentre de la ``función_a``
+se leen los nombres ``x`` y ``A`` de los ámbitos externor. Esta es la
+visibilidad hacia arriba. Ahora también en la ``función_b`` intentamos modificar
+a la variable externa ``x``, esto realmente crea una variable local ``x`` y no
+se modifica la externa.
+
+Una vez definidas las funciones, podemos ver que no es posible
+llamar a la función interna ``función_a()``:
+
+>>> función_a()
+Traceback (most recent call last):
+  File "<python-input-4>", line 1, in <module>
+    función_a()
+    ^^^^^^^^^
+NameError: name 'función_a' is not defined. Did you mean: 'Función_A'?
+
+Lo podemos hacer llamando a la función que esta directamente en este ámbito,
+la ``Función_A()`` internamente llama a sus funciones y solo vemos el resultado:
+
+>>> Función_A()
+123
+333
+
+Como vemos la función ``x`` no fue modificada.
+
+>>> x
+123
+
+Para modificar o crear un objeto en el ámbito del módulo
+podemos hacerlo utilizando la palabra clave ``global``:
+
+.. code-block:: python
+
+   >>> def Función_A():
+   ...     A = 333
+   ...     def función_a():
+   ...         print(x)
+   ...         print(A)
+   ...     def función_a2():
+   ...         global x
+   ...         x = 1
+   ...     función_a()
+   ...     función_a2()
+
+   >>> Función_A()
+   123
+   333
+
+   >>> x
+   123
+
+ar un nombre que esta definido en un ámbito externo
+(más arriba en la jerarquía), podemos utilizar la palabra reservada ``nonlocal``
+de manera similar a ``global``.
+
+En resúmen, son importantes estos tres conceptos:
+
+- **Encapsulamiento**: Las funciones internas no son accesibles desde fuera de su función contenedora.
+- **Alcance léxico**: Las funciones anidadas tienen acceso al contexto de las funciones que las contienen.
+- **Diseño modular**: El módulo oculta los detalles internos a quien lo usa; solo expone una interfaz (las funciones principales).
+
+Estos conceptos se utilizan de nuevo en la programación orientada a objetos.
+
+Clases
+******
+
+Tomando como base el concepto de encapsulamiento, para hacer un cambio de paradigma.
+En un módulo podemos tener un ambito que incluye datos (nombres) y funciones para
+encapsular cierta funcionalidad. En orientación a objetos, un clase encapsula los
+atributos (en lugar de datos) y métodos (en lugar de funciones) que definen
+a un nuevo tipo de objeto. Cada objeto lo podríamos ver como un módulo independiente,
+con sus propios datos y funcionalidad interna. Aunque conceptualmente el
+encapsulamiento lo hemos visto como ocultar información y funciones, en realidad
+esto se hace de manera selectiva, cuándo definimos un módulo podemos especificar
+que datos y funciones serán visibles a otros módulos. Lo mismo sucede en la programación
+orientada a objetos. Veamos un ejemplo:
+
+>>> class Persona:
+...     clase = 'Persona'
+...     def __init__(self, nombre, apellido):
+...         self.nombre = nombre
+...         self.apellido = apellido
+...     def get_nombre_completo(self):
+...         return f'{self.nombre} {self.apellido}'
+...     def saluda(self):
+...         print(f'Hola soy {self.get_nombre_completo()}')
+...
+
+Vemos como la definición es básicamente un bloque dónde definimos métodos y
+atributos. Como cada instancia (objeto) de esta clase tendrá sus propios atributos y
+todas las instancias van a compartir los métodos definidos en su clase.
+Debemos utilizar la referencia ``self`` para identificar al objeto particular
+que estamos utilizando.
+
+.. code-block:: python
+
+   >>> ana = Persona('Ana', 'Lee')
+   >>> ana.saluda()
+   Hola soy Ana Lee
+   >>> tom = Persona('Tom', 'Pit')
+   >>> tom.saluda()
+   Hola soy Tom Pit
+   >>> Persona.clase
+   'Persona'
+
+En este código creamos dos instancias de la clase Persona, cada objeto se
+crea en una localidad independiente de memoria y la podemos referenciar
+utilizando :python:`self`. Esto lo debemos de especificar explicitamente al
+definir la clase para decir que estos son atributos y métodos de instancias.
+En el caso del atributo :python:`Persona.clase` este no tiene :python:`self` porque se
+trata de un atributo de la clase. Cuando ejecutamos el método de instancia
+:python:`saluda`, por ejemplo :python:`ana.saluda()` no es necesario enviar
+la referencia :python:`self`, esto se hace implicitamente.
+
+.. figure:: ./images/self.svg
+   :align: left
+   :alt: El uso de :python:`self` al definir una clase.
+
+.. note::
+
+   Es importante agregar la referencia :python:`self` en todos lados. Por
+   ejemplo, :python:`self.get_nombre_completo()`, aunque esto no es necesario en otros
+   lenguajes, uno de los principios básicos de Python es "Explicito es
+   preferible a implícito".
 
