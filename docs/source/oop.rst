@@ -565,7 +565,7 @@ definiendo utilizamos :python:`self`:
          print(f'Hola soy {self}, soy una instancia de: {self.__class__.clase})
 
 
-En este ejemplo, utilizamos un atributo :python:`clase`` como ejemplo. Pero como
+En este ejemplo, utilizamos un atributo :python:`clase` como ejemplo. Pero como
 vimos, podríamos saber el nombre de la clase sin necesidad de este atributo.
 
 
