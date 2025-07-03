@@ -404,6 +404,7 @@ El ejemplo, en C# se podría implementar así:
     }
    }
 
+
 Objetos
 ^^^^^^^
 
@@ -569,6 +570,33 @@ En este ejemplo, utilizamos un atributo :python:`clase` como ejemplo. Pero como
 vimos, podríamos saber el nombre de la clase sin necesidad de este atributo.
 
 
+Miembros privados en Python
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Los mecanismos de introspección que ofrece Python —como la posibilidad de
+consultar los atributos de un objeto o transformarlo en un diccionario—
+contrastan con el principio de ocultar los datos internos de una instancia.
+
+En Python, las variables de instancia privadas no se implementan de forma
+estricta. En su lugar, se utiliza una convención: se antepone un guion bajo (_)
+al nombre de los atributos, funciones o métodos que se consideran parte interna
+de la implementación, como en self._nombre.
+
+Aunque estos miembros no están realmente protegidos contra el acceso externo,
+esta convención señala que no deberían ser utilizados fuera del contexto de la
+clase, ya que forman parte de su estructura interna y podrían cambiar sin previo
+aviso.
+
+.. note::
+
+ El diseño del lenguaje Python considera más importante la transparencia y la flexibilidad
+ (introspección, reflexión) que el encapsulamiento estricto.
+
+ Se dice que el creador de Python Guido van Rossum, dijo la frase: “We
+ are all consenting adults here.” ("Aquí todos somos adultos responsables.")
+ defendiendo sus decisiones de diseño.
+
+
 Herencia
 ^^^^^^^^
 
@@ -600,9 +628,14 @@ Herencia Múltiple
 
 Para este ejemplo vamos a implementar la siguiente herencia de clases:
 
+.. figure:: ./images/herencia.svg
+   :align: left
+   :alt: Visibilidad y Encapsulamiento.
+
 Lo haremos en un script que llamaremos ``herencia.py``:
 
 .. code-block:: python
+   :caption: ``herencia.py``.
 
    class Persona:
       def __init__(self, nombre, apellido, **kwargs):
@@ -642,3 +675,42 @@ Lo haremos en un script que llamaremos ``herencia.py``:
 
       def saluda(self):
          super().saluda()
+
+Este tipo de herencia en "diamante" suele ser complicado de utilizar, ya que
+puede existir ambigüedad en el órden de ejecución y los parámetros que se
+envían a los constructores por ejemplo. Anteriormente al utilizar :python:`super().__init__()`
+ya sabíamos que parámetros enviar al nivel más arriba. Pero en este caso el
+constructor lo enviamos con los parámetros de ambos padres. ¿Como saben los constructores
+que parámetro tomar?. Para esto se hace uso del envío de parametros por *keywords*. Por
+ejemplo. Para el constructor de :python:`Empleado`:
+
+.. code-block:: python
+
+  class Empleado(Persona):
+      def __init__(self, empleo, **kwargs):
+         self.empleo = empleo
+         super().__init__(**kwargs)
+
+El método dice: dame el argumento de  ``empleo`` y los otros
+mantenlos en el diccionario. Incializa el atributo correspondiente
+y después le pide a :python:`super()` que busque entre los "hermanos"
+de este nivel o siga buscando más arriba algun constructor.
+En este caso la clase a la que le pasa el resto de los argumentos es la
+clase :python:`Estudiante`, esta clase toma el argumento con la ``especialidad``
+y pasa el resto ``nombre`` y ``apellido`` a la clase ``Persona``.
+
+..note::
+   El método :python:`super()` no siempre se refiere a la clase *padre* de la clase.
+   En el caso de herencia múltiple búsca también en las clases *hermanas*.
+   Esta sintáxis de  :python:`super()` sin parámetros es para versiones
+   recientes del lenguaje.
+
+El mismo flujo sucede cuando ejecutamos el método de imprimir un saludo.
+Si ejecutamos el programa el resultado debería de ser:
+
+.. code-block:: bash
+
+   $ python herencia.py
+   Hola, soy Ana Lee
+   Trabajo como Asistente
+   Estudio Arquitectura
