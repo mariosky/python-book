@@ -345,9 +345,9 @@ que podamos imprimir los objetos diractamente:
 .. code-block:: python
 
    class Persona:
-      clase = 'Persona'
+      clase = 'Persona'  # variable de clase, se comparte por todas las instancias
       def __init__(self, nombre, apellido):
-         self.nombre = nombre
+         self.nombre = nombre  # variable de instancia, cada instancia tiene su propia
          self.apellido = apellido
       def __str__(self):
          return f'{self.nombre} {self.apellido}'
@@ -571,3 +571,74 @@ vimos, podríamos saber el nombre de la clase sin necesidad de este atributo.
 
 Herencia
 ^^^^^^^^
+
+Python implementa la herencia múltiple. La sintáxis para derivar una clase
+es la siguiente:
+
+.. code-block:: python
+
+   >>> class Estudiante(Persona):
+   ...     def __init__(self, nombre, apellido, especialidad):
+   ...         super().__init__(nombre, apellido)
+   ...         self.especialidad = especialidad
+   ...     def saluda(self):
+   ...         print(f'Hola, estudio {self.especialidad} y me llamo {self}')
+   ...
+   >>> ana = Estudiante('Ana', 'Lee', 'Arquitectura')
+   >>> ana.saluda()
+   Hola, estudio Arquitectura y me llamo Ana Lee
+
+En este ejemplo la clase :python:`Estudiante` hereda de la clase Persona y
+redefine el método :python:`saluda()` definido en la clase base. El método :python:`super()`
+utilizado aquí sin parámetros y en una herencia simple, buscaría el método subiendo la jerarquía de clasees.
+Si enviamos como parámetro un tipo, la busqueda en la jerarquía de clases empezaría a partir de esa clase.
+Por ejemplo, para la jerarquía: ``Estudiante_Temporal -> Estudiante -> Persona -> object ``, una
+llamada :python:`super(Persona)` empezaría la búsqueda del método a partir de ``Persona -> object``.
+
+Herencia Múltiple
+^^^^^^^^^^^^^^^^^
+
+Para este ejemplo vamos a implementar la siguiente herencia de clases:
+
+Lo haremos en un script que llamaremos ``herencia.py``:
+
+.. code-block:: python
+
+   class Persona:
+      def __init__(self, nombre, apellido, **kwargs):
+         self.nombre = nombre
+         self.apellido = apellido
+         super().__init__(**kwargs)
+
+      def saluda(self):
+         print(f"Hola, soy {self.nombre} {self.apellido}")
+
+   class Estudiante(Persona):
+      def __init__(self, especialidad, **kwargs):
+         self.especialidad = especialidad
+         super().__init__(**kwargs)
+
+      def saluda(self):
+         super().saluda()
+         print(f"Estudio {self.especialidad}")
+
+   class Empleado(Persona):
+      def __init__(self, empleo, **kwargs):
+         self.empleo = empleo
+         super().__init__(**kwargs)
+
+      def saluda(self):
+         super().saluda()
+         print(f"Trabajo como {self.empleo}")
+
+   class Estudiante_Empleado(Estudiante, Empleado):
+      def __init__(self, nombre, apellido, especialidad, empleo):
+         super().__init__(
+               nombre=nombre,
+               apellido=apellido,
+               especialidad=especialidad,
+               empleo=empleo
+         )
+
+      def saluda(self):
+         super().saluda()
