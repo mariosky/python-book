@@ -19,8 +19,10 @@ tuplas y por lo tanto pueden utilizar los métodos que se aplican a estas. Pero 
 se incluyen muchas funciones útiles para operar sobre este tipo de datos.
 Veamos primero las funciones básicas para crear y leer cadenas de caracteres:
 
-Operaciones básicas crear y codificar de caracteres
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+Operaciones básicas: crear y codificar de caracteres
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. rubric:: :python:`str(objeto='', encoding='utf-8', errors='strict')`
 
@@ -60,6 +62,8 @@ de un objeto. La sintáxis básica es la siguiente:
 | ``'namereplace'``      | Reemplaza con el nombre Unicode del carácter:               |
 |                        | ``\N{REPLACEMENT CHARACTER}``.                              |
 +------------------------+-------------------------------------------------------------+
+
+.. _encoding:
 
 .. rubric:: :python:`str.encode(encoding='utf-8', errors='strict')`
 
