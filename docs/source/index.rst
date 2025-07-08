@@ -22,6 +22,9 @@ pyBook documentation
    strings
    archivos
    oop
+   módulos
+   venv
+   sql
 
 .. toctree::
    :maxdepth: 2
