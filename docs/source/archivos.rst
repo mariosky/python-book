@@ -81,5 +81,133 @@ También podemos abrir un stream de texto en memoria:
    >>> buffer.read() # Leemos el buffer
    'Hola Mundo\n'
 
+Binario
+*******
+
+Para crear un "stream" binario también utilizamos el método :python:`open()`
+pero ahora incluimos la letra ``b`` en el parámetro de modo:
+
+.. code-block:: python
+
+   >>> f = open("imagen.png","rb")
+   >>> imagen = f.read()
+   >>> imagen
+   b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x07X\x00\x00\x04\xc4\x08\xfb\xb
+
+Este "stream" trabaja con objetos ``bytes-like`` por lo que no se realiza ningún
+procesamiento adicionale de encoding, salto de línea o decoding. Podemos
+utilizar este "stream" para todo tipo de archivos binarios como imágenes, video,
+etc., o para operar sobre texto con una representación binaria.
+
+Este "stream" nos brinda una lectura y escritura por bloques (buffers) por
+lo que es más eficiente y práctico. Este es el método recomendado para el
+procesamiento de datos binarios. Para ver con mayor detalle los métodos
+disponibles podemos ver la documentación de  `BytesIO`_
+
+.. _BytesIO: https://docs.python.org/3/library/io.html#io.BytesIO
+
+Binario sin buffer
+******************
+
+Este "stream" binario no utiliza bloques y nos permite tener
+un acceso a bajo nivel y control total del acceso.
+
+Operaciones sobre archivos
+**************************
+
+Una de las operaciones más básicas es escribir datos en un archivo de texto:
 
 
+.. code-block:: python
+
+   >>> a = open("archivo.txt", "w", encoding="utf-8")
+   >>> a.write("Esta es la primera línea\n")
+   25
+   >>> a.write("Esta es la segunda\n")
+   19
+   >>> a.close()
+
+Una vez cerrado el archivo no podemos realizar operaciones en él:
+
+
+.. code-block:: python
+
+   >>> a.write("Esto es un error")
+   Traceback (most recent call last):
+   File "<python-input-4>", line 1, in <module>
+      a.write("Esto es un error")
+      ~~~~~~~^^^^^^^^^^^^^^^^^^^^
+   ValueError: I/O operation on closed file.
+
+Puedes comprobar que el archivo se grabó correctamente abriendolo en un editor de texto.
+
+Ahora vamos a abrir el archivo para leerlo completo:
+
+
+.. code-block:: python
+
+   >>> a = open("archivo.txt", "r",encoding="utf-8")
+   >>> a.read()
+   'Esta es la primera línea\nEsta es la segunda\n'
+
+
+
+Como estamos leyendo un "stream" una vez que consumimos todo el
+flujo, estámos en el final del archivo y ya no podemos leer más:
+
+.. code-block:: python
+
+   >>> a.read()
+   ''
+
+Podemos posicionarnos al inicio del archivo con el método :python:`seek()`
+
+.. code-block:: python
+
+   >>> a.seek(0)
+   0
+   >>> a.read()
+   'Esta es la primera línea\nEsta es la segunda\n'
+
+También se puede recorrer el archivo línea por línea:
+
+.. code-block:: python
+
+   >>> a.seek(0)
+   0
+   >>> for línea in a:
+   ...     print(línea)
+   ...
+   Esta es la primera línea
+
+   Esta es la segunda
+
+Hay dos saltos de línea ya que el método :python:`print()` agrega un salto y las
+líneas del archivo incluyen un salto también. Podemos eliminar los
+saltos utilizando el método :python:`str.rstrip()` teniendo cuidado de
+cubrir los saltos de línea de Unix y Windows: :python:`línea.rstrip('\n\r')`.
+
+En archivos de texto, el método :python:`seek()` solo puede dar saltos relativos
+al inicio del archivo o moverse al final. En los archivos binarios se pueden
+utilizar saltos a partir de otras posiciones.
+
+Para probar esto vamos a crear un "buffer" binario:
+
+.. code-block:: python
+
+   >>> import io
+   >>> b = io.BytesIO(b"0123456789abcdef\x00\x01")
+   >>> b.seek(4)  # Avanzamos al cuarto byte
+   4
+   >>> b.read(2)  # Leemos dos bytes
+   b'45'
+   >>> b.tell()  # Vemos la posición actual
+   6
+   >>> b.seek(-2, 2) # Retrocedemos dos bytes con respecto al final del archivo
+   16
+   >>> b.read(1) # Leemos un byte
+   b'\x00'
+
+El método :python:`seek()` toma como primer argumento el "offset" y como segundo argumento
+enviamos el punto de referencia: un valor de ``0`` indica el inicio del archivo o buffer,
+``1`` indíca la posición actual y el valor ``2`` hace referencia al final del archivo.
