@@ -171,10 +171,96 @@ bastante como :python:`array, math, sys, time, itertools`.  Al no encontrar el
 nombre del módulo, busca un archivo en los directorios incluidos en la variable
 :python:`sys.path`. Esta lista se incializa a partir de los siguientes datos:
 
-   - El directorio dónde se encuentra el script desde dónde se llamó el :python:`import`. En caso de que no se esté corriendo un script, se busca en el directorio actual.
+   - El directorio dónde se encuentra el script desde dónde se llamó el :python:`import`.
+     En caso de que no se esté corriendo un script, se busca en el directorio actual.
 
    - En las rutas especificadas en la variable de entorno ``PYTHONPATH``. De manera similar a ``PATH``.
 
    - El valor por defecto especificado al momento de la instalación. Es común buscar en el  directorio ``site-packages``.
 
-El
+Es posible modificar la variable :python:`sys.path` en tiempo de ejecución.
+
+Paquetes
+********
+
+Hemos visto que los espacios de nombres en Python se definen de manera dinámica
+e impicitamente al definir objetos como:  módulos, clases y funciones. Podemos
+incluso verificar los nombres en el ámbit actual con funciones como como
+:python:`globals()`, :python:`locals()`, :python:`vars()` o :python:`dir()`. En
+otros lenguajes el espacio de nombres se declara explícitamente con bloques, por
+ejemplo, en C# se tiene la palabra reservada ``namespace nombre {   }``. Estos
+espacios son estáticos y también tienen el propósito de evitar conflictos de
+nombres y sirven para organizar el código. Normalmente los lenguajes utilizan
+una **notación de punto** para referirse a los subcomponentes en una relación
+jerárquica de composición. Veamos un ejemplo en C#:
+
+.. code-block:: csharp
+
+   namespace Utilerías {
+      class Calculadora {
+         public static int Sumar(int a, int b) => a + b;
+      }
+   }
+
+Y el uso en un programa:
+
+.. code-block:: csharp
+
+   using Utilerías;
+   int resultado = Calculadora.Sumar(3, 4);
+
+En el caso de Python se utiliza la misma estructura
+jerárquica del sistema de archivos basada en directorios y subdirectorios.
+Por ejemplo, la librería de procesamiento de audio librosa tiene una estructura
+similar a esta:
+
+.. code-block:: bash
+
+ librosa
+   │   beat.py
+   │   display.py
+   │   effects.py
+   │   filters.py
+   │   segment.py
+   │   sequence.py
+   │   version.py
+   │   _cache.py
+   │   _typing.py
+   │   __init__.py
+   ├───core
+   │   │   audio.py
+   │   │   fft.py
+   │   │   harmonic.py
+   │   │   pitch.py
+   │   │   spectrum.py
+   │   └── __init__.py
+   ├───feature
+   │   │   rhythm.py
+   │   │   spectral.py
+   │   │   utils.py
+   │   └── __init__.py
+   └───util
+      │   decorators.py
+      │   deprecation.py
+      │   exceptions.py
+      │   matching.py
+      │   utils.py
+      │   _nnls.py
+      │   __init__.py
+      └───example_data
+         │   index.json
+         │   registry.txt
+         └── __init__.py
+
+Esta estructura de archivos define la jerarquía de composición del paquete ``librosa``. Cada
+directorio es un paquete que contiene una colección de módulos y posiblemente otros supaquetes.
+En este caso se tienen tres subpaquetes:
+
+ - ``core`` Dónde se incluye la funcionalidad principal de I/O y DSP (Digital Signal Processing)
+   estas funciones nos permiten cargar, procesar y generar señales de audio, así como su representación en distintos formatos.
+ - ``feature`` Contiene los módulos especializados en extraer características del audio (MFCC, cromas, espectrogramas, tempo, tonalidad, etc.).
+ -  ``util`` Se incluyen aquí módulos auxiliares para el procesamiento, como operaciones en ``Arrays``, archivos y validaciones.
+
+Esta organización permite a los desarrolladores entender mejor el código y dividir mejor la
+colaboración al ser un proyecto de código abierto.
+
