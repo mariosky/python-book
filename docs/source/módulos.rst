@@ -264,3 +264,50 @@ En este caso se tienen tres subpaquetes:
 Esta organización permite a los desarrolladores entender mejor el código y dividir mejor la
 colaboración al ser un proyecto de código abierto.
 
+Los directorios (paquetes para Python) incluyen un archivo llamado ``__init__.py`` el
+cual identifica al directorio como paquete y además puede contener código en
+para incializar el paquete o definir la lista  ``__all__`` que contiene los
+nombres de los módulos que se van incluir cuando los usuarios del paquete lo importen con
+utilizando un ``*``. La definición de esta lista es es opcional.
+
+En el módulo de audio ``librosa.core.audio`` se tiene el método de :python:`load()`
+que sirve para cargar un archivo de audio. Podríamos cargar el método utilizando
+:python:`import` como vimos en la sección anterior (asumiendo que tenemos instalada la librería):
+
+.. code-block:: python
+
+   >>> from librosa.core.audio import load
+   >>> load
+   <function load at 0x0000021679668C20>
+
+Sin embargo en la documentación, se recomienda utilizar :python:`load()` de la
+siguiente manera:
+
+.. code-block:: python
+
+   import librosa
+   filename = librosa.example('nutcracker')
+   y, sr = librosa.load(filename)
+
+
+Del ejemplo vemos que solo necesitamos importar la librería y ya.
+La función :python:`load()` se incluye mágicamente.
+Esto es porque se utiliza la librería ``lazy_loader`` para cargar
+subomodelos y funciones de manera ``lazy``, solo se incluyen
+hasta el momento en el que se utilizan y solo se cargan la primera vez.
+Esta librería se utiliza al nivel de los archivos ``__intit__.py`` que
+vimos anteriormente.
+
+.. note::
+   Esta funcionalidad es posible porque en Python los especios de nombres
+   son dinámicos y se resulven en tiempo de ejecución.
+
+Dentro de un paquete se puede hacer referencia a otros subpaquetes utilizando
+la notación de ruta relativa utilizada en el sistema de archivos. Por ejemplo,
+desde el módulo de ``librosa.core.audio`` nos podemos referir a
+``librosa.utils.util`` de distintas maneras:
+
+.. code-block:: python
+
+   from .fft import get_fftlib # Módulo en el mismo directorio
+   from ..util.exceptions import ParameterError
