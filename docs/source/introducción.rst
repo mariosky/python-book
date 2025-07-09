@@ -5,17 +5,18 @@
 =================================
 
 En estos días a principios del 2025, Python es el lenguaje de programación más
-popular, según el índice de `TIOBE <https://www.tiobe.com>`_, quienes además le han dado el premio de
-"lenguaje de programación del año 2024". El premio se otorga al lenguaje con el
-mayor incremento de calificación en un año, creciendo un 9.3% solo
-en el año 2024 (`https://www.tiobe.com/tiobe-index/ <https://www.tiobe.com/tiobe-index/>`_). Actualmente, Python no
-tiene rival en varios campos de la computación, por ejemplo, análisis de datos,
-aprendizaje automático y desarrollo de aplicaciones de aprendizaje profundo.
-Una razón de este éxito se debe a lo práctico que resulta aprender el lenguaje,
-ya que es interpretado, lo que nos permite probar el código sin necesidad de
-compilarlo. Algunas desventajas son su bajo rendimiento en comparación con
-lenguajes compilados como C++ o Rust y que muchos de los errores en el código
-suceden al momento de ejecución.
+popular, según el índice de `TIOBE <https://www.tiobe.com>`_, quienes además le
+han dado el premio de "lenguaje de programación del año 2024". El premio se
+otorga al lenguaje con el mayor incremento de calificación en un año, creciendo
+un 9.3% solo en el año 2024 (`https://www.tiobe.com/tiobe-index/
+<https://www.tiobe.com/tiobe-index/>`_). Actualmente, Python no tiene rival en
+varios campos de la computación, por ejemplo, análisis de datos, aprendizaje
+automático y desarrollo de aplicaciones de aprendizaje profundo.  Una razón de
+este éxito se debe a lo práctico que resulta aprender el lenguaje, ya que es
+interpretado, lo que nos permite probar el código sin necesidad de compilarlo.
+Algunas desventajas son su bajo rendimiento en comparación con lenguajes
+compilados como C++ o Rust y que muchos de los errores en el código suceden al
+momento de ejecución.
 
 ¿Por qué uso Python?
 --------------------
