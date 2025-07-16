@@ -67,13 +67,15 @@ Python por su parte cuenta con el Python Database API Specification v2.0 (PEP
 Python con sistemas de bases de datos relacionales.  Antes de ver detalles
 especificos veamos los componentes principales del estándar:
 
-1. Conectar
+**1. Constructores**
+
 Antes de empezar a interactuar con un servidor de base de datos, debemos
 establecer una conexión, normalmente utilizamon una cadena dónde enviamos
 los datos específicos de la conexión y una vez establecida la conexión nos
 regresa un objecto que representa una conexión específica.
 
-2. Conexión
+**2. Conexión**
+
 Una conexión es un objeto de la clase :python:`Connection` la cual
 contiene métodos para interactuar a nivel alto con el servidor:
 
@@ -85,7 +87,8 @@ contiene métodos para interactuar a nivel alto con el servidor:
 
 :python:`close()` Cierra la conexión.
 
-3. Cursor
+**3. Cursor**
+
 Un cursor incluye los siguientes métodos:
 
 :python:`execute(sql, params)` ejecuta una consulta, envía los parámetros de la consulta por separado.
@@ -103,3 +106,139 @@ Atributos:
 :python:`description` información de los campos del resultado.
 
 :python:`rowcount` número de registros afectados por la última operación
+
+**4. Tipos de datos**
+
+La especificación del API también incluye tipos de datos estándar en una
+base de datos:
+
+- ``Date``, ``Time``, ``Timestamp``
+
+- ``Binary``
+
+- ``STRING``, ``NUMBER``, ``DATETIME``, ``ROWID`` (como constantes tipo)
+
+Cada módulo debe implementar funciones para convertir entre los tipos de Python y los de SQL.
+
+**5. Excepciones**
+
+Se define una jerarquía de excepciones estándar:
+
+.. code-block:: bash
+
+   Exception
+   |__Warning
+   |__Error
+      |__InterfaceError
+      |__DatabaseError
+         |__DataError
+         |__OperationalError
+         |__IntegrityError
+         |__InternalError
+         |__ProgrammingError
+         |__NotSupportedError
+
+Todos los módulos deben lanzar estas excepciones específicas para facilitar la portabilidad del código.
+
+
+Base de datos
+^^^^^^^^^^^^^
+
+Como ejemplo de la base de datos utilizaremos un esquema relacional para
+almacenar información sobre peículas. Este ejemplo se podría tomar  como
+base para realizar una aplicación del tema, pero su objetivo principal es ejemplificar
+el uso del lenguaje.
+
+.. figure:: ./images/movies.svg
+   :align: left
+   :alt: Diseño Entidad-Relación para un directorio de películas.
+
+El modelo índica que una persona (``Persona``) puede tener varios roles
+(``Rol``) en una película (``Película``) . Por ejemplo, el director de una
+película, también puede ser el productor o e incluso uno de los actores, para
+establecer esta relación tripartita se crea la entidad ``Credito``.  Además, una
+película puede pertenecer a varios géneros.  La información de las peliculas se
+pueden extraer de la plataforma "TMDB"
+
+Veamos ejemplos para SQLite y PostgreSQL:
+
+SQLite
+^^^^^^
+
+SQLite es un sistema relacional de bases de datos extremadamente ligero,
+implementado como una librería (escrita en C), que puede ser embedida en un
+proceso (por ejemplo, un programa de Python).  No requiere configuración, ni
+corre como un servidor. Sin embargo es de alto desempeño e implementa
+transacciones. La base de datos se puede almacenar en un solo archivo y su
+licencia de dominio público, la hacen ideal para ambiéntes académicos, pero
+también profesionales. Como se ejecuta en móviles y navegadores web, se estima
+que es el sistema de bases de datos más instalado en el mundo.
+
+La librería estándar de Python incluye el módulo :python:`sqlite` que implementa
+el DB API 2.0 visto anteriormente. Como no tiene un proceso independiente
+utilizado como servidor y la base de datos es solemante un archivo, no requerimos
+instalar nada y solamente nos "conectamos" pasando como argumento el nombre del
+archivo con el que vamos a trabajar:
+
+>>> import sqlite3 as sql
+>>> con = sql.connect("movies.sqlite")
+
+Antes de crear nuestra primera tabla, hablemos un poco de los tipos de datos
+de SQLite. SQLite es muy flexible en cuanto a los tipos de dato que utiliza e incluso
+es opcional indicar el tipo de dato. Es parecida a Python en el sentido de que el
+tipo de dato no se estipula a nivel de la columna, es más bien flexible y se almacena junto con
+cada dato. Sin embargo para la versión 3.37 es posible indicar tipos de datos estríctos.
+Los tipos de datos de almacenamiento de SQLite son los siguientes:
+
+  - **NULL**. El valor de NULL.
+  - **INTEGER**. Representa un entero con signo y dependiendo de la magnitud del valor se almacena
+    utilizando 0, 1, 2, 3, 4, 6 u 8 bytes.
+  - **REAL**. Es un valor flotante almacenado como un número flotante IEEE de 8 bits.
+  - **TEXT**. Es una cadena de texto, almacenada con un encoding de UTF-8, UTF-16BE o UTF-16LE.
+  - **BLOB**. Es un objeto binario almacenado tal cual se ingresó.
+
+Las fechas y hora se almacenan como:
+- **TEXT** como cadenas en ISO8601 ("YYYY-MM-DD HH:MM:SS.SSS").
+- **REAL** como números del calendario Juliano, el número de días desde el medio díiade del 24 de Noviembre del 4714 B.C.
+- **INTEGER** como tiempo de Unix, el número de segundos desde 1970-01-01 00:00:00 UTC.
+
+Las aplicaciones pueden almacenar las fechas utilizando el formato que puedan manipular. Al crear una tabla
+podemos indicar los tipos de datos en SQL estándar o utilizando algunas restricciones, por ejemplo: ``VARCHAR(255)``,
+SQLite ignorará el ``(255)`` ya que no hace validaciones de este tipo y utilizará el tipo de dato ``TEXT``.
+
+.. literalinclude:: movies.sql
+  :language: sql
+  :linenos:
+  :caption: Script con los comandos de SQL para crear el esquema: ``movies.sql``
+
+Vamos a cargar el script utilizando python:
+
+.. code-block:: python
+
+  >>> import sqlite3 as sql
+  >>> con = sql.connect("movies.sqlite")
+  >>> with open('.\\docs\\source\\movies.sql', 'r') as f:
+  ...     sql_script = f.read()
+  ...
+  >>> cursor = con.cursor()
+  >>> cursor.executescript(sql_script)
+  <sqlite3.Cursor object at 0x00000175F2123CC0>
+
+
+>>> res = cursor.execute("SELECT * FROM PERSONA");
+>>> res.fetchone()
+(190, 'Clint Eastwood')
+>>> res.fetchone()
+(3265, 'Eli Wallach')
+
+PostgreSQL
+^^^^^^^^^^
+
+No SQL
+*******
+
+Redis
+^^^^^
+
+MongoDB
+^^^^^^^

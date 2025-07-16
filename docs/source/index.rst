@@ -3,8 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-pyBook documentation
-====================
+Python para Análisis de Datos, Computación Inteligente, Cómputo Distribuido y Servicios Web
+===========================================================================================
+
+
+.. sidebar:: Optional Sidebar Title
+   :subtitle: Optional Sidebar Subtitle
+
+   .. figure:: ./images/visibilidad.svg
+      :align: right
+      :scale: 50%
+      :alt: Visibilidad y Encapsulamiento.
 
 .. toctree::
    :maxdepth: 2
