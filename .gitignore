@@ -2,4 +2,4 @@ pybook.pdf
 venv
 build
 .DS_Store
-.sqlite
+*.sqlite
