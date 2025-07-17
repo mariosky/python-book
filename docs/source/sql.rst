@@ -223,13 +223,44 @@ Vamos a cargar el script utilizando python:
   >>> cursor = con.cursor()
   >>> cursor.executescript(sql_script)
   <sqlite3.Cursor object at 0x00000175F2123CC0>
+  >>> con.commit()
+  >>> con.close()
 
+Para cargar el archivo utilizamos el método :python:`open()` para abrir el script.
+Ajusta la ruta que en este ejemplo esta utilizando el separadore de directorios
+estilo Windows y la ubicación específica en mi computadora. Se executa el script con
+el método :python:`cursor.executemany(script)`.
+
+El script agrega la información de dos películas:
+
+  - https://www.themoviedb.org/movie/429-il-buono-il-brutto-il-cattivo
+  - https://www.themoviedb.org/movie/496243
+
+Si utilizas un editor de texto como Visual Studio Code, puedes instalar un **``plug-in`** para
+visualizar la base de datos que hemos creado. Por ejemplo, el SQLite Viwer de Forian Klampfer.
+
+
+Una vez creada la base de datos, podemos conectarnos y hacer consultas utilizanod el :python:`cursor.execute()`.
+El **cursor** ahora si contiene elementos ya que el comando es una consulta ``SELECT`` y puede regresar ciertos datos.
+Podemos iterar el cursor recuperando un registro a la vez con el método :python:`fetchone()`.
 
 >>> res = cursor.execute("SELECT * FROM PERSONA");
 >>> res.fetchone()
 (190, 'Clint Eastwood')
 >>> res.fetchone()
 (3265, 'Eli Wallach')
+
+También podemos leer el resultado de la consulta en su totalidad, consumiendo todo el iterador:
+
+>>> import sqlite3 as sql
+>>> con = sql.connect("movies.sqlite")
+>>> cursor = con.cursor()
+>>> res = cursor.execute("SELECT * FROM PERSONA");
+>>> res.fetchall()
+[(190, 'Clint Eastwood'), (3265, 'Eli Wallach'), (4078, 'Lee Van Cleef'), (4385, 'Sergio Leone'), (20738, 'Song Kang-ho'), (21684, 'Bong Joon Ho'), (115290, 'Lee Sun-kyun'), (556435, 'Cho Yeo-jeong'), (1255881, 'Choi Woo-shik'), (1442583, 'Park So-dam')]
+
+
+
 
 PostgreSQL
 ^^^^^^^^^^
