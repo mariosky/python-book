@@ -166,10 +166,12 @@ SQLite
 ^^^^^^
 
 SQLite es un sistema relacional de bases de datos extremadamente ligero,
-implementado como una librería (escrita en C), que puede ser embedida en un
-proceso (por ejemplo, un programa de Python).  No requiere configuración, ni
-corre como un servidor. Sin embargo es de alto desempeño e implementa
-transacciones. La base de datos se puede almacenar en un solo archivo y su
+implementado como una librería en C que puede ser embedida en un
+proceso, como por ejemplo, un programa escrito en Python.
+
+No requiere configuración, ni opera como un servidor independiente. Sin embargo,
+a pesar de su simplicidad, ofrece un alto rendimiento y soporte completo de
+transacciones **ACID**. La base de datos se puede almacenar en un solo archivo y su
 licencia de dominio público, la hacen ideal para ambiéntes académicos, pero
 también profesionales. Como se ejecuta en móviles y navegadores web, se estima
 que es el sistema de bases de datos más instalado en el mundo.
@@ -183,28 +185,27 @@ archivo con el que vamos a trabajar:
 >>> import sqlite3 as sql
 >>> con = sql.connect("movies.sqlite")
 
-Antes de crear nuestra primera tabla, hablemos un poco de los tipos de datos
+Antes de crear nuestra primera tabla, es importante conocer los tipos de datos
 de SQLite. SQLite es muy flexible en cuanto a los tipos de dato que utiliza e incluso
 es opcional indicar el tipo de dato. Es parecida a Python en el sentido de que el
 tipo de dato no se estipula a nivel de la columna, es más bien flexible y se almacena junto con
-cada dato. Sin embargo para la versión 3.37 es posible indicar tipos de datos estríctos.
+cada valor. Sin embargo para la versión 3.37 es posible indicar tipos de datos estríctos.
 Los tipos de datos de almacenamiento de SQLite son los siguientes:
 
-  - **NULL**. El valor de NULL.
-  - **INTEGER**. Representa un entero con signo y dependiendo de la magnitud del valor se almacena
-    utilizando 0, 1, 2, 3, 4, 6 u 8 bytes.
-  - **REAL**. Es un valor flotante almacenado como un número flotante IEEE de 8 bits.
-  - **TEXT**. Es una cadena de texto, almacenada con un encoding de UTF-8, UTF-16BE o UTF-16LE.
-  - **BLOB**. Es un objeto binario almacenado tal cual se ingresó.
+  - **NULL**. El valor nulo.
+  - **INTEGER**. Entero con signo; el tamaño en bytes varía según el valor.
+  - **REAL**. Número flotante IEEE de 8 bytes.
+  - **TEXT**. Cadena de texto almacenada como UTF-8, UTF-16BE o UTF-16LE.
+  - **BLOB**. Objeto binario almacenado tal cual se ingresó.
 
 Las fechas y hora se almacenan como:
 - **TEXT** como cadenas en ISO8601 ("YYYY-MM-DD HH:MM:SS.SSS").
-- **REAL** como números del calendario Juliano, el número de días desde el medio díiade del 24 de Noviembre del 4714 B.C.
-- **INTEGER** como tiempo de Unix, el número de segundos desde 1970-01-01 00:00:00 UTC.
+- **REAL** usando el número Juliano, el número de días desde el medio díiade del 24 de Noviembre del 4714 B.C.
+- **INTEGER** como tiempo de Unix, (segundos desde 1970-01-01 00:00:00 UTC).
 
 Las aplicaciones pueden almacenar las fechas utilizando el formato que puedan manipular. Al crear una tabla
 podemos indicar los tipos de datos en SQL estándar o utilizando algunas restricciones, por ejemplo: ``VARCHAR(255)``,
-SQLite ignorará el ``(255)`` ya que no hace validaciones de este tipo y utilizará el tipo de dato ``TEXT``.
+SQLite ignorará la restricción de longitud ``(255)`` y lo tratará como el tipo de dato ``TEXT``.
 
 .. literalinclude:: movies.sql
   :language: sql
@@ -227,9 +228,8 @@ Vamos a cargar el script utilizando python:
   >>> con.close()
 
 Para cargar el archivo utilizamos el método :python:`open()` para abrir el script.
-Ajusta la ruta que en este ejemplo esta utilizando el separadore de directorios
-estilo Windows y la ubicación específica en mi computadora. Se executa el script con
-el método :python:`cursor.executemany(script)`.
+Ajusta la ruta si estás en otro sistema operativo o estructura de carpetas.
+En el ejemplo ejecutamos el script con el método :python:`cursor.executescript(script)`.
 
 El script agrega la información de dos películas:
 
@@ -256,10 +256,95 @@ También podemos leer el resultado de la consulta en su totalidad, consumiendo t
 >>> con = sql.connect("movies.sqlite")
 >>> cursor = con.cursor()
 >>> res = cursor.execute("SELECT * FROM PERSONA");
->>> res.fetchall()
-[(190, 'Clint Eastwood'), (3265, 'Eli Wallach'), (4078, 'Lee Van Cleef'), (4385, 'Sergio Leone'), (20738, 'Song Kang-ho'), (21684, 'Bong Joon Ho'), (115290, 'Lee Sun-kyun'), (556435, 'Cho Yeo-jeong'), (1255881, 'Choi Woo-shik'), (1442583, 'Park So-dam')]
+>>> res.fetchall() # Resultados recortados por espacio:
+[(190, 'Clint Eastwood'), (3265, 'Eli Wallach'), (4078, 'Lee Van Cleef'), (1442583, 'Park So-dam')]
+>>> res.fetchall() # El iterador ya se consumió en su totalidad
+[]
 
+Otra operación básica es la inserción de nuevos registros, que se realiza
+utilizando la sentencia SQL INSERT INTO.  Un aspecto importante a considerar es
+la forma en que construimos la consulta a partir de marcadores de posición en
+lugar de concatenar cadenas directamente.  Esta técnica no solo facilita el
+manejo de valores dinámicos, sino que también previene ataques de inyección SQL
+(SQL Injection), ya que ``sqlite3`` se encarga de validar y
+escapar los valores proporcionados antes de ejecutar el comando.
 
+Veamos un ejemplo de inserción utilizando una consulta parametrizada:
+
+>>> cursor.execute("INSERT INTO PERSONA (ID, NOMBRE) VALUES (?, ?)", (999, "Nuevo Actor"))
+<sqlite3.Cursor object at 0x00000248C990C840>
+>>> con.commit()
+
+Notamos que Se usan signos de interrogación (?) como marcadores de posición, y
+los valores se pasan como una tupla.
+
+Si tenemos varios registros se puede utilizar ``executemany()``:
+
+>>> personas = [(1001, "Leonardo DiCaprio"), (1002, "Brad Pitt")]
+>>> cursor.executemany("INSERT INTO PERSONA (ID, NOMBRE) VALUES (?, ?)", personas)
+<sqlite3.Cursor object at 0x00000248C990C840>
+>>> con.commit()
+
+Podemos encapsular los comandos en funciones para mejorar la estructura de
+nuestro programa:
+
+>>> def conectar_db(nombre_archivo):
+...     return sql.connect(nombre_archivo)
+...
+>>> def insertar_persona(con, persona_id, nombre):
+...     cur = con.cursor()
+...     cur.execute("INSERT INTO PERSONA (ID, NOMBRE) VALUES (?, ?)", (persona_id, nombre))
+...     con.commit()
+...
+>>> con = conectar_db("movies.sqlite")
+>>> insertar_persona(con, 138, "Quentin Tarantino")
+>>> con.close()
+
+En este caso la conección se establece solo una vez al principio del programa
+y se reutiliza enviando la referencia a los distintos métodos que
+operan sobre nuestros datos.
+
+Al enviar comandos a un sistema de bases de datos, estos se ejecutan en el
+contexto de una transacción, la cual debe completarse en su totalidad o
+revertirse completamente en caso de error.  Una transacción es, por definición,
+atómica: todas las operaciones que contiene deben realizarse con éxito; de lo
+contrario, deben deshacerse como si nunca hubieran ocurrido.
+
+En caso de que se produzca un error durante la ejecución de alguna operación,
+podemos revertir los cambios explícitamente utilizando el comando ROLLBACK. Si
+todas las operaciones se ejecutan correctamente, debemos confirmar los cambios
+con el comando COMMIT.
+
+En Python, podemos utilizar el objeto Connection como un gestor de contexto
+(with) para manejar transacciones de forma automática.  En este modo, si el
+bloque with finaliza sin excepciones, se envía automáticamente un COMMIT.  En
+caso de que ocurra una excepción o el commit falle, la transacción se revierte
+automáticamente mediante un ROLLBACK.
+
+.. code-block:: python
+  :linenos:
+  :caption: Gestión contextual utilizando un objeto tipo :python:`Connection`
+
+  con = sqlite3.connect(":memory:") # Creamos la base de datos en memoria
+
+  # Creamos una nueva tabla PERSONA,  con una restricción UNIQUE
+  con.execute("CREATE TABLE PERSONA(id INTEGER PRIMARY KEY, nombre VARCHAR UNIQUE)")
+
+  # Si hay exito automáticamente se llama con.commit()
+  with con:
+      con.execute("INSERT INTO Persona(nombre) VALUES(?)", ("Leonardo DiCaprio",))
+
+  # Se ejecuta con.rollback() en si el bloque termina debido a una excepción,
+  # debemos atrapar la exepción
+  try:
+      with con:
+          con.execute("INSERT INTO Persona(name) VALUES(?)", ("Leonardo DiCaprio",))
+  except sqlite3.IntegrityError:
+      print("couldn't add Python twice")
+
+  # El objecto ``Connection`` utilizado solo compromete o deshace transacciones, no
+  # cierra la conexión
+  con.close()
 
 
 PostgreSQL
