@@ -7,13 +7,14 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'pyBook'
-copyright = '2025, Jose Mario García Valdez'
-author = 'Jose Mario García Valdez'
+copyright = '2025, José Mario García Valdez'
+author = 'José Mario García Valdez'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = []
+extensions = ['sphinxcontrib.bibtex']
+bibtex_bibfiles = ['biblio.bib']
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -23,7 +24,7 @@ language = 'es'
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-# html_theme = 'sphinx_rtd_theme'
-html_theme = 'furo'
+html_theme = 'sphinx_book_theme'
+#html_theme = 'furo'
 html_static_path = ['_static']
 html_title = 'Python para ...'

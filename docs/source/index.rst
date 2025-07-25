@@ -37,6 +37,13 @@ Python para Análisis de Datos, Computación Inteligente, Cómputo Distribuido y
 
 .. toctree::
    :maxdepth: 2
+   :caption: Bibliografía
+
+   bibliografia
+
+
+.. toctree::
+   :maxdepth: 2
    :caption: Anexos:
 
    instalación

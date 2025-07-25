@@ -4,14 +4,14 @@
 0. Introducción
 =================================
 
-En estos días a principios del 2025, Python es el lenguaje de programación más
+En estos días a principios del 2025, Python :cite:`van2007python` es el lenguaje de programación más
 popular, según el índice de `TIOBE <https://www.tiobe.com>`_, quienes además le
 han dado el premio de "lenguaje de programación del año 2024". El premio se
 otorga al lenguaje con el mayor incremento de calificación en un año, creciendo
 un 9.3% solo en el año 2024 (`https://www.tiobe.com/tiobe-index/
 <https://www.tiobe.com/tiobe-index/>`_). Actualmente, Python no tiene rival en
-varios campos de la computación, por ejemplo, análisis de datos, aprendizaje
-automático y desarrollo de aplicaciones de aprendizaje profundo.  Una razón de
+varios campos de la computación :cite:`srinath2017python`, por ejemplo, análisis de datos, aprendizaje
+automático :cite:`hao2019machine` y desarrollo de aplicaciones de aprendizaje profundo.  Una razón de
 este éxito se debe a lo práctico que resulta aprender el lenguaje, ya que es
 interpretado, lo que nos permite probar el código sin necesidad de compilarlo.
 Algunas desventajas son su bajo rendimiento en comparación con lenguajes
@@ -29,7 +29,7 @@ web, de una manera muy fácil para la época. Ya después surgieron `Django <htt
 scripts populares para esas tareas como `tcl <https://www.tcl.tk/>`_, `PHP <https://www.php.net/>`_ y ya después `Ruby <https://www.ruby-lang.org/en/>`_,
 la sintaxis de Python se me hizo más amigable y fácil de entender. Con el paso
 del tiempo surgieron muchas librerías y servicios innovadores para el
-desarrollo de aplicaciones científicas que no encontraba en los otros
+desarrollo de aplicaciones científicas :cite:`langtangen2009primer` que no encontraba en los otros
 lenguajes, por lo que lo fui utilizando para otro tipo de proyectos. Por
 ejemplo, en 2008, Python era el único lenguaje utilizado por Google App Engine,
 permitiendo de una manera muy sencilla de ejecutar código de alto desempeño en
