@@ -699,7 +699,7 @@ En este caso la clase a la que le pasa el resto de los argumentos es la
 clase :python:`Estudiante`, esta clase toma el argumento con la ``especialidad``
 y pasa el resto ``nombre`` y ``apellido`` a la clase ``Persona``.
 
-..note::
+.. note::
    El método :python:`super()` no siempre se refiere a la clase *padre* de la clase.
    En el caso de herencia múltiple búsca también en las clases *hermanas*.
    Esta sintáxis de  :python:`super()` sin parámetros es para versiones

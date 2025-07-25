@@ -827,7 +827,7 @@ En el caso de no enviar el índice como parámetro:
    >>> elemento_eliminado
    4
 
-.. danger:: ¿Qué pasará si ejecutamos :python:`li.pop()` y ya no hay elementos?
+.. caution:: ¿Qué pasará si ejecutamos :python:`li.pop()` y ya no hay elementos?
 
 
 Otra manera de eliminar uno o varios elementos es mediante el método
@@ -884,7 +884,7 @@ lista *in-place*, sin modificar la referencia y que es el mismo objeto.
    >>>li
    [1, 2, 3, 4, 9, 8, 7]
 
-.. danger::
+.. caution::
    Cuidado: `extend` recibe una lista, `append` recibe un solo elemento.
 
 No podemos lograr lo mismo con el método :python:`list.append(elemento)` ya que
@@ -1014,7 +1014,7 @@ el diccionario que definimos pero es un `valor` no una `clave`. Del mismo modo
 que con las lístas, podemos utilizar el operador :python:`in` para revisar
 antes, y estar seguros que la clave se encuentra en el diccionario.
 
-.. danger::
+.. caution::
    - Recuerda que solo podemos utilizar objetos inmutables como clave.
    - Al recuperar un valor la clave debe de existir en el diccionario.
 
@@ -1054,7 +1054,7 @@ limpiar el diccionario para dejarlo vacio:
    >>> d
    {}
 
-.. danger::
+.. caution::
    Recuerda que los diccionarios utilizan una función hash por lo que
    los valores no se almacenan de manera secuencial.
 
@@ -1390,7 +1390,7 @@ la primera definición con la segunda:
    Hola
    >>>
 
-.. Danger::
+.. caution::
 
    La facilidad para redefinir funciones en Python puede ser peligroso ya que
    sin querer podríamos redefinir un método de alguna librería o que haya
@@ -1514,7 +1514,7 @@ se elimina, recuperando espacio de memoria.  Veamos un ejemplo:
       x
    NameError: name 'x' is not defined
 
-.. Danger::
+.. caution::
    La técnica de conteo no puede detectar casos en los que dos objetos se referencían
    mutuamente, pero nadie hace referencia a ninguno de los dos. Para esto Python utiliza
    un módulo especial que los detecta y recupera la memoria.

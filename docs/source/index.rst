@@ -7,14 +7,6 @@ Python para Análisis de Datos, Computación Inteligente, Cómputo Distribuido y
 ===========================================================================================
 
 
-.. sidebar:: Optional Sidebar Title
-   :subtitle: Optional Sidebar Subtitle
-
-   .. figure:: ./images/visibilidad.svg
-      :align: right
-      :scale: 50%
-      :alt: Visibilidad y Encapsulamiento.
-
 .. toctree::
    :maxdepth: 2
    :caption: Preliminares
