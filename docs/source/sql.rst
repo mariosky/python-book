@@ -5,19 +5,21 @@ Bases de Datos
 ==============
 
 En esta sección nos centraremos en el amacenamiento de
-datos utilizando servicios de sistemas de bases de datos relacionales y
-no relacionales. Estos sistemas son de vital importancia para
+datos utilizando sistemas de bases de datos relacionales :cite:`codd1990relational` y
+no relacionales :cite:`strauch2011nosql`. Estos sistemas son de vital importancia para
 el desarrollo de aplicaciones, ya que la mayoría de ellas requiere una gestión
 de datos escalable, eficiente y segura.
 
 Elegir entre una base de datos relacional o no relacional depende del tipo de
-aplicación que estemos desarrollando: Los sistemas relacionales como *PostgreSQL*, *MySQL* o *Oracle*, ofrecen un
-esquema estructurado y formal que ofrece integridad y consistencia de los datos,
-además de contar con un lenguaje estándar como SQL que nos permite hacer
-consultas complejas de manera eficiente. Por otro lado, los sistemas no
-relacionaes como *MongoDB* o *Redis*, aportan flexibilidad en el manejo de estructuras de datos
-heterogéneas y una escalabilidad superior, lo que los hace especialmente
-adecuados para aplicaciones distribuidas con una gran demanda.
+aplicación que estemos desarrollando: Los sistemas relacionales como
+*PostgreSQL* :cite:`stonebraker1991postgres`, *MySQL* :cite:`grippa2021learning`
+o *Oracle* :cite:`greenwald2013oracle`, ofrecen un esquema estructurado y formal
+que ofrece integridad y consistencia de los datos, además de contar con un
+lenguaje estándar como SQL que nos permite hacer consultas complejas de manera
+eficiente. Por otro lado, los sistemas no relacionaes como *MongoDB* :cite:`banker2016mongodb` o *Redis* :cite:`eddelbuettel2022brief`,
+aportan flexibilidad en el manejo de estructuras de datos heterogéneas y una
+escalabilidad superior, lo que los hace especialmente adecuados para
+aplicaciones distribuidas con una gran demanda.
 
 .. list-table:: Comparación entre bases de datos relacionales y no relacionales
    :widths: 25 35 40
@@ -51,7 +53,7 @@ adecuados para aplicaciones distribuidas con una gran demanda.
 Python cuenta con un ecosistema maduro de bibliotecas que permiten la
 comunicación con diversos sistemas gestores de bases de datos.  En las
 siguientes secciones, se presentarán ejemplos prácticos de uso para diferentes
-tipos de gestores, tanto relacionales como no relacionales
+tipos de gestores, tanto relacionales como no relacionales.
 
 Bases de Datos relacionales
 ***************************
@@ -171,7 +173,7 @@ proceso, como por ejemplo, un programa escrito en Python.
 
 No requiere configuración, ni opera como un servidor independiente. Sin embargo,
 a pesar de su simplicidad, ofrece un alto rendimiento y soporte completo de
-transacciones **ACID**. La base de datos se puede almacenar en un solo archivo y su
+transacciones **ACID** :cite:`vossen2009acid`. La base de datos se puede almacenar en un solo archivo y su
 licencia de dominio público, la hacen ideal para ambiéntes académicos, pero
 también profesionales. Como se ejecuta en móviles y navegadores web, se estima
 que es el sistema de bases de datos más instalado en el mundo.
