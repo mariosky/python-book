@@ -1,0 +1,19 @@
+[TEMPLATE_CONFIGURATION]
+name = my book configuration
+template = book
+
+parts =
+    title
+    ;front_matter
+    contents
+    ;back_matter
+stylesheet = sphinx
+language = es
+
+[STRINGS]
+@contents = 'Contenido'
+@caution = 'Cuidado:'
+@warning = 'Advertencia:'
+
+
+
