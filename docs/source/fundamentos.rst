@@ -483,7 +483,7 @@ complicar mucho el diseno del programa.
 Secuencias
 ^^^^^^^^^^
 
-.. figure:: ./images/secuencia.svg
+.. figure:: ./images/secuencia.png
    :align: left
    :alt: Un arreglo dinámico clásico con nodos ligados.
 
@@ -937,7 +937,7 @@ Para convertir entre ellas utiliza las funciones :python:`list()` y :python:`tup
 Diccionarios
 ------------
 
-.. figure:: ./images/dict.svg
+.. figure:: ./images/dict.png
    :align: left
    :alt: Un diccionario como una colección de claves y sus corresponidientes valores.
 
@@ -962,7 +962,7 @@ de hash son menos que la cantidad de objetos diferentes que podemos utilizar
 como clave.
 
 
-.. figure:: ./images/hash.svg
+.. figure:: ./images/hash.png
    :align: left
    :scale: 80 %
    :alt: Ejemplo de una `función hash <https://es.wikipedia.org/wiki/Funci%C3%B3n_hash>`__ .

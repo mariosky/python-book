@@ -147,7 +147,7 @@ El punto clave es que las funciones internas **no son accesibles** desde fuera d
 Sin embargo, las funciones anidadas tienen acceso al contexto de las funciones que las contienen.
 Esta estructura se muestra en la siguiente figura:
 
-.. figure:: ./images/visibilidad.svg
+.. figure:: ./images/visibilidad.png
    :align: left
    :alt: Visibilidad y Encapsulamiento.
 
@@ -301,7 +301,7 @@ trata de un atributo de la clase. Cuando ejecutamos el método de instancia
 :python:`saluda`, por ejemplo :python:`ana.saluda()` no es necesario enviar
 la referencia :python:`self`, esto se hace implicitamente.
 
-.. figure:: ./images/self.svg
+.. figure:: ./images/self.png
    :align: left
    :alt: El uso de :python:`self` al definir una clase.
 
@@ -628,7 +628,7 @@ Herencia Múltiple
 
 Para este ejemplo vamos a implementar la siguiente herencia de clases:
 
-.. figure:: ./images/herencia.svg
+.. figure:: ./images/herencia.png
    :align: left
    :alt: Visibilidad y Encapsulamiento.
 

@@ -1,7 +1,7 @@
 .. _introducción:
 
 
-0. Introducción
+Introducción
 =================================
 
 En estos días a principios del 2025, Python :cite:`van2007python` es el lenguaje de programación más

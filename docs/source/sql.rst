@@ -151,7 +151,7 @@ almacenar información sobre peículas. Este ejemplo se podría tomar  como
 base para realizar una aplicación del tema, pero su objetivo principal es ejemplificar
 el uso del lenguaje.
 
-.. figure:: ./images/movies.svg
+.. figure:: ./images/movies.png
    :align: left
    :alt: Diseño Entidad-Relación para un directorio de películas.
 
