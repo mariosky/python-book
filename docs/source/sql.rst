@@ -143,13 +143,13 @@ Se define una jerarquía de excepciones estándar:
 Todos los módulos deben lanzar estas excepciones específicas para facilitar la portabilidad del código.
 
 
-Base de datos
-^^^^^^^^^^^^^
+Base de Datos de Películas
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Como ejemplo de la base de datos utilizaremos un esquema relacional para
-almacenar información sobre peículas. Este ejemplo se podría tomar  como
-base para realizar una aplicación del tema, pero su objetivo principal es ejemplificar
-el uso del lenguaje.
+Como ejemplo de base de datos, utilizaremos un esquema relacional para
+almacenar información sobre peículas. Podríamos basarnos en este ejemplo para
+programar alguna aplicación del tema, pero por ahora, el objetivo principal es
+ejemplificar el uso del lenguaje.
 
 .. figure:: ./images/movies.png
    :align: center
@@ -240,7 +240,6 @@ El script agrega la información de dos películas:
 
 Si utilizas un editor de texto como Visual Studio Code, puedes instalar un **``plug-in`** para
 visualizar la base de datos que hemos creado. Por ejemplo, el SQLite Viwer de Forian Klampfer.
-
 
 Una vez creada la base de datos, podemos conectarnos y hacer consultas utilizanod el :python:`cursor.execute()`.
 El **cursor** ahora si contiene elementos ya que el comando es una consulta ``SELECT`` y puede regresar ciertos datos.
