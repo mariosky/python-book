@@ -45,7 +45,7 @@ Como programador puedes iniciar tu búsqueda en el repositorio y ver los
 detalles del módulo:
 
 .. figure:: ./images/pypi.png
-   :align: left
+   :align: center
    :alt: La entrada en el repositorio https://pypi.org/ de la librería ``numpy``.
 
 En esta página podemos ver información del módulo y también

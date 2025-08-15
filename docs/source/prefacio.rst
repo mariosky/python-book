@@ -1,7 +1,7 @@
-.. _introducción:
+.. _prefacio:
 
 
-Introducción
+Prefacio
 =================================
 
 En estos días a principios del 2025, Python :cite:`van2007python` es el lenguaje de programación más

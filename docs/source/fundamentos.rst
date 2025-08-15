@@ -484,7 +484,6 @@ Secuencias
 ^^^^^^^^^^
 
 .. figure:: ./images/secuencia.png
-   :align: left
    :alt: Un arreglo dinámico clásico con nodos ligados.
 
    Python internamente *no utiliza* listas ligadas como podríamos pensar.
@@ -938,7 +937,6 @@ Diccionarios
 ------------
 
 .. figure:: ./images/dict.png
-   :align: left
    :alt: Un diccionario como una colección de claves y sus corresponidientes valores.
 
 Una estructura de datos muy importante en Python es el diccionario. Un
@@ -963,7 +961,6 @@ como clave.
 
 
 .. figure:: ./images/hash.png
-   :align: left
    :scale: 80 %
    :alt: Ejemplo de una `función hash <https://es.wikipedia.org/wiki/Funci%C3%B3n_hash>`__ .
 

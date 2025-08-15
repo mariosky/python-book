@@ -6,7 +6,7 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Python para estudiantes de computación'
+project = 'Python para estudiantes'
 copyright = '2025, José Mario García Valdez'
 author = 'José Mario García Valdez'
 
@@ -38,8 +38,37 @@ rinoh_documents = [
         ),
     ]
 
+# -- Options for Latex
+
+latex_engine = 'xelatex'
+master_doc = "index"
+
 latex_elements = {
     "releasename": "",
     "tableofcontents": "",
-    "maketitle": "",
+    "maketitle": r'''
+\begin{titlepage}
+  \centering
+  \vspace*{2cm}
+  {\LARGE Tecnológico Nacional de México / Instituto Tecnológico de Tijuana\par}
+  \vspace*{4cm}
+  {\Huge\bfseries Python para estudiantes de computación  \par}
+  {\large Análisis de Datos, Computación Inteligente, Cómputo Distribuido y Servicios Web \par}
+  
+  \vspace{2cm}
+  {\LARGE José Mario García Valdez \par}
+  \vfill
+  {\large Julio 2025 \par}
+\end{titlepage}
+''',
 }
+
+latex_documents = [
+    (
+        master_doc,
+        "pybook.tex",
+        "\\textbf{Python para estudiantes}",
+        "José M. García Valdez",
+        "book",
+    )
+]

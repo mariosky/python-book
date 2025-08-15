@@ -3,20 +3,36 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Python para Análisis de Datos, Computación Inteligente, Cómputo Distribuido y Servicios Web
-===========================================================================================
-
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Preliminares
-
-   introducción
+Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo Distribuido y Servicios Web
+========================================================================================================
+.. raw:: latex
+   
+   \frontmatter
 
 .. toctree::
-   :maxdepth: 2
+   :hidden:
+   :glob:
+
+   contribución_académica
+   agradecimientos
+   prefacio
+
+.. raw:: latex
+
+    \sphinxtableofcontents
+
+.. raw:: latex
+
+    \mainmatter
+
+.. toctree::
+   :hidden:
+   :includehidden:
+   :numbered: 4
+   :maxdepth: 4
    :caption: Contenido:
-   :numbered:
+   :name: mastertoc
+   :glob:
 
    fundamentos
    funcional
@@ -27,15 +43,25 @@ Python para Análisis de Datos, Computación Inteligente, Cómputo Distribuido y
    venv
    sql
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Bibliografía
+.. raw:: latex
 
-   bibliografia
-
+   \appendix
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Anexos:
+   :hidden:
+   :numbered: 4
+   :maxdepth: 4
+   :caption: Apéndice
+   :glob:
 
    instalación
+
+.. raw:: latex
+
+   \backmatter
+
+
+.. bibliography:: biblio.bib
+    :style: plain
+    :all:
+

@@ -152,7 +152,7 @@ base para realizar una aplicación del tema, pero su objetivo principal es ejemp
 el uso del lenguaje.
 
 .. figure:: ./images/movies.png
-   :align: left
+   :align: center
    :alt: Diseño Entidad-Relación para un directorio de películas.
 
 El modelo índica que una persona (``Persona``) puede tener varios roles

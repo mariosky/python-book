@@ -148,7 +148,7 @@ Sin embargo, las funciones anidadas tienen acceso al contexto de las funciones q
 Esta estructura se muestra en la siguiente figura:
 
 .. figure:: ./images/visibilidad.png
-   :align: left
+   :align: center
    :alt: Visibilidad y Encapsulamiento.
 
 En el lado izquierdo podemos observar la estructura jerárquica dentro de un módulo (azul claro)
@@ -302,7 +302,7 @@ trata de un atributo de la clase. Cuando ejecutamos el método de instancia
 la referencia :python:`self`, esto se hace implicitamente.
 
 .. figure:: ./images/self.png
-   :align: left
+   :align: center
    :alt: El uso de :python:`self` al definir una clase.
 
 .. note::
@@ -629,7 +629,7 @@ Herencia Múltiple
 Para este ejemplo vamos a implementar la siguiente herencia de clases:
 
 .. figure:: ./images/herencia.png
-   :align: left
+   :align: center
    :alt: Visibilidad y Encapsulamiento.
 
 Lo haremos en un script que llamaremos ``herencia.py``:
