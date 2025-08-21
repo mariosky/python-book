@@ -1,5 +1,15 @@
 # pyBook
 
+Dependencias
+
+Python
+  - Crear ambiente virtual e instalar `requirements.txt`.
+
+Perl 
+  Windows: https://strawberryperl.com/
+
+LaTeX  https://www.latex-project.org/get/#tex-distributions
+
 ---
 
 ## Capítulo 1: **Introducción a Python**
