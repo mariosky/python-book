@@ -42,6 +42,7 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
    módulos
    venv
    sql
+   datapy
 
 .. raw:: latex
 
