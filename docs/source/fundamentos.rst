@@ -132,11 +132,12 @@ distribución principal de Python. Las siglas PEP vienen del inglés
 documento público que brinda información a la comunidad sobre alguna nueva
 característica o sugerencia de mejora para el lenguaje.
 
-Siguiendo con el código, vemos también que los operadores lógicos (:python:`and`, :python:`or`,
-:python:`not`) son palabras y no símbolos como en ciertos lenguajes. Al igual que en la
-mayoría de los lenguajes, la concatenación de cadenas de caracteres se hace con
-el operador de adición. Para operaciones con otro tipo de objetos, los
-operadores (``+ - * /``) funcionan como siempre.
+Siguiendo con el código, vemos también que los operadores lógicos
+(:python:`and`, :python:`or`, :python:`not`) son palabras y no símbolos como en
+ciertos lenguajes. Al igual que en la mayoría de los lenguajes, la
+concatenación de cadenas de caracteres se hace con el operador de adición. Para
+operaciones con otro tipo de objetos, los operadores (``+ - * /``) funcionan
+como siempre.
 
 Otra característica importante es que la función para imprimir en la consola es
 :python:`print()` y no tuvimos que agregar una librería para acceder a su funcionalidad.
