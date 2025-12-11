@@ -466,11 +466,17 @@ coincida con la forma del arreglo más grande, sin copiar datos innecesariamente
 En otras palabras, NumPy "extiende" el escalar ``1`` para que actúe sobre cada
 elemento de ``evaluaciones``, gráficamente la extensión virtual se vería así:
 
+.. figure:: ./images/punto_extra.png
+   :align: center
+   :alt: Ejemplo de *broadcasting* en NumPy.
+
+.. attention::
+   Hay un detalle en nuestra operación. Al hacer la operación en todo el arreglo 
+   varias evaluaciones superan la calificación máxima de diez. Resolveremos este problema 
+   como ejercicio.
 
 
-
-
-Por último, vamos a suponer que deseamos aplicar una ponderación distinta a cada
+Siguiendo con el ejemplo, ahora vamos a suponer que deseamos aplicar una ponderación distinta a cada
 actividad. Por ejemplo, podríamos asignar un 40% a la tarea, 40% al examen y
 20% al proyecto:
 
@@ -483,7 +489,11 @@ actividad. Por ejemplo, podríamos asignar un 40% a la tarea, 40% al examen y
 Si multiplicamos el arreglo ``evaluaciones`` por el arreglo ``ponderacion``, NumPy
 aplica la operación elemento a elemento. En este caso los arreglos tienen formas
 compatibles: ``evaluaciones`` es de forma ``(4, 3)`` y ``ponderacion`` es de forma
-``(3,)``. NumPy utiliza *broadcasting* para extender la ponderación a cada renglón:
+``(3,)``. De nuevo NumPy utiliza *broadcasting* para extender la ponderación a cada renglón:
+
+.. figure:: ./images/ponderacion.png
+   :align: center
+   :alt: Ejemplo de *broadcasting* en NumPy.
 
 .. code-block:: python
 
@@ -498,9 +508,51 @@ actividades para todos los alumnos. Este tipo de operación es muy eficiente,
 porque NumPy no hace copias adicionales; simplemente extiende de manera
 conceptual el arreglo ``ponderacion`` para que sea compatible con ``evaluaciones``.
 
-Como hemos visto el *broadcasting* es fundamental en NumPy, pues permite realizar
-operaciones aritméticas entre arreglos de diferentes formas de manera muy
-eficiente. Más adelante estudiaremos este mecanismo con mayor detalle.
+Como ejemplo, vamos a suponer que no agregamos una ponderación para la evaluación del proyecto:
+
+>>> ponderacion = np.array([0.40, 0.40])
+>>> ponderacion.shape
+(2,)
+
+En este caso no podemos hacer la multiplicación elemento por elemento, ya 
+que no es posible obtener dos arreglos compatibles (con la misma forma) 
+estirando alguno de ellos:
+
+.. figure:: ./images/incompatibles.png
+   :align: center
+   :alt: Ejemplo de *broadcasting* en NumPy.
+
+``numpy.newaxis``
+-----------------
+
+En algunos casos debemos agregar una dimensión adicional a nuestros arreglos
+para que estos sean compatibles. Veamos un ejemplo. 
+
+De nuevo vamos dar un punto extra a los alumnos, pero solo a algunos.
+Para especificar a que alumnos daremos un punto extra utilizaremos un 
+arreglo de una dimensión con cuatro elementos, indicando el valor que 
+sumaremos al las evaluaciones de cada alumno:
+
+>>> puntos_extra = np.array([1,0,0,1])
+>>> puntos_extra
+array([1, 0, 0, 1])
+>>> puntos_extra.shape
+(4,)
+
+Gráficamente podemos observar que el arreglo ``evaluaciones`` no es compatible 
+con ``puntos_extra``:
+
+
+.. figure:: ./images/punto_alumno.png
+   :align: center
+   :alt: Ejemplo de *broadcasting* en NumPy.
+
+Podemos ver gráficamente una manera de solucionar este problema:
+
+.. figure:: ./images/newaxis.png
+   :align: center
+   :alt: Ejemplo de *broadcasting* en NumPy.
+
 
 Para obtener el promedio ponderado final de cada alumno sumamos los valores de
 cada renglón. NumPy puede hacerlo de manera vectorizada:
