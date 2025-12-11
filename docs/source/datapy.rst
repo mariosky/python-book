@@ -553,6 +553,56 @@ Podemos ver gráficamente una manera de solucionar este problema:
    :align: center
    :alt: Ejemplo de *broadcasting* en NumPy.
 
+La solución es cambiar el arreglo de una dimensión a dos dimensiones con 
+forma ``4 x 1``. Para esto utilizaremos la constante ``np.newaxis`` dentro de la
+operación de indexado:
+
+Primero vamos la forma actual:
+
+>>> puntos_extra.shape
+(4,)
+
+Si agregamos ``np.newaxis`` en el primer índice se 
+crea una arreglo con forma ``(1, 4)``:
+
+>>> puntos_extra[np.newaxis, :]
+array([[1, 0, 0, 1]])
+>>> puntos_extra[np.newaxis, :].shape
+(1, 4)
+
+Esto nos da un arreglo similar al que tenemos,
+pero ahora es un renglon con cuatro columnas.
+
+Probemos agregando la constante en el segundo índice:
+
+>>> puntos_extra[:, np.newaxis]
+array([[1],
+       [0],
+       [0],
+       [1]])
+>>> puntos_extra[:, np.newaxis].shape
+(4, 1)
+
+Esto es lo que necesitamos. Ahora podemos hacer la operación sin 
+problema:
+
+>>> puntos_extra[:, np.newaxis]  +  evaluaciones
+array([[ 9.5, 10. ,  6. ],
+       [10. ,  5. ,  9. ],
+       [ 6.5, 10. ,  8. ],
+       [ 9. ,  5. , 10. ]])
+
+Utilizar la constante ``np.newaxis`` es equivalente a utilizar ``None``,
+por lo que a veces lo veremos expresado de esta manera:
+
+>>> puntos_extra[:, None]
+array([[1],
+       [0],
+       [0],
+       [1]])
+
+El parámetro ``axis``
+---------------------
 
 Para obtener el promedio ponderado final de cada alumno sumamos los valores de
 cada renglón. NumPy puede hacerlo de manera vectorizada:
@@ -598,13 +648,6 @@ Aquí ``axis=0`` indica que la operación se aplica columna por columna, lo que
 corresponde a obtener el promedio de cada actividad considerando a todos los
 alumnos.
 
-Ejemplo: Cuantización Vectorial
--------------------------------
-
-En la documentación oficial de NumPy se describe un ejemplo del uso de arreglos 
-para un caso del mundo real de *Cuantización Vectorial*. Veamos podemos aplicar este 
-concepto a nuestros estudiantes.
-
 Ejemplo: Cuantización Vectorial de Colores RGB
 ---------------------------------------------
 
@@ -631,13 +674,7 @@ un color RGB:
     ...     [250, 250, 250],   # píxel 4
     ...     [ 80,  80,  80]    # píxel 5
     ... ], dtype=float)
-    >>> imagen
-    array([[123.,  20.,  18.],
-           [200., 180., 170.],
-           [ 10., 220.,  30.],
-           [  5.,  10., 200.],
-           [250., 250., 250.],
-           [ 80.,  80.,  80.]])
+
 
 Ahora definimos una pequeña *paleta* de colores prototipo. Estos serán los
 colores “permitidos” después de la cuantización:
@@ -650,11 +687,7 @@ colores “permitidos” después de la cuantización:
     ...     [  0,   0, 255],   # azul
     ...     [255, 255, 255]    # blanco
     ... ], dtype=float)
-    >>> paleta
-    array([[255.,   0.,   0.],
-           [  0., 255.,   0.],
-           [  0.,   0., 255.],
-           [255., 255., 255.]])
+
 
 Queremos asignar cada píxel de la imagen al color de la paleta *más cercano*
 usando la distancia euclidiana.
