@@ -13,7 +13,9 @@ author = 'José Mario García Valdez'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinxcontrib.bibtex',]
+extensions = ['sphinxcontrib.bibtex','sphinx_copybutton', ]
+copybutton_prompt_text = r">>>|\.\.\."
+copybutton_prompt_is_regexp = True
 bibtex_bibfiles = ['biblio.bib']
 
 templates_path = ['_templates']

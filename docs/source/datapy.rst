@@ -12,32 +12,31 @@ NumPy
 Cómputo numérico en Python
 --------------------------
 
-Durante más de cinco décadas, `Fortran <https://fortran-lang.org/>`_  ha sido
-el lenguaje estándar del cómputo científico y de alto rendimiento. Bibliotecas
-clásicas como la especificación
-`BLAS <https://es.wikipedia.org/wiki/Basic_Linear_Algebra_Subprograms>`_ y
-`LAPACK <https://es.wikipedia.org/wiki/LAPACK>`_, escritas en Fortran, continúan
-siendo la referencia cuando queremos hecer operaciones vectoriales y
-matriciales. Incluso, herramientas comerciales como `MATLAB <https://en.wikipedia.org/wiki/MATLAB>`_,
-se basan en estas librerías con el objetivo de hacer su
-programación más amigable. La desventaja que tienen es que crean una
-dependencia del proveedor y vam en contra de la práctica de la **ciencia
-abierta** que nos interesa promoveer.
+Durante más de cincuenta años, `Fortran <https://fortran-lang.org/>`_  ha sido
+el lenguaje estándar del cómputo científico y de alto rendimiento. Las
+librerías `BLAS <https://es.wikipedia.org/wiki/Basic_Linear_Algebra_Subprograms>`_ (en realidad,
+una especificación) y `LAPACK <https://es.wikipedia.org/wiki/LAPACK>`_,
+escritas en Fortran, continúan siendo la referencia cuando se trata de hacer
+operaciones vectoriales y matriciales. Incluso, herramientas comerciales como
+`MATLAB <https://en.wikipedia.org/wiki/MATLAB>`_, se basan en estas librerías
+pero ofreciendo una interfaz de programación más amigable. La desventaja es
+que crean una dependencia del proveedor y van en contra de las prácticas de 
+**ciencia abierta** que nos interesa promoveer.
 
-La tendencia actual es movernos hacia alternativas libres como 
+La tendencia actual de la comunidad científica es migrar hacia alternativas de sofware libres como 
 `GNU Octave <https://octave.org/>`_ o `SageMath <https://www.sagemath.org/>`_, 
-y hacia lenguajes diseñados para el análisis 
+y hacia lenguajes de programación abiertos, diseñados para el análisis 
 numérico (`Julia <https://julialang.org/>`_) o estadístico (`R <https://www.r-project.org/>`_).
 En este panorama, *Python* se ha 
 consolidado como uno de los lenguajes más utilizados gracias a su sencillez, 
-su comunidad y su ecosistema científico. Muchas de las librerías científicas 
-de Python tienen en su núcleo a la librería `NumPy <https://numpy.org/>`.
+su comunidad y su creciente ecosistema científico. Este éxito se debe en gran medida al esfuerzo inicial  
+de los autores de proyectos de código abierto
+`SciPy <https://scipy.org/>`_, `Matplotlib <https://matplotlib.org/>`_, y `NumPy <https://numpy.org/>`_ .
 
-.. tip::
-
-        Si te interesa conocer más sobre la historia de la librería NumPy, no te pierdas el documental 
-        *The early days of scientific Python with Travis Oliphant* disponible 
-        en `YouTube <https://www.youtube.com/watch?v=-xhai2iu_QY>`_.
+NumPy, en particular, introdujo un tipo de dato fundamental: el arreglo
+multidimensional ``ndarray``. Este arreglo (o matriz), junto con sus operaciones
+vectorizadas permitió que Python alcanzara el rendimiento
+necesario para aplicaciones científicas y de ingeniería.
 
 NumPy nos proporciona:
 
@@ -49,21 +48,56 @@ NumPy nos proporciona:
 * Integración con código en C, C++ y Fortran.
 * Licencia abierta *BSD*, compatible con la ciencia abierta.
 
-realizar operaciones sobre sus elementos: las listas son de distintos tamaños y tienen
-objetos de distintos tipos. Por ejemplo, no podemos sumar todos los números en
-la primera posición o en la tercera. En el primer caso no podemos sumar la
-cadena 'Hola' y en el segundo hay dos listas que no tienen un elemento en la
-tercera posición. 
+.. tip::
 
-NumPy introduce el **arreglo homogéneo multidimensional** (``ndarray``), 
-en los cuales:
+        Si te interesa conocer más sobre la historia de la librería NumPy, no te pierdas el documental 
+        *The early days of scientific Python with Travis Oliphant* disponible 
+        en `YouTube <https://www.youtube.com/watch?v=-xhai2iu_QY>`_.
 
-* Todos sus elementos son del **mismo tipo** (casi siempre numérico).
-* Todas sus dimensiones tienen el **mismo tamaño**.
-* El almacenamiento en memoria es **contiguo**, lo cual permite 
-  una ejecución más rápida mediante el uso de BLAS/LAPACK.
+``ndarray``
+-----------
 
-Vamos a crear una lista compatible con un ``ndarray``::
+Mientras que en Python contamos con colecciones de objetos tipo secuencia, como
+las listas, éstas no tienen una estructura adecuada para realizar operaciones
+numéricas generales. Por ejemplo, si tenemos la siguiente lista de listas:
+
+.. code-block:: python
+
+    >>> lista_objetos = [[1, 2, 3],
+    ...                  [2, 2],
+    ...                  ['Hola', 11],
+    ...                  [2]]
+
+Tenemos dos problemas importantes:
+
+1. **Las sublistas tienen diferente tamaño.**  
+   Unas tienen tres elementos, otras dos y una solo uno. Esto
+   impide realizar operaciones posición por posición, como sumar todos los valores de
+   la tercera columna ya que algunas sublistas no tienen el tercer
+   elemento.
+
+2. **Los elementos no son del mismo tipo.**  
+   La tercera sublista contiene una cadena:
+
+   .. code-block:: python
+
+       ['Hola', 11]
+
+   Esto hace imposible sumar todos los elementos de la primera posición, ya 
+   Python no puede sumar enteros con cadenas de texto.
+
+Estas limitaciones hacen que las listas de Python no sean una buena
+representación para datos numéricos estructurados. Para análisis científico,
+necesitamos estructuras que:
+
+- tengan forma regular (todas las filas con el mismo número de columnas),  
+- contengan datos homogéneos,  
+- permitan operaciones vectorizadas eficientes.
+
+Aquí es donde entra **NumPy** y su tipo de dato fundamental: el arreglo
+multidimensional ``ndarray``.
+
+Vamos a crear una lista compatible con un ``ndarray``:
 
 .. code-block:: python
 
@@ -72,9 +106,9 @@ Vamos a crear una lista compatible con un ``ndarray``::
         >>> listas
         [[2, 3, 4], [3, 6, 8], [2, 3, 4]]
 
-Podemos crear arreglos ``ndarray`` a partir de listas u otras secuencias de
-Python.  Cuando la secuencia contiene otras secuencias internas, como aquí, que
-tenemos una *lista de listas*, NumPy interpreta esta estructura como un arreglo
+Python nos permite crear arreglos ``ndarray`` a partir de listas u otras secuencias de
+Python. En este ejemplo, la secuencia contiene otras secuencias internas, ya que
+tenemos una *lista de listas*. En estos casos NumPy interpreta esta estructura como un arreglo
 bidimensional.
 
 .. code-block:: python
@@ -147,36 +181,6 @@ Modificamos la vista:
 El arreglo original también cambió:
 
 .. code-block:: python
-trabajemos con datos numéricos y operaciones matriciales en NumPy.
-
-Copias y vistas
-----------------
-Algo muy importante al trabajar con arreglos ``ndarray`` es que, en la mayoría
-de los casos, los cortes (*slices*) no generan una copia del arreglo, sino una
-*vista* (*view*). Una vista comparte la misma memoria con el arreglo original,
-por lo que cualquier modificación hecha a la vista afecta directamente al
-arreglo original.
-
-Veamos un ejemplo:
-
-.. code-block:: python
-
-    >>> a = np.array([1, 2, 3, 4, 5])
-    >>> b = a[1:4]   # Regresa una vista
-    >>> b
-    array([2, 3, 4])
-
-Modificamos la vista:
-
-.. code-block:: python
-
-    >>> b[0] = 99
-    >>> b
-    array([99, 3, 4])
-
-El arreglo original también cambió:
-
-.. code-block:: python
 
     >>> a
     array([1, 99, 3, 4, 5])
@@ -196,6 +200,51 @@ Si necesitamos explícitamente una copia independiente del arreglo, debemos usar
     array([-5,  3,  4])
     >>> a
     array([1, 99, 3, 4, 5])  # El original ya no cambia
+
+Funciones para crear arreglos 
+-----------------------------
+
+En ocasiones queremos crear arreglos con datos iniciales sin necesidad de
+proporcionar explícitamente cada elemento. NumPy incluye varias funciones
+con este propósito, entre ellas ``zeros()``, ``ones()`` y ``empty()``.
+
+Podemos crear un arreglo lleno de ceros especificando su forma (*shape*) como
+una tupla:
+
+.. code-block:: python
+
+    >>> np.zeros((3, 4))
+    array([[0., 0., 0., 0.],
+           [0., 0., 0., 0.],
+           [0., 0., 0., 0.]])
+
+De manera similar, ``ones()`` crea un arreglo en el que todos los elementos
+son uno. El siguiente ejemplo crea un arreglo tridimensional:
+
+.. code-block:: python
+
+    >>> np.ones((2, 3, 4))
+    array([[[1., 1., 1., 1.],
+            [1., 1., 1., 1.],
+            [1., 1., 1., 1.]],
+
+           [[1., 1., 1., 1.],
+            [1., 1., 1., 1.],
+            [1., 1., 1., 1.]]])
+
+La función ``empty()`` crea un arreglo con la forma indicada pero **sin
+inicializar** sus valores; es decir, contiene lo que sea que hubiera en la
+memoria en ese momento:
+
+>>> np.empty((3,))
+array([7.74860419e-304, 7.74860419e-304, 7.74860419e-304])
+
+.. note::
+
+        Es importante recordar que ``empty()`` no llena el arreglo con ceros;
+        el contenido depende del estado de la memoria asignada y, por lo tanto,
+        **no se debe utilizar cuando necesitemos valores iniciales
+        confiables**.
 
 
 Tipos de datos
@@ -231,7 +280,8 @@ Veamos que pasa si enviamos una lista heterogénea al constructor de `ndarray`:
 >>> arreglo = np.array(objetos)
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
-ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (3,) + inhomogeneous part.
+ValueError: setting an array element with a sequence. The requested array has 
+an inhomogeneous shape after 1 dimensions. The detected shape was (3,) + inhomogeneous part.
 
 NumPy intenta crear un arreglo bidimensional, pero las sublistas no tienen la
 misma longitud; por lo tanto, la estructura no es rectangular y se produce un
@@ -243,8 +293,7 @@ de elementos tipo ``object``:
 array([list([1, 3.4]), list(['Hola']), list([2, 3, 4])], dtype=object)
 
 Este no es un arreglo muy útil para cómputo numérico. 
-Mejor vamos a crear un arreglo unidimensional
-más común:
+Mejor vamos a crear un arreglo unidimensional de enteros:
 
 >>> enteros = np.array([1,3,4,5,7])
 >>> enteros
@@ -272,16 +321,8 @@ de elementos en cada dimensión:
 
 Para un arreglo bidimensional, el primer valor de la tupla corresponde al número
 de renglones y el segundo al número de columnas. Una forma útil de recordarlo es
-
->>> np.empty((3,))
-array([7.74860419e-304, 7.74860419e-304, 7.74860419e-304])
-
-.. note::
-
-        Es importante recordar que ``empty()`` no llena el arreglo con ceros;
-        el contenido depende del estado de la memoria asignada y, por lo tanto,
-        **no se debe utilizar cuando necesitemos valores iniciales
-        confiables**.
+pensar en cómo se asignan los asientos en el cine: primero se indica la fila
+(renglón) y después el número de asiento (columna).
 
 Operaciones en arreglos 
 -----------------------
@@ -344,50 +385,19 @@ Podemos inspeccionar la forma (*shape*) del arreglo para confirmar su estructura
 
 Esto nos indica que tenemos **4 alumnos** y **3 evaluaciones** por alumno.
 
-También podemos verificar el tipo de dato que NumPy asignó:
+También podemos verificar el tipo de dato que le asignó NumPy:
 
 .. code-block:: python
 
     >>> evaluaciones.dtype
     dtype('float64')
 
-A partir de este punto podremos aplicar operaciones vectorizadas sobre las
-calificaciones: promedios, máximos, mínimos, normalización y muchas otras
-operaciones típicas del análisis numérico.
+Sobre estos arreglos ahora si podemos aplicar operaciones vectorizadas. 
+En el caso de las evaluaciones podemos calcular: promedios, máximos, mínimos,  
+normalización y muchas otras operaciones de análisis numérico.
+Veamos algunos ejemplos.
 
-slicing
-
-Podemos ver las calificaciones de ``Joe`` y calcular su promedio utilizando
-*slicing*. Recordemos que ``Joe`` corresponde al primer renglón del arreglo
-(índice ``0``):
-
-.. code-block:: python
-
-    >>> evaluaciones[0, :]
-    array([8.5, 9. , 5. ])
-
-También podemos acceder al primer renglón del arreglo utilizando únicamente un
-índice:
-
-.. code-block:: python
-
-    >>> evaluaciones[0]
-    array([8.5, 9. , 5. ])
-
-También podemos verificar el tipo de dato que NumPy asignó:
-
-.. code-block:: python
-
-    >>> evaluaciones.dtype
-    dtype('float64')
-
-A partir de este punto podremos aplicar operaciones vectorizadas sobre las
-calificaciones: promedios, máximos, mínimos, normalización y muchas otras
-operaciones típicas del análisis numérico.
-
-slicing
-
-Podemos ver las calificaciones de ``Joe`` y calcular su promedio utilizando
+Para empezar, podemos ver las calificaciones de ``Joe`` y calcular su promedio utilizando
 *slicing*. Recordemos que ``Joe`` corresponde al primer renglón del arreglo
 (índice ``0``):
 
@@ -420,7 +430,8 @@ NumPy realiza esta operación de manera vectorizada, sin necesidad de escribir
 ciclos explícitos. Esta es una de las razones por las que es tan eficiente para
 el análisis numérico.
 
-Operaciones básicas
+Operaciones elemento por elemento
+---------------------------------
 
 Cuando utilizamos operaciones aritméticas sobre arreglos, la operación se realiza
 para cada elemento (*element-wise*) y se regresa un nuevo arreglo con el
@@ -439,21 +450,9 @@ decide subir un punto a todas las calificaciones:
            [ 9. ,  5. , 10. ]])
 
 La operación ``+ 1`` se aplica a cada elemento del arreglo y NumPy regresa un
-nuevo arreglo con los valores actualizados. El arreglo original no se modifica,
-a menos que asignemos el resultado a una variable:
-
-.. code-block:: python
-
-    >>> nuevas = evaluaciones + 1
-    >>> nuevas
-    array([[ 9.5, 10. ,  6. ],
-           [11. ,  6. , 10. ],
-           [ 7.5, 11. ,  9. ],
-           [ 9. ,  5. , 10. ]])
-
-El operador de adición es un alias de la función ``numpy.add``. Esta función
-toma dos arreglos como operandos y aplica la operación elemento a elemento.
-Cuando realizamos:
+nuevo arreglo con los valores actualizados. El operador de adición es un alias
+de la función ``numpy.add``. Esta función toma dos arreglos como operandos y
+aplica la operación elemento a elemento. Cuando realizamos:
 
 .. code-block:: python
 
@@ -465,19 +464,207 @@ que consiste en ampliar de manera conceptual el arreglo más pequeño para que
 coincida con la forma del arreglo más grande, sin copiar datos innecesariamente.
 
 En otras palabras, NumPy "extiende" el escalar ``1`` para que actúe sobre cada
-elemento de ``evaluaciones``:
+elemento de ``evaluaciones``, gráficamente la extensión virtual se vería así:
+
+
+
+
+
+Por último, vamos a suponer que deseamos aplicar una ponderación distinta a cada
+actividad. Por ejemplo, podríamos asignar un 40% a la tarea, 40% al examen y
+20% al proyecto:
 
 .. code-block:: python
 
-    >>> np.add(evaluaciones, 1)
-    array([[ 9.5, 10. ,  6. ],
-           [11. ,  6. , 10. ],
-           [ 7.5, 11. ,  9. ],
-           [ 9. ,  5. , 10. ]])
+    >>> ponderacion = np.array([0.40, 0.40, 0.20])
+    >>> ponderacion
+    array([0.4, 0.4, 0.2])
 
-Este proceso de *broadcasting* es fundamental en NumPy, pues permite realizar
+Si multiplicamos el arreglo ``evaluaciones`` por el arreglo ``ponderacion``, NumPy
+aplica la operación elemento a elemento. En este caso los arreglos tienen formas
+compatibles: ``evaluaciones`` es de forma ``(4, 3)`` y ``ponderacion`` es de forma
+``(3,)``. NumPy utiliza *broadcasting* para extender la ponderación a cada renglón:
+
+.. code-block:: python
+
+    >>> evaluaciones * ponderacion
+    array([[3.4 , 3.6 , 1.  ],
+           [4.  , 2.  , 1.8 ],
+           [2.6 , 4.  , 1.6 ],
+           [3.2 , 1.6 , 1.8 ]])
+
+En este caso, la ponderación se aplica correctamente a cada una de las tres
+actividades para todos los alumnos. Este tipo de operación es muy eficiente,
+porque NumPy no hace copias adicionales; simplemente extiende de manera
+conceptual el arreglo ``ponderacion`` para que sea compatible con ``evaluaciones``.
+
+Como hemos visto el *broadcasting* es fundamental en NumPy, pues permite realizar
 operaciones aritméticas entre arreglos de diferentes formas de manera muy
 eficiente. Más adelante estudiaremos este mecanismo con mayor detalle.
+
+Para obtener el promedio ponderado final de cada alumno sumamos los valores de
+cada renglón. NumPy puede hacerlo de manera vectorizada:
+
+.. code-block:: python
+
+    >>> (evaluaciones * ponderacion).sum(axis=1)
+    array([8. , 7.8, 8.2, 6.6])
+
+Esto lo hacemos aplicando la función suma a los elementos del eje
+correspondiente. Al utilizar ``axis=1`` indicamos que la suma debe realizarse a
+lo largo de cada renglón, es decir, sumamos las actividades de cada alumno para
+obtener su promedio ponderado.
+
+Esto produce un arreglo unidimensional donde cada entrada corresponde al
+promedio ponderado de un alumno.
+
+- Joe obtiene **8.0**  
+- Ana obtiene **7.8**  
+- Tom obtiene **8.2**  
+- Zoe obtiene **6.6**
+
+Nótese que no necesitamos escribir ciclos; NumPy realiza la operación de manera
+eficiente mediante operaciones vectorizadas y *broadcasting*.
+
+De manera análoga, si deseamos calcular el promedio de calificación por
+actividad (tarea, examen y proyecto), debemos sumar a lo largo del eje ``0``,
+es decir, por columnas. Después dividimos entre el número de alumnos o, de
+forma más conveniente, utilizamos directamente la función ``mean``:
+
+.. code-block:: python
+
+    >>> evaluaciones.mean(axis=0)
+    array([8.25, 7.0 , 7.75])
+
+Esto nos da:
+
+- promedio de **tarea**: 8.25  
+- promedio de **examen**: 7.0  
+- promedio de **proyecto**: 7.75  
+
+Aquí ``axis=0`` indica que la operación se aplica columna por columna, lo que
+corresponde a obtener el promedio de cada actividad considerando a todos los
+alumnos.
+
+Ejemplo: Cuantización Vectorial
+-------------------------------
+
+En la documentación oficial de NumPy se describe un ejemplo del uso de arreglos 
+para un caso del mundo real de *Cuantización Vectorial*. Veamos podemos aplicar este 
+concepto a nuestros estudiantes.
+
+Ejemplo: Cuantización Vectorial de Colores RGB
+---------------------------------------------
+
+En la documentación oficial de NumPy se describe un ejemplo del uso de arreglos 
+para un caso del mundo real de *Cuantización Vectorial*. Vamos a adaptar esta
+idea al caso de colores en formato RGB.
+
+Cada color se puede representar como un vector en :math:`\mathbb{R}^3` con tres
+componentes: rojo (R), verde (G) y azul (B). Por ejemplo, el color rojo puro
+sería el vector ``[255, 0, 0]``.
+
+Supongamos que tenemos una pequeña “imagen” formada por 6 píxeles, cada uno con
+un color RGB:
+
+.. code-block:: python
+
+    >>> import numpy as np
+
+    >>> imagen = np.array([
+    ...     [123,  20,  18],   # píxel 0
+    ...     [200, 180, 170],   # píxel 1
+    ...     [ 10, 220,  30],   # píxel 2
+    ...     [  5,  10, 200],   # píxel 3
+    ...     [250, 250, 250],   # píxel 4
+    ...     [ 80,  80,  80]    # píxel 5
+    ... ], dtype=float)
+    >>> imagen
+    array([[123.,  20.,  18.],
+           [200., 180., 170.],
+           [ 10., 220.,  30.],
+           [  5.,  10., 200.],
+           [250., 250., 250.],
+           [ 80.,  80.,  80.]])
+
+Ahora definimos una pequeña *paleta* de colores prototipo. Estos serán los
+colores “permitidos” después de la cuantización:
+
+.. code-block:: python
+
+    >>> paleta = np.array([
+    ...     [255,   0,   0],   # rojo
+    ...     [  0, 255,   0],   # verde
+    ...     [  0,   0, 255],   # azul
+    ...     [255, 255, 255]    # blanco
+    ... ], dtype=float)
+    >>> paleta
+    array([[255.,   0.,   0.],
+           [  0., 255.,   0.],
+           [  0.,   0., 255.],
+           [255., 255., 255.]])
+
+Queremos asignar cada píxel de la imagen al color de la paleta *más cercano*
+usando la distancia euclidiana.
+
+Primero calculamos la diferencia entre cada píxel y cada color de la paleta.
+Utilizamos *broadcasting* para evitar ciclos explícitos:
+
+.. code-block:: python
+
+    >>> dif = imagen[:, np.newaxis, :] - paleta[np.newaxis, :, :]
+    >>> dif.shape
+    (6, 4, 3)
+
+El arreglo ``dif`` tiene forma ``(6, 4, 3)``:
+
+- 6 píxeles,
+- 4 colores en la paleta,
+- 3 componentes (R, G, B).
+
+Calculamos ahora la distancia euclidiana a lo largo del último eje:
+
+.. code-block:: python
+
+    >>> distancias = np.linalg.norm(dif, axis=2)
+    >>> distancias
+    array([[134.71451295, 265.85334303, 267.76482219, 358.91224554],
+           [253.62373706, 272.99267389, 282.17902119, 125.99603168],
+           [330.64331235,  47.16990566, 314.84122983, 334.47720401],
+           [320.31234756, 316.30681308,  56.1248608 , 354.33035433],
+           [353.58874416, 353.58874416, 353.58874416,   8.66025404],
+           [208.38665984, 208.38665984, 208.38665984, 303.10889132]])
+
+Cada renglón corresponde a un píxel y cada columna a un color de la paleta.
+
+Para saber qué color asignar a cada píxel, tomamos el índice del menor valor
+en cada renglón:
+
+.. code-block:: python
+
+    >>> asignacion = distancias.argmin(axis=1)
+    >>> asignacion
+    array([0, 3, 1, 2, 3, 0])
+
+Con esta información construimos la versión cuantizada de la imagen, donde cada
+píxel se reemplaza por su color prototipo más cercano:
+
+.. code-block:: python
+
+    >>> imagen_cuantizada = paleta[asignacion]
+    >>> imagen_cuantizada
+    array([[255.,   0.,   0.],
+           [255., 255., 255.],
+           [  0., 255.,   0.],
+           [  0.,   0., 255.],
+           [255., 255., 255.],
+           [255.,   0.,   0.]])
+
+Hemos realizado una versión sencilla de *cuantización vectorial* de colores:
+cada vector RGB original se ha aproximado por el color de la paleta más
+cercano. Este mismo patrón se usa en problemas reales de compresión de imágenes
+y reducción de colores, y ilustra muy bien la potencia de las operaciones
+vectorizadas y el *broadcasting* en NumPy.
 
 
 Pandas
