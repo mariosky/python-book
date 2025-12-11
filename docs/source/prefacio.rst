@@ -40,6 +40,13 @@ nube a partir de código ejecutado localmente, solamente importando una
 librería. Era la primera aproximación a lo que hoy es computación
 `Serverless <https://es.wikipedia.org/wiki/Serverless_computing>`_.
 
+
+.. tip::
+
+        Si te interesa conocer más sobre la historia del lenguaje, no te pierdas el documental
+        *The Story of Python and how it took over the world | Python: The Documentary*
+        disponible en `YouTube <https://www.youtube.com/watch?v=GfH4QL4VqJ0>`_.
+
 ¿A quién va dirigido este libro?
 --------------------------------
 
