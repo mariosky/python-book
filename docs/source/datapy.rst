@@ -755,5 +755,383 @@ vectorizadas y el *broadcasting* en NumPy.
 Pandas
 ******
 
+En el capítulo anterior trabajamos con arreglos ``ndarray`` de NumPy. Vimos que
+son estructuras muy eficientes para representar datos numéricos en una o varias
+dimensiones, con:
+
+- tipos de datos homogéneos (el mismo tipo en todo el arreglo),
+- operaciones vectorizadas muy rápidas,
+- soporte para *broadcasting*,
+- integración con librerías de cómputo de alto rendimiento (BLAS, LAPACK).
+
+Sin embargo, cuando trabajamos con datos del mundo real —por ejemplo,
+encuestas, registros de ventas, sensores o conjuntos de datos clásicos de
+machine learning— suele aparecer una estructura distinta: **tablas** con
+columnas de distintos tipos:
+
+- una columna numérica (edad, ingreso, peso),
+- otra categórica (país, género, tipo de producto),
+- otra con fechas,
+- otra con identificadores o nombres.
+
+Podríamos almacenar estos datos en arreglos de NumPy, pero perderíamos
+comodidad:
+
+- mezclar tipos en un mismo ``ndarray`` es incómodo e ineficiente,
+- es difícil dar nombres claros a filas y columnas,
+- leer y escribir archivos de texto (CSV, JSON) requiere más trabajo manual,
+- operaciones típicas de análisis de datos, como agrupar, filtrar por valores
+  categóricos o combinar tablas, no son tan naturales con arreglos puros.
+
+Aquí es donde entra **pandas**.
+
+Pandas está construido sobre NumPy y aprovecha sus arreglos ``ndarray`` como
+motor numérico, pero añade una capa de abstracción muy conveniente para el
+análisis de datos tabulares:
+
+- ``Series``: una secuencia unidimensional con índice etiquetado.
+- ``DataFrame``: una tabla con renglones y columnas etiquetadas, donde cada
+  columna puede tener un tipo diferente (numérico, categórico, texto, fechas).
+
+En otras palabras, si NumPy nos da el “motor” numérico, pandas nos da la
+“carrocería” para manejar datos de manera más cómoda: tablas con nombres de
+columnas, índices, lectura y escritura de archivos, agrupamientos y muchas
+operaciones comunes en ciencia de datos.
+
+El ``DataFrame`` 
+================
+
+En esta sección nos concentraremos en la estructura ``DataFrame`` y veremos cómo:
+
+- crearla a partir de archivos de texto (como CSV),
+- construirla desde estructuras de Python (listas, diccionarios, arreglos de
+  NumPy),
+- inspeccionar y seleccionar datos por renglón y por columna,
+- realizar operaciones básicas de limpieza y análisis.
+
+Como punto de partida, piensa en un ``DataFrame`` como un arreglo de NumPy de
+dos dimensiones, pero:
+
+- con nombres para las columnas,
+- con un índices para los renglones y las columnas,
+- con la posibilidad de que cada columna tenga un tipo de dato diferente.
+
+Creando un ``DataFrame`` desde un archivo de texto
+--------------------------------------------------
+
+Como ejemplo, vamos a utilizar una estructura tipo ``DataFrame`` para almacenar
+el conjunto de datos conocido como `Auto MPG
+<https://archive.ics.uci.edu/ml/datasets/Auto+MPG>`_. Lo primero que debemos
+hacer es revisar los tipos de datos de sus atributos:
+
+.. list-table::
+   :header-rows: 1
+
+   * - nombre
+     - tipo
+     - escala
+     - descripción
+   * - ``mpg``
+     - continuo
+     - razón
+     - millas por galón
+   * - ``cylinders``
+     - discreto
+     - ordinal
+     - número de cilindros
+   * - ``displacement``
+     - continuo
+     - razón
+     - desplazamiento
+   * - ``horsepower``
+     - continuo
+     - razón
+     - caballos de fuerza
+   * - ``weight``
+     - continuo
+     - razón
+     - peso en libras (US)
+   * - ``acceleration``
+     - continuo
+     - razón
+     - aceleración
+   * - ``model_year``
+     - discreto
+     - razón
+     - año de fabricación
+   * - ``origin``
+     - discreto
+     - categórico
+     - origen del auto
+   * - ``car_name``
+     - cadena
+     - categórico
+     - nombre del auto
+
+Como podemos ver, estas observaciones tienen atributos heterogéneos: algunos
+son numéricos continuos, otros son enteros, y también hay cadenas de texto.
+El objetivo original de este conjunto de datos era **predecir el consumo de
+combustible en millas por galón (``mpg``)** utilizando los demás atributos como
+predictores.
+
+Descargando y explorando el archivo de datos
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Vamos a descargar el conjunto de datos desde el `repositorio de machine learning
+de la UC Irvine
+<https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/>`_. El
+archivo que nos interesa se llama ``auto-mpg.data``.
+
+Si abrimos el archivo en un editor de texto, vemos que:
+
+- los campos están separados por espacios en blanco, no por comas como es habitual en archivos CSV
+- el número de espacios entre columnas no es siempre el mismo
+- los valores faltantes están marcados con el carácter ``?``.
+
+Un fragmento del archivo luce así:
+
+.. code-block:: text
+
+   11.0   8   350.0      180.0      3664.      11.0   73  1   "oldsmobile omega"
+   20.0   6   198.0       95.0      3102.      16.5   74  1   "plymouth duster"
+   21.0   6   200.0        ?        2875.      17.0   74  1   "ford maverick"
+
+Lectura del archivo con ``read_csv``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pandas nos brinda un conjunto de herramientas de entrada/salida (*IO tools*)
+para leer archivos en distintos formatos: texto, binarios y SQL. En el caso de
+texto, el método más utilizado es ``read_csv``, que puede leer no solo archivos
+separados por comas, sino también por otros delimitadores.
+
+La documentación de ``read_csv`` contiene muchos parámetros para controlar con
+detalle la lectura y el *parsing* del archivo. Aquí utilizaremos sólo algunos de
+los más importantes.
+
+Recordemos que en un archivo *CSV* típico los valores de los atributos se
+separan por comas. En nuestro archivo ``auto-mpg.data`` la separación se hace
+por espacios en blanco, y además el número de espacios no es constante. Para
+leer correctamente este archivo, utilizaremos el parámetro ``sep``, que indica
+el separador de campos. Por defecto es la coma ``','``, pero también puede ser
+una expresión regular.
+
+En expresiones regulares, la cadena ``'\\s'`` representa cualquier espacio en
+blanco (espacios y tabulaciones); el operador ``'+'`` indica “una o más
+repeticiones”. Es decir, ``'\\s+'`` significa “uno o más espacios en blanco
+seguidos”. Ese será nuestro separador.
+
+Primer intento de lectura:
+
+.. code-block:: python
+
+   >>> import pandas as pd
+   >>> df = pd.read_csv('datos-ejemplo/auto-mpg.data', sep=r'\s+')
+   >>> df.head()
+       18.0  8  307.0  130.0   3504.0  12.0  70  1  \
+   0   15.0  8  350.0  165.0   3693.0  11.5  70  1
+   1   18.0  8  318.0  150.0   3436.0  11.0  70  1
+   2   16.0  8  304.0  150.0   3433.0  12.0  70  1
+   ...
+
+Observaciones importantes:
+
+- Logramos separar las columnas utilizando la expresión regular ``'\\s+'``.
+- Sin embargo, **los nombres de las columnas no tienen sentido**: pandas asumió
+  que el primer renglón era el encabezado con los nombres de los atributos.
+
+Nuestro archivo **no tiene fila de encabezados**, por lo que debemos indicarlo.
+
+Indicando que no hay encabezado
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Para decirle a ``read_csv`` que el archivo **no** incluye encabezados, usamos
+el parámetro ``header=None``:
+
+.. code-block:: python
+
+   >>> df = pd.read_csv(
+   ...     'datos-ejemplo/auto-mpg.data',
+   ...     sep=r'\s+',
+   ...     header=None
+   ... )
+   >>> df.head()
+        0  1      2      3       4     5   6  7  \
+   0  18.0  8  307.0  130.0  3504.0  12.0  70  1
+   1  15.0  8  350.0  165.0  3693.0  11.5  70  1
+   2  18.0  8  318.0  150.0  3436.0  11.0  70  1
+   ...
+
+   8
+   0  chevrolet chevelle malibu
+   1          buick skylark 320
+   2         plymouth satellite
+   ...
+
+Ahora pandas asigna nombres genéricos (0, 1, 2, …) a las columnas. El siguiente
+paso es asignar nombres descriptivos, de acuerdo con la tabla de atributos que
+mostramos anteriormente.
+
+Asignando nombres a las columnas
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Podemos asignar los nombres de los atributos utilizando el parámetro ``names``:
+
+.. code-block:: python
+
+   >>> nombres_columnas = [
+   ...     'mpg', 'cylinders', 'displacement', 'horsepower',
+   ...     'weight', 'acceleration', 'model_year', 'origin', 'car_name'
+   ... ]
+   >>> df = pd.read_csv(
+   ...     'datos-ejemplo/auto-mpg.data',
+   ...     sep=r'\s+',
+   ...     header=None,
+   ...     names=nombres_columnas
+   ... )
+   >>> df.head()
+       mpg  cylinders  displacement horsepower  weight  acceleration  \
+   0  18.0          8         307.0      130.0  3504.0          12.0
+   1  15.0          8         350.0      165.0  3693.0          11.5
+   2  18.0          8         318.0      150.0  3436.0          11.0
+   ...
+
+Nos falta revisar qué tipos de datos infirió pandas para cada columna.
+
+Revisando los tipos de datos
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Podemos ver el tipo de dato de cada columna con el atributo ``dtypes``:
+
+.. code-block:: python
+
+   >>> df.dtypes
+   mpg             float64
+   cylinders         int64
+   displacement    float64
+   horsepower       object
+   weight          float64
+   acceleration    float64
+   model_year        int64
+   origin            int64
+   car_name         object
+   dtype: object
+
+Hay un detalle importante: la columna ``horsepower`` aparece como ``object``,
+cuando debería ser numérica (``float64``). Esto ocurre porque algunos valores
+faltantes se representaron en el archivo original con el carácter ``'?'`` y
+pandas, al encontrarse con una mezcla de números y cadenas en la misma columna,
+prefirió tratarla como texto.
+
+Manejando valores faltantes con ``na_values``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Podemos indicar a ``read_csv`` qué valores deben considerarse como “datos no
+disponibles” (NaN) utilizando el parámetro ``na_values``. En este caso, queremos
+que el símbolo ``'?'`` se interprete como valor faltante:
+
+.. code-block:: python
+
+   >>> df = pd.read_csv(
+   ...     'datos-ejemplo/auto-mpg.data',
+   ...     sep=r'\s+',
+   ...     header=None,
+   ...     names=nombres_columnas,
+   ...     na_values='?'
+   ... )
+   >>> df.dtypes
+   mpg             float64
+   cylinders         int64
+   displacement    float64
+   horsepower      float64
+   weight          float64
+   acceleration    float64
+   model_year        int64
+   origin            int64
+   car_name         object
+   dtype: object
+
+Ahora sí, todas las columnas numéricas fueron correctamente interpretadas como
+valores de punto flotante o enteros. Los valores ``'?'`` se convirtieron en
+NaN (*Not a Number*), lo que permitirá aplicar funciones estadísticas sin que
+fallen las operaciones.
+
+Especificando tipos de datos con ``dtype``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Si queremos un control todavía más fino sobre los tipos de dato, podemos
+utilizar el parámetro ``dtype`` para indicar explícitamente el tipo de cada
+columna. Esto puede ser útil para ahorrar memoria (por ejemplo utilizando
+tipos de 32 bits) o para indicar que ciertas columnas son categóricas:
+
+.. code-block:: python
+
+   >>> df = pd.read_csv(
+   ...     'datos-ejemplo/auto-mpg.data',
+   ...     sep=r'\s+',
+   ...     header=None,
+   ...     names=nombres_columnas,
+   ...     na_values='?',
+   ...     dtype={
+   ...         'mpg': 'float32',
+   ...         'cylinders': 'int32',
+   ...         'displacement': 'float32',
+   ...         'horsepower': 'float32',
+   ...         'weight': 'float32',
+   ...         'acceleration': 'float32',
+   ...         'model_year': 'int32',
+   ...         'origin': 'int32',
+   ...         'car_name': 'category',
+   ...     }
+   ... )
+   >>> df.dtypes
+   mpg             float32
+   cylinders         int32
+   displacement    float32
+   horsepower      float32
+   weight          float32
+   acceleration    float32
+   model_year        int32
+   origin            int32
+   car_name       category
+   dtype: object
+
+De esta manera:
+
+- reducimos el uso de memoria al utilizar tipos de 32 bits,
+- indicamos que ``car_name`` es una variable categórica.
+
+Un primer resumen estadístico
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Una vez leído correctamente el ``DataFrame``, podemos obtener un resumen
+estadístico descriptivo utilizando el método ``describe()``:
+
+.. code-block:: python
+
+   >>> df.describe()
+               mpg   cylinders  displacement  horsepower       weight  \
+   count  398.0000  398.000000    398.000000   392.00000   398.000000
+   mean    23.5146    5.454774    193.425873   104.46939  2970.424561
+   std      7.8160    1.701004    104.269859    38.49114   846.841431
+   min      9.0000    3.000000     68.000000    46.00000  1613.000000
+   25%     17.5000    4.000000    104.250000    75.00000  2223.750000
+   50%     23.0000    4.000000    148.500000    93.50000  2803.500000
+   75%     29.0000    8.000000    262.000000   126.00000  3608.000000
+   max     46.6000    8.000000    455.000000   230.00000  5140.000000
+
+       acceleration  model_year
+   count   398.00000  398.000000
+   mean     15.56809   76.010048
+   std       2.75769    3.697627
+   min       8.00000   70.000000
+   25%      13.82500   73.000000
+   50%      15.50000   76.000000
+   75%      17.17500   79.000000
+   max      24.80000   82.000000
+
+Por defecto, ``describe()`` muestra estadísticas únicamente para las columnas
+numéricas (las columnas categóricas y de texto se omiten). Más adelante veremos
+cómo generar resúmenes específicos para variables categóricas.
+
 Matplotlib
 **********
