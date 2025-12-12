@@ -44,6 +44,7 @@ NumPy nos proporciona:
 * Operaciones vectorizadas implementadas en C/Fortran para mejorar el rendimiento.
 * Funciones de *álgebra lineal*, transformadas de Fourier y generación 
   de números aleatorios. 
+
 * *Broadcasting*, para operar arreglos de diferentes formas.
 * Integración con código en C, C++ y Fortran.
 * Licencia abierta *BSD*, compatible con la ciencia abierta.
@@ -757,72 +758,58 @@ Pandas
 
 En el capítulo anterior trabajamos con arreglos ``ndarray`` de NumPy. Vimos que
 son estructuras muy eficientes para representar datos numéricos en una o varias
-dimensiones, con:
+dimensiones, con tipos de datos homogéneos (el mismo tipo en todo el arreglo),
+y operaciones vectorizadas. Sin embargo, cuando trabajamos con datos del mundo
+real preferimos organizar los datos en forma de tablas. Las tablas pueden tener
+diferentes tipos de datos en cada columna, nos referimos a las columnas por su
+nombre y a los registros por algún identificador. Podríamos almacenar estos
+datos en arreglos de NumPy, pero con algunas limitantes:
 
-- tipos de datos homogéneos (el mismo tipo en todo el arreglo),
-- operaciones vectorizadas muy rápidas,
-- soporte para *broadcasting*,
-- integración con librerías de cómputo de alto rendimiento (BLAS, LAPACK).
-
-Sin embargo, cuando trabajamos con datos del mundo real —por ejemplo,
-encuestas, registros de ventas, sensores o conjuntos de datos clásicos de
-machine learning— suele aparecer una estructura distinta: **tablas** con
-columnas de distintos tipos:
-
-- una columna numérica (edad, ingreso, peso),
-- otra categórica (país, género, tipo de producto),
-- otra con fechas,
-- otra con identificadores o nombres.
-
-Podríamos almacenar estos datos en arreglos de NumPy, pero perderíamos
-comodidad:
-
-- mezclar tipos en un mismo ``ndarray`` es incómodo e ineficiente,
-- es difícil dar nombres claros a filas y columnas,
-- leer y escribir archivos de texto (CSV, JSON) requiere más trabajo manual,
-- operaciones típicas de análisis de datos, como agrupar, filtrar por valores
-  categóricos o combinar tablas, no son tan naturales con arreglos puros.
+- mezclar tipos de datos en un mismo ``ndarray`` es complicado e ineficiente,
+- hay que utilizar varios arreglos para dar nombres a renglones y columnas,
+- realizar operaciones que encontramos en SQL, como agrupar, filtrar por valores
+  categóricos o combinar tablas, no es tan fácil utilizando ``ndarray``.
 
 Aquí es donde entra **pandas**.
 
-Pandas está construido sobre NumPy y aprovecha sus arreglos ``ndarray`` como
-motor numérico, pero añade una capa de abstracción muy conveniente para el
-análisis de datos tabulares:
+Pandas está construido sobre NumPy y utiliza arreglos ``ndarray`` para
+gestionar los datos numéricos internamente, pero añade una capa de abstracción
+para el análisis de datos tabulares. Para esto implementa dos estructuras
+fundamentales:
 
-- ``Series``: una secuencia unidimensional con índice etiquetado.
+- ``Series``: una secuencia unidimensional para procesar series de tiempo.
 - ``DataFrame``: una tabla con renglones y columnas etiquetadas, donde cada
-  columna puede tener un tipo diferente (numérico, categórico, texto, fechas).
-
-En otras palabras, si NumPy nos da el “motor” numérico, pandas nos da la
-“carrocería” para manejar datos de manera más cómoda: tablas con nombres de
-columnas, índices, lectura y escritura de archivos, agrupamientos y muchas
-operaciones comunes en ciencia de datos.
+  columna puede tener un tipo de dato diferente (numérico, categórico, texto, fechas). 
+  Parecido a utlizar hojas de Excel o tablas relaciones.
 
 El ``DataFrame`` 
 ================
 
 En esta sección nos concentraremos en la estructura ``DataFrame`` y veremos cómo:
 
-- crearla a partir de archivos de texto (como CSV),
-- construirla desde estructuras de Python (listas, diccionarios, arreglos de
+- cargar datos a un ``DataFrame`` desde archivos de texto (como CSV),
+- utilizar el constructor pasándole estructuras de Python ( como listas, diccionarios, arreglos de
   NumPy),
-- inspeccionar y seleccionar datos por renglón y por columna,
-- realizar operaciones básicas de limpieza y análisis.
+- consultar datos por renglón o columna,
+- realizar operaciones básicas de limpieza de datos y análisis estadístico.
 
-Como punto de partida, piensa en un ``DataFrame`` como un arreglo de NumPy de
-dos dimensiones, pero:
+Como inicio pensemos que un ``DataFrame``  es como un arreglo de NumPy bidimensioal, 
+pero con capacidades adicionales:
 
-- con nombres para las columnas,
-- con un índices para los renglones y las columnas,
-- con la posibilidad de que cada columna tenga un tipo de dato diferente.
+- Las columnas y renglones pueden tener nombre (etiqueta).
+- También podemos utilizar índices para referirnos a los renglones y las columnas,
+- Diseñado pensado en el procesamiento de datos heterogéneos (tipo de dato diferentes).
+
 
 Creando un ``DataFrame`` desde un archivo de texto
 --------------------------------------------------
 
 Como ejemplo, vamos a utilizar una estructura tipo ``DataFrame`` para almacenar
 el conjunto de datos conocido como `Auto MPG
-<https://archive.ics.uci.edu/ml/datasets/Auto+MPG>`_. Lo primero que debemos
-hacer es revisar los tipos de datos de sus atributos:
+<https://archive.ics.uci.edu/ml/datasets/Auto+MPG>`_. Aunque este es un *data set*
+viejito, es muy útil para ejemplificar el tipo de operaciones que debemos realizar 
+en nuestras tareas de análisis de datos. Al encontrarnos frente a un nuevo conjunto de datos,
+lo primero que debemos hacer es revisar el tipo de dato de sus atributos. En este caso:
 
 .. list-table::
    :header-rows: 1
@@ -868,13 +855,12 @@ hacer es revisar los tipos de datos de sus atributos:
      - categórico
      - nombre del auto
 
-Como podemos ver, estas observaciones tienen atributos heterogéneos: algunos
-son numéricos continuos, otros son enteros, y también hay cadenas de texto.
+Como podemos ver, este conjunto de datos contiene atributos heterogéneos. Tenemos
+datos numéricos continuos y enteros, pero también hay cadenas de texto y categorías.
 El objetivo original de este conjunto de datos era **predecir el consumo de
-combustible en millas por galón (``mpg``)** utilizando los demás atributos como
-predictores.
+combustible en millas por galón (``mpg``)** utilizando los demás atributos como características.
 
-Descargando y explorando el archivo de datos
+Cargando y explorando el archivo de datos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Vamos a descargar el conjunto de datos desde el `repositorio de machine learning
@@ -884,11 +870,11 @@ archivo que nos interesa se llama ``auto-mpg.data``.
 
 Si abrimos el archivo en un editor de texto, vemos que:
 
-- los campos están separados por espacios en blanco, no por comas como es habitual en archivos CSV
-- el número de espacios entre columnas no es siempre el mismo
-- los valores faltantes están marcados con el carácter ``?``.
+- los campos están separados por espacios en blanco, no por comas como es habitual en archivos CSV,
+- el número de espacios entre columnas no es siempre el mismo,
+- los valores faltantes están marcados con el símbolo ``?``.
 
-Un fragmento del archivo luce así:
+Aquí esta un fragmento del archivo:
 
 .. code-block:: text
 
@@ -896,11 +882,12 @@ Un fragmento del archivo luce así:
    20.0   6   198.0       95.0      3102.      16.5   74  1   "plymouth duster"
    21.0   6   200.0        ?        2875.      17.0   74  1   "ford maverick"
 
+
 Lectura del archivo con ``read_csv``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Pandas nos brinda un conjunto de herramientas de entrada/salida (*IO tools*)
-para leer archivos en distintos formatos: texto, binarios y SQL. En el caso de
+para leer archivos con distintos formatos: texto, binarios y SQL. En el caso de
 texto, el método más utilizado es ``read_csv``, que puede leer no solo archivos
 separados por comas, sino también por otros delimitadores.
 
@@ -910,7 +897,7 @@ los más importantes.
 
 Recordemos que en un archivo *CSV* típico los valores de los atributos se
 separan por comas. En nuestro archivo ``auto-mpg.data`` la separación se hace
-por espacios en blanco, y además el número de espacios no es constante. Para
+por espacios en blanco, y además el número de espacios no es consistente. Para
 leer correctamente este archivo, utilizaremos el parámetro ``sep``, que indica
 el separador de campos. Por defecto es la coma ``','``, pero también puede ser
 una expresión regular.
@@ -918,7 +905,7 @@ una expresión regular.
 En expresiones regulares, la cadena ``'\\s'`` representa cualquier espacio en
 blanco (espacios y tabulaciones); el operador ``'+'`` indica “una o más
 repeticiones”. Es decir, ``'\\s+'`` significa “uno o más espacios en blanco
-seguidos”. Ese será nuestro separador.
+seguidos”. Este es el separador que necesitamos.
 
 Primer intento de lectura:
 
@@ -933,13 +920,18 @@ Primer intento de lectura:
    2   16.0  8  304.0  150.0   3433.0  12.0  70  1
    ...
 
-Observaciones importantes:
+
+Cargamos el archivo al objeto ``df`` y al ejecutar método ``df.head()`` 
+nos muestra los primeros registros del *data frame*. Aquí  
+observamos lo siguiente:
 
 - Logramos separar las columnas utilizando la expresión regular ``'\\s+'``.
-- Sin embargo, **los nombres de las columnas no tienen sentido**: pandas asumió
-  que el primer renglón era el encabezado con los nombres de los atributos.
-
-Nuestro archivo **no tiene fila de encabezados**, por lo que debemos indicarlo.
+- Cada renglón incluye internamente un índice (lo vemos antes de la primera columna)
+- Hay un pequeño problema, **los nombres de las columnas no tienen sentido**: pandas asumió
+  que el primer renglón del archivo era el encabezado con los nombres de los atributos.
+  
+Nuestro archivo **no tiene un primer renglón de encabezados**, esto debemos indicarlo 
+para corregir el problema.
 
 Indicando que no hay encabezado
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -967,8 +959,17 @@ el parámetro ``header=None``:
    2         plymouth satellite
    ...
 
-Ahora pandas asigna nombres genéricos (0, 1, 2, …) a las columnas. El siguiente
-paso es asignar nombres descriptivos, de acuerdo con la tabla de atributos que
+Ahora pandas simplemente asigna un índice (0, 1, 2, …) a las columnas. De
+hecho, pandas siempre conserva un índice entero interno que nos permite acceder
+a columnas y renglones por su posición. Estos índices los vemos a la izquierda
+y en la parte superior de la de la impresión en pantalla. Con estos índices,
+podemos seleccionar columnas y renglones utilizando su posición con mecanismos
+como ``iloc`` que veremos más adelante.
+
+Sin embargo, en un ``DataFrame`` es muy importante etiquetar con un nombre las
+columnas ya que esto nos permite referirnos a los atributos por su nombre
+permitiendo un análisis de datos más legible y expresivo. El siguiente paso es
+asignar nombres descriptivos, de acuerdo con la tabla de atributos que
 mostramos anteriormente.
 
 Asignando nombres a las columnas
@@ -1000,7 +1001,7 @@ Nos falta revisar qué tipos de datos infirió pandas para cada columna.
 Revisando los tipos de datos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Podemos ver el tipo de dato de cada columna con el atributo ``dtypes``:
+Similar a NumPy, podemos ver el tipo de dato de cada columna con el atributo ``dtypes``:
 
 .. code-block:: python
 
@@ -1017,10 +1018,10 @@ Podemos ver el tipo de dato de cada columna con el atributo ``dtypes``:
    dtype: object
 
 Hay un detalle importante: la columna ``horsepower`` aparece como ``object``,
-cuando debería ser numérica (``float64``). Esto ocurre porque algunos valores
+cuando debería ser numérica continua (``float64``). Esto ocurre porque algunos valores
 faltantes se representaron en el archivo original con el carácter ``'?'`` y
 pandas, al encontrarse con una mezcla de números y cadenas en la misma columna,
-prefirió tratarla como texto.
+prefirió tratarla como ``object``.
 
 Manejando valores faltantes con ``na_values``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
