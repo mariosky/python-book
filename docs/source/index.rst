@@ -43,6 +43,7 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
    venv
    sql
    datapy
+   scikitlearn
 
 .. raw:: latex
 

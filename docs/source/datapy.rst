@@ -3,15 +3,14 @@
 
 .. _datapy: 
 
-Análisis de Datos con Python
-=================================
+Estructuras de datos para análisis numérico y tabular
+=====================================================
 
 En los capítulos anteriores hemos trabajado con distintos enfoques para manejar
 datos en Python. Vimos cómo representar datos mediante **estructuras nativas de Python**
 (listas, diccionarios y tuplas), y cómo aplicar **programación funcional** para
 expresar transformaciones de manera concisa y declarativa. Además, consideramos
 el uso de bases de datos relacionales transaccionales y así como las denominadas NoSQL. 
-
 
 Aunque estas herramientas son fundamentales, para la gestión de datos de
 propósito general, en áreas de ingeniería y ciencias computacionales también
