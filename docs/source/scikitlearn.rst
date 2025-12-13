@@ -197,4 +197,160 @@ desempeño antes de utilizarlo en un escenario real.
    resulta más cercano a problemas reales y evita algunas de las limitaciones
    conocidas del *dataset* de Iris.
 
+Cargamos el *dataset*
+~~~~~~~~~~~~~~~~~~~~
+
+El *dataset* se encuentra en el repositorio público de GitHub de
+`Allison Horst <https://github.com/allisonhorst/palmerpenguins>`_ y consiste en
+dos archivos que contienen datos recolectados de **344 pingüinos** encontrados
+en tres islas del Archipiélago Palmer, en la Antártida.
+
+Los datos están disponibles bajo la licencia **CC-0**, de acuerdo con el
+*Palmer Station LTER Data Policy* y el *LTER Data Access Policy for Type I data*
+:cite:`gorman2014ecological`.
+
+El primer archivo, llamado ``penguins``, es una versión simplificada de los
+datos originales. El segundo archivo, ``penguins_raw``, contiene los datos
+crudos tal como fueron capturados originalmente. En el repositorio original
+los archivos se encuentran en formato del lenguaje **R**; para facilitar su
+lectura en Python, podemos descargar los archivos en formato **CSV** desde el
+sitio `Kaggle
+<https://www.kaggle.com/datasets/parulpandey/palmer-archipelago-antarctica-penguin-data>`_
+(requiere registro). Estos archivos también estarán disponibles en el
+repositorio del libro.
+
+Los archivos CSV que utilizaremos se llaman:
+
+* ``penguins_size.csv`` (versión simplificada)
+* ``penguins_iter.csv`` (versión cruda)
+
+Para leer los archivos vamos a suponer que se encuentran en el mismo directorio
+desde donde ejecutamos el intérprete de Python. Comenzaremos leyendo la versión
+simplificada utilizando la librería ``pandas``:
+
+>>> import pandas as pd
+>>> df = pd.read_csv('penguins_size.csv')
+>>> df.head()
+  species     island  culmen_length_mm  culmen_depth_mm  flipper_length_mm  body_mass_g     sex
+0  Adelie  Torgersen              39.1             18.7              181.0       3750.0    MALE
+1  Adelie  Torgersen              39.5             17.4              186.0       3800.0  FEMALE
+2  Adelie  Torgersen              40.3             18.0              195.0       3250.0  FEMALE
+3  Adelie  Torgersen               NaN              NaN                NaN          NaN     NaN
+4  Adelie  Torgersen              36.7             19.3              193.0       3450.0  FEMALE
+
+Observamos que algunos registros contienen valores ``NaN``, los cuales
+interpretaremos como **datos faltantes**. Este es un escenario común en
+conjuntos de datos reales y lo abordaremos más adelante.
+
+Ahora imprimimos información general sobre el *dataset* y los tipos de datos
+de sus columnas:
+
+>>> df.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 344 entries, 0 to 343
+Data columns (total 7 columns):
+ #   Column             Non-Null Count  Dtype
+---  ------             --------------  -----
+ 0   species            344 non-null    object
+ 1   island             344 non-null    object
+ 2   culmen_length_mm   342 non-null    float64
+ 3   culmen_depth_mm    342 non-null    float64
+ 4   flipper_length_mm  342 non-null    float64
+ 5   body_mass_g        342 non-null    float64
+ 6   sex                334 non-null    object
+dtypes: float64(4), object(3)
+memory usage: 18.9+ KB
+
+Las columnas del *dataset* incluyen los siguientes atributos:
+
+* ``species``: especie del pingüino (Chinstrap, Adélie o Gentoo)
+* ``culmen_length_mm``: longitud del culmen (mm)
+* ``culmen_depth_mm``: profundidad del culmen (mm)
+* ``flipper_length_mm``: longitud de la aleta (mm)
+* ``body_mass_g``: masa corporal (g)
+* ``island``: nombre de la isla (Dream, Torgersen o Biscoe)
+* ``sex``: sexo del pingüino
+
+Eliminamos registros con valores nulos
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Más adelante veremos las herramientas de `sci-kit learn` para tratar los casos
+de valores nulos. En estre primer ejercicio simplemente vamos a eliminar estos
+registros. Primero vemos cuales renglones *incluyen* valores nulos en alguna de
+sus columnas:
+
+>>> df.isnull().any(axis=1)
+0      False
+1      False
+2      False
+3       True
+4      False
+       ...
+339     True
+340    False
+341    False
+342    False
+343    False
+Length: 344, dtype: bool
+
+Podemos utilizar este vector de boleanos (mascara boleane) pare filtrar aquellos que 
+*no tienen valores nulos*   y 
+copiarlos en un nuevo `DataFrame`. Como esta es la idea, mejor vamos a utilizar 
+directamente `notnull()` para quedarnos con los que cumplen con la condición (`True`). Es
+importante observar que ahora tenemos que utilizar el cuantificador `all(axis=1)` porque 
+queremos *no nulo* en todas las columnas.
+
+>>> df = df[df.notnull().all(axis=1)]
+>>> df.isnull().all(axis=1).sum()
+0
+
+Preprocesamiento mínimo
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Los algoritmos de clasificación en ``scikit-learn`` requieren que tanto las
+**características** como la **clase objetivo** estén representadas mediante
+valores numéricos.
+
+En nuestro *dataset*, la clase corresponde a la **especie del pingüino**, la
+cual está representada como texto. Además, como vimos anteriormente, la columna
+``sex`` es una variable categórica. Para poder entrenar un modelo, es necesario
+codificar este tipo de datos.
+
+Para realizar esta codificación utilizaremos la librería
+``sklearn.preprocessing``, en particular el *encoder* ``OrdinalEncoder``, el
+cual transforma variables categóricas asignando un valor numérico ordinal a
+cada categoría:
+
+>>> from sklearn.preprocessing import OrdinalEncoder
+>>> encoder = OrdinalEncoder()
+>>> df[['species', 'island', 'sex']] = encoder.fit_transform(
+...     df[['species', 'island', 'sex']]
+... )
+>>> df.head()
+   species  island  culmen_length_mm  culmen_depth_mm  flipper_length_mm  body_mass_g  sex
+0      0.0     2.0              39.1             18.7              181.0       3750.0  2.0
+1      0.0     2.0              39.5             17.4              186.0       3800.0  1.0
+2      0.0     2.0              40.3             18.0              195.0       3250.0  1.0
+4      0.0     2.0              36.7             19.3              193.0       3450.0  1.0
+5      0.0     2.0              39.3             20.6              190.0       3650.0  2.0
+
+.. warning::
+
+   Es importante recordar que los datos ordinales implican la existencia de una
+   **secuencia u orden inherente** entre las categorías, lo cual **no ocurre en
+   este caso**. Aunque ``scikit-learn`` puede trabajar con este tipo de
+   codificación, algunos algoritmos de aprendizaje automático pueden interpretar
+   erróneamente estos valores como si existiera una relación de orden o
+   magnitud entre ellos.
+
+   En la mayoría de los casos, especialmente en problemas reales, es preferible
+   utilizar *encoders* alternativos como ``OneHotEncoder`` o ``TargetEncoder``,
+   los cuales evitan introducir supuestos de orden que no están presentes en los
+   datos originales.
+
+.. note::
+
+   Como vimos anteriormente, estas transformaciones también pueden realizarse con ``pandas``; aquí se
+   presentan utilizando ``scikit-learn`` para mantener un flujo de trabajo
+   coherente con el entrenamiento de modelos.
 
