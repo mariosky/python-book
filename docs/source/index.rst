@@ -28,7 +28,7 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
 .. toctree::
    :hidden:
    :includehidden:
-   :numbered: 4
+   :numbered: 2
    :maxdepth: 4
    :caption: Contenido:
    :name: mastertoc

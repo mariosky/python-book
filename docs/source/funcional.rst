@@ -8,8 +8,6 @@ Programación Funcional
 A Python se le considera un lenguaje multiparadigma ya que tiene soporte para
 varios estilos de programación.
 
-.. rubric::  Programación procedural
-
 En un inicio hemos seguido un paradigma de programación predominantemente
 **imperativo**. Este es un estilo muy báscio pues nuestros programas capturan su
 estado utilizando variables y estructuras, y el flujo de nuestro programa avanza

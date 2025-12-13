@@ -6,6 +6,34 @@
 Análisis de Datos con Python
 =================================
 
+En los capítulos anteriores hemos trabajado con distintos enfoques para manejar
+datos en Python. Vimos cómo representar datos mediante **estructuras nativas de Python**
+(listas, diccionarios y tuplas), y cómo aplicar **programación funcional** para
+expresar transformaciones de manera concisa y declarativa. Además, consideramos
+el uso de bases de datos relacionales transaccionales y así como las denominadas NoSQL. 
+
+
+Aunque estas herramientas son fundamentales, para la gestión de datos de
+propósito general, en áreas de ingeniería y ciencias computacionales también
+requerimos herramientas para realizar operaciones numéricas y estadísticas de
+forma eficiente. Para esto, necesitamos representaciones que permitan trabajar
+con datos de manera vectorizada, minimizar el uso de ciclos explícitos y servir
+como base para algoritmos de aprendizaje automático.
+
+En Python, estas necesidades están cubiertas principalmente por las bibliotecas
+**NumPy** y **pandas**. NumPy introduce arreglos numéricos homogéneos diseñados
+para el cómputo científico eficiente, mientras que pandas amplía estas
+capacidades para trabajar con datos tabulares heterogéneos, incorporando
+etiquetas, soporte para valores faltantes y operaciones de alto nivel orientadas
+al análisis de datos.
+
+Este capítulo funciona como un puente natural hacia el aprendizaje
+automático. Las estructuras y operaciones que aquí se presentan constituyen
+la base sobre la cual se construyen bibliotecas como **scikit-learn**, que
+asume que los datos ya han sido limpiados, transformados y organizados en formas
+adecuadas para el entrenamiento de modelos.
+
+
 NumPy
 *****
 
@@ -756,7 +784,7 @@ vectorizadas y el *broadcasting* en NumPy.
 Pandas
 ******
 
-En el capítulo anterior trabajamos con arreglos ``ndarray`` de NumPy. Vimos que
+En la sección anterior trabajamos con arreglos ``ndarray`` de NumPy. Vimos que
 son estructuras muy eficientes para representar datos numéricos en una o varias
 dimensiones, con tipos de datos homogéneos (el mismo tipo en todo el arreglo),
 y operaciones vectorizadas. Sin embargo, cuando trabajamos con datos del mundo
@@ -783,7 +811,7 @@ fundamentales:
   Parecido a utlizar hojas de Excel o tablas relaciones.
 
 El ``DataFrame`` 
-================
+----------------
 
 En esta sección nos concentraremos en la estructura ``DataFrame`` y veremos cómo:
 
@@ -861,7 +889,7 @@ El objetivo original de este conjunto de datos era **predecir el consumo de
 combustible en millas por galón (``mpg``)** utilizando los demás atributos como características.
 
 Cargando y explorando el archivo de datos
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------
 
 Vamos a descargar el conjunto de datos desde el `repositorio de machine learning
 de la UC Irvine
@@ -884,7 +912,7 @@ Aquí esta un fragmento del archivo:
 
 
 Lectura del archivo con ``read_csv``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------
 
 Pandas nos brinda un conjunto de herramientas de entrada/salida (*IO tools*)
 para leer archivos con distintos formatos: texto, binarios y SQL. En el caso de
@@ -999,7 +1027,7 @@ Podemos asignar los nombres de los atributos utilizando el parámetro ``names``:
 Nos falta revisar qué tipos de datos infirió pandas para cada columna.
 
 Revisando los tipos de datos
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 Similar a NumPy, podemos ver el tipo de dato de cada columna con el atributo ``dtypes``:
 
@@ -1024,7 +1052,7 @@ pandas, al encontrarse con una mezcla de números y cadenas en la misma columna,
 prefirió tratarla como ``object``.
 
 Manejando valores faltantes con ``na_values``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---------------------------------------------
 
 Podemos indicar a ``read_csv`` qué valores deben considerarse como “datos no
 disponibles” (NaN) utilizando el parámetro ``na_values``. En este caso, queremos
@@ -1057,7 +1085,7 @@ NaN (*Not a Number*), lo que permitirá aplicar funciones estadísticas sin que
 fallen las operaciones.
 
 Especificando tipos de datos con ``dtype``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------------
 
 Si queremos un control todavía más fino sobre los tipos de dato, podemos
 utilizar el parámetro ``dtype`` para indicar explícitamente el tipo de cada
@@ -1102,7 +1130,7 @@ De esta manera:
 - indicamos que ``car_name`` es una variable categórica.
 
 Un primer resumen estadístico
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------
 
 Una vez leído correctamente el ``DataFrame``, podemos obtener un resumen
 estadístico descriptivo utilizando el método ``describe()``:
@@ -1134,5 +1162,311 @@ Por defecto, ``describe()`` muestra estadísticas únicamente para las columnas
 numéricas (las columnas categóricas y de texto se omiten). Más adelante veremos
 cómo generar resúmenes específicos para variables categóricas.
 
-Matplotlib
-**********
+Este tipo de resumen es muy útil como primer paso en el análisis exploratorio de
+datos, ya que permite identificar rangos típicos, valores atípicos y posibles
+problemas en los datos.
+
+Datos categóricos
+-----------------
+
+Hasta ahora hemos trabajado principalmente con columnas numéricas. Sin embargo,
+el conjunto de datos también incluye variables categóricas. En particular, la
+columna ``origin`` contiene valores enteros (1, 2 y 3) que representan el país
+de origen del automóvil.
+
+Al inspeccionar los nombres de los modelos, inferimos que estos valores
+corresponden a:
+
+- ``1`` → ``USA``
+- ``2`` → ``Japan``
+- ``3`` → ``Germany``
+
+Vamos a mapear estos valores enteros a etiquetas descriptivas y asegurarnos de
+que la columna sea de tipo ``category``:
+
+.. code-block:: python
+
+Vamos a mapear estos valores enteros a etiquetas descriptivas y asegurarnos de
+que la columna sea de tipo ``category``:
+
+.. code-block:: python
+
+    >>> origin_map = {1: 'USA', 2: 'Japan', 3: 'Germany'}
+    >>> df['origin'] = df['origin'].map(origin_map)
+    >>> df['origin'] = df['origin'].astype('category')
+    >>> df['origin'] = df['origin'].cat.set_categories(['USA', 'Japan', 'Germany'])
+    >>> df['origin']
+
+De esta forma, la columna ``origin`` deja de ser un simple código numérico y se
+convierte en una variable categórica explícita, lo cual facilita tanto el
+análisis como la visualización.
+
+Visualización rápida desde pandas
+---------------------------------
+
+Pandas incluye métodos de visualización básicos que se apoyan internamente en
+la biblioteca ``matplotlib``. Aunque veremos visualización con más detalle más
+adelante, podemos generar gráficas sencillas de forma muy rápida.
+
+Por ejemplo, para ver cuántos autos hay por país de origen, podemos utilizar:
+
+.. code-block:: python
+
+    >>> df['origin'].value_counts().plot(kind='bar')
+
+Una vez creada la gráfica, la mostramos explícitamente:
+
+.. code-block:: python
+
+    >>> import matplotlib.pyplot as plt
+    >>> plt.show()
+
+Deberíamos ver una gráfica de barras con la distribución de autos por país de
+origen.
+
+.. note::
+
+   Debes cerrar la ventana de la gráfica para liberar el control del intérprete
+   y poder continuar ejecutando comandos. Si lo deseas, también puedes guardar
+   la figura en un archivo.
+
+Gráficas con múltiples variables
+--------------------------------
+
+También podemos explorar relaciones entre varias variables al mismo tiempo.
+Por ejemplo, podemos graficar:
+
+- ``weight`` en el eje horizontal,
+- ``mpg`` en el eje vertical,
+- y utilizar ``horsepower`` como mapa de color.
+
+.. code-block:: python
+
+    >>> df.plot.scatter(
+    ...     x='weight',
+    ...     y='mpg',
+    ...     c='horsepower',
+    ...     cmap='viridis'
+    ... )
+    >>> plt.show()
+
+Este tipo de gráfica permite observar relaciones entre variables numéricas y
+detectar patrones interesantes de forma visual.
+
+Puedes experimentar con otros mapas de color disponibles en ``matplotlib``:
+https://matplotlib.org/stable/tutorials/colors/colormaps.html
+
+El ejemplo anterior muestra **una de las muchas formas** en que podemos cargar
+datos en un ``DataFrame`` de pandas. En este caso utilizamos un archivo de texto
+con formato irregular para ilustrar cómo ajustar los parámetros del lector y
+resolver problemas comunes al trabajar con datos reales.
+
+Sin embargo, pandas ofrece múltiples mecanismos adicionales para crear
+``DataFrames``, entre ellos:
+
+- a partir de estructuras de Python (listas, diccionarios, arreglos de NumPy),
+- desde archivos JSON, Excel o bases de datos,
+- mediante datos obtenidos de servicios web o APIs.
+
+En la documentación oficial se pueden encontrar estos y otros métodos de
+entrada. En lo que sigue, asumiremos que los datos ya están disponibles en un
+``DataFrame`` y nos concentraremos en las operaciones de procesamiento y
+análisis que constituyen el uso principal de pandas.
+
+
+Operaciones básicas con ``DataFrame``
+------------------------------------
+
+Ya tenemos los datos en un ``DataFrame``, ¿y ahora?  
+En esta sección veremos cómo realizar operaciones básicas de inspección,
+consulta y manipulación de datos tabulares utilizando pandas.
+
+Trabajaremos con el conjunto de datos *Auto MPG*, ya cargado en un
+``DataFrame``:
+
+.. code-block:: python
+
+    >>> import numpy as np
+    >>> import pandas as pd
+
+    >>> auto_mpg = pd.read_csv(
+    ...     'datos-ejemplo/auto-mpg.data',
+    ...     sep='\s+',
+    ...     header=None,
+    ...     na_values='?',
+    ...     names=['mpg','cylinders','displacement','horsepower',
+    ...            'weight','acceleration','model_year','origin','car_name'],
+    ...     dtype={'mpg':'f4','cylinders':'i4','displacement':'f4',
+    ...            'horsepower':'f4','weight':'f4','acceleration':'f4',
+    ...            'model_year':'i4','origin':'category','car_name':'category'}
+    ... )
+
+    >>> auto_mpg['origin'].cat.categories = ['USA', 'Japan', 'Germany']
+
+Inspección rápida
+-----------------
+
+Para ver una muestra de los datos podemos utilizar los métodos ``head()`` y
+``tail()``. Por defecto muestran cinco registros, pero podemos indicar cuántos
+queremos ver.
+
+.. code-block:: python
+
+    >>> auto_mpg.tail(3)
+
+También es posible inspeccionar los índices y las columnas:
+
+.. code-block:: python
+
+    >>> auto_mpg.index
+    >>> auto_mpg.columns
+
+Internamente, pandas almacena los datos numéricos utilizando arreglos de NumPy.
+Podemos acceder a ellos explícitamente con:
+
+.. code-block:: python
+
+    >>> auto_mpg.to_numpy()
+
+Ordenamiento
+------------
+
+Para ordenar los datos por una o más columnas utilizamos el método
+``sort_values()``:
+
+.. code-block:: python
+
+    >>> auto_mpg.sort_values(by='car_name').head()
+
+También es posible ordenar por múltiples columnas:
+
+.. code-block:: python
+
+    >>> auto_mpg.sort_values(by=['origin', 'car_name']).tail()
+
+Selección de datos
+------------------
+
+Podemos seleccionar subconjuntos de renglones utilizando *slicing* al estilo de
+Python:
+
+.. code-block:: python
+
+    >>> auto_mpg[2:5]
+
+Para seleccionar columnas, podemos usar su nombre directamente:
+
+.. code-block:: python
+
+    >>> auto_mpg.car_name[:3]
+
+O bien, pasar una lista de columnas:
+
+.. code-block:: python
+
+    >>> auto_mpg[['car_name', 'origin', 'model_year']].head()
+
+Selección con ``loc`` e ``iloc``
+--------------------------------
+
+Se recomienda utilizar ``loc`` para selección basada en **etiquetas**:
+
+.. code-block:: python
+
+    >>> auto_mpg.loc[3:5, 'mpg':'weight']
+
+A diferencia del *slicing* estándar de Python, este corte **incluye ambas
+etiquetas**.
+
+Para selección basada en **posición**, utilizamos ``iloc``:
+
+.. code-block:: python
+
+    >>> auto_mpg.iloc[0:2, 0:2]
+
+En este caso, los cortes funcionan exactamente como en listas y arreglos de
+Python.
+
+Operaciones vectorizadas
+------------------------
+
+Una de las principales ventajas de pandas es que permite aplicar operaciones
+vectorizadas sobre columnas completas. Por ejemplo:
+
+.. code-block:: python
+
+    >>> auto_mpg.mpg.head() * 2
+
+Estas operaciones funcionan sobre datos numéricos, pero no sobre datos
+categóricos:
+
+.. code-block:: python
+
+    >>> auto_mpg.origin.head() * 2
+    TypeError: Categorical cannot perform the operation *
+
+Para datos de tipo texto, pandas ofrece métodos especializados a través del
+atributo ``str``:
+
+.. code-block:: python
+
+    >>> auto_mpg.car_name.str.upper().head()
+
+Filtrado condicional
+--------------------
+
+Supongamos que queremos encontrar autos con rendimiento mayor a 40 millas por
+galón. Primero generamos una máscara booleana:
+
+.. code-block:: python
+
+    >>> auto_mpg.mpg > 40
+
+Luego usamos esta máscara para filtrar el ``DataFrame``:
+
+.. code-block:: python
+
+    >>> auto_mpg[auto_mpg.mpg > 40].loc[:, 
+    ...     ['mpg', 'model_year', 'origin', 'car_name']]
+
+Concatenación
+-------------
+
+Podemos combinar varios ``DataFrames`` utilizando ``concat()``. Por ejemplo,
+extraemos los autos de Japón y Alemania:
+
+.. code-block:: python
+
+    >>> japon = auto_mpg[auto_mpg.origin == 'Japan']
+    >>> alemania = auto_mpg[auto_mpg.origin == 'Germany']
+
+    >>> non_usa = pd.concat([japon, alemania])
+
+Agrupación
+----------
+
+Para agrupar datos por una variable categórica utilizamos ``groupby()``:
+
+.. code-block:: python
+
+    >>> auto_mpg.groupby('origin').count().loc[:, 'mpg']
+
+
+En esta sección vimos cómo trabajar con un ``DataFrame`` una vez que los datos
+ya están cargados en memoria. Aprendimos a inspeccionar, ordenar, seleccionar,
+filtrar, transformar y agrupar datos, operaciones que constituyen el núcleo del
+análisis de datos con pandas.
+
+Resumen
+-------
+
+En este capítulo estudiamos las dos estructuras fundamentales para el análisis
+de datos en Python: los arreglos ``ndarray`` de NumPy y los ``DataFrame`` de
+pandas. NumPy nos permite realizar cómputo numérico eficiente mediante
+operaciones vectorizadas, mientras que pandas extiende estas capacidades para
+trabajar con datos tabulares heterogéneos.
+
+Estas herramientas son parte fundamental de la mayoría de los flujos
+modernos de minería de datos y aprendizaje automático. En el siguiente
+capítulo utilizaremos estas estructuras como base para construir, entrenar y
+evaluar modelos utilizando la biblioteca **scikit-learn**.
