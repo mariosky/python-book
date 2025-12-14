@@ -1374,8 +1374,7 @@ Se recomienda utilizar ``loc`` para selección basada en **etiquetas**:
 
     >>> auto_mpg.loc[3:5, 'mpg':'weight']
 
-A diferencia del *slicing* estándar de Python, este corte **incluye ambas
-etiquetas**.
+A diferencia del *slicing* estándar de Python, este corte **incluye índices y etiquetas**.
 
 Para selección basada en **posición**, utilizamos ``iloc``:
 
@@ -1383,8 +1382,28 @@ Para selección basada en **posición**, utilizamos ``iloc``:
 
     >>> auto_mpg.iloc[0:2, 0:2]
 
-En este caso, los cortes funcionan exactamente como en listas y arreglos de
-Python.
+En este caso, los cortes funcionan exactamente como en listas y arreglos de NumPy.
+
+Selección de filas:``Series`` vs ``DataFrames`` 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Al seleccionar una sola fila de un ``DataFrame`` con ``iloc``, es importante
+distinguir entre obtener una **Serie** y conservar un **DataFrame**.
+
+Por ejemplo:
+
+>>> df.iloc[0]
+
+devuelve una ``Series`` (estructura unidimensional), mientras que:
+
+>>> df.iloc[[0]]
+
+devuelve un ``DataFrame`` con una sola fila, conservando su estructura
+bidimensional.
+
+Esta diferencia es relevante al trabajar con librerías que esperan recibir
+datos en forma de matrices, como es el caso de muchas herramientas de análisis
+numérico y aprendizaje automático. 
 
 Operaciones vectorizadas
 ------------------------

@@ -483,9 +483,9 @@ Ahora entrenamos de nuevo con los datos de entrenamiento ``X_train`` y
 
 Podemos probar clasificando alguno de los pingüinos de prueba. Cuando el modelo
 se entrena utilizando un ``DataFrame`` de ``pandas``, es recomendable realizar
-las predicciones utilizando el mismo tipo de estructura. Por ello, al
-seleccionar una sola observación se debe conservar la forma bidimensional del
-``DataFrame``:
+las predicciones utilizando el mismo tipo de estructura. 
+Como vimos anteriormente, aunque seleccionemos solo una fila podemos conservar el
+``DataFrame`` utilizando ``iloc[[i]]``:
 
 >>> X_test.iloc[[0]]
     island  culmen_length_mm  culmen_depth_mm  flipper_length_mm  body_mass_g  sex
@@ -681,6 +681,20 @@ Y evaluamos su desempeño en el conjunto de prueba usando exactitud
 >>> accuracy_score(y_test, y_pred)
 0.6811594202898551
 
+Este resultado nos puede sorprender por ser tan bajo, pero muestra una realidad
+del aprendizaje automático: no todo se resuelve utilizando el mejor algoritmo.
+De hecho, según el principio *No free lunch* no hay un algoritmo que sea el
+mejor en todos los casos. En este caso, el resultado se puede explicar por 
+varias razones:
+
+- El *dataset* tiene muy pocos registros y las clases están bien separadas. 
+  La red no alcanza a ajustarse a los datos,en el caso de los árboles de 
+  decisión que hacen "cortes" rectos aquí es más fácil.
+- El preprocesamiento no fue adecuado (este normalmente es el caso)
+- Los parámetros (hiperparámtros) de la red no son los adecuados.
+  
+Veamos el caso del preprocesamiento.
+
 Es importante notar que, en este ejemplo, utilizamos ``OrdinalEncoder`` para
 codificar las variables categóricas. Esta codificación introduce una relación
 numérica artificial entre categorías que no tienen un orden inherente.
@@ -688,11 +702,12 @@ numérica artificial entre categorías que no tienen un orden inherente.
 Mientras que modelos como los árboles de decisión son poco sensibles a esta
 representación, las **redes neuronales sí se ven fuertemente afectadas** por la
 forma en que se codifican las variables categóricas. En estos casos, suele ser
-preferible utilizar esquemas como ``OneHotEncoder``, que evitan introducir
-supuestos de orden inexistentes.
+preferible utilizar *encoders* como ``OneHotEncoder``, que evitan introducir
+datos ordinales.
 
-El menor desempeño observado en este ejemplo ilustra la importancia de elegir
-el preprocesamiento adecuado en función del modelo utilizado.
+El menor desempeño observado en este ejemplo resalta la importancia de realizar
+un preprocesamiento adecuado en función del algoritmo utilizado. Mejorar este
+resultado quedará como ejercicio para el lector.
 
 .. rubric:: Ejercicio
 
@@ -742,15 +757,10 @@ A lo largo del capítulo:
   problema y de los datos disponibles, y que modelos más complejos no garantizan
   mejores resultados.
 
-El objetivo principal de este capítulo no fue agotar las capacidades de
-``scikit-learn``, sino proporcionar una **visión clara y coherente del flujo de
-trabajo básico** del aprendizaje automático en Python, sentando las bases para
-profundizar posteriormente en técnicas más avanzadas como la validación
-cruzada, el ajuste de hiperparámetros y el uso de modelos más complejos.
+El objetivo principal de este capítulo no fue mostrar todas las capacidades de
+``scikit-learn``, sino proporcionar una **visión clara del flujo de
+trabajo básico** del aprendizaje automático en Python.
 
-Con esto, el lector cuenta ya con las herramientas necesarias para comenzar a
-experimentar con ``scikit-learn`` y continuar su aprendizaje en el área del
-aprendizaje automático.
 
 
 
