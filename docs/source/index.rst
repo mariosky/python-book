@@ -44,6 +44,7 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
    sql
    datapy
    scikitlearn
+   fuzzy
 
 .. raw:: latex
 
