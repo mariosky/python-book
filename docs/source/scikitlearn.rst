@@ -715,6 +715,42 @@ Este ejercicio ilustra la importancia del preprocesamiento y muestra que
 distintos modelos pueden requerir distintas representaciones de los datos para
 obtener buenos resultados.
 
+Resumen del capítulo
+~~~~~~~~~~~~~~~~~~~~
+
+En este capítulo presentamos una introducción práctica al **aprendizaje
+automático con ``scikit-learn``**, enfocándonos en el flujo de trabajo completo
+más que en los detalles teóricos de los algoritmos.
+
+A lo largo del capítulo:
+
+- Revisamos el flujo general del aprendizaje automático y su relación con el
+  proceso de *Knowledge Discovery in Databases* (KDD).
+- Trabajamos con un *dataset* real de pingüinos, utilizando ``pandas`` para su
+  exploración y preparación inicial.
+- Construimos y entrenamos un primer **modelo de clasificación** utilizando
+  árboles de decisión.
+- Introdujimos buenas prácticas como la separación de datos en conjuntos de
+  entrenamiento y prueba, así como la evaluación del modelo mediante una
+  métrica sencilla.
+- Mostramos cómo integrar **preprocesamiento y modelos** mediante
+  *pipelines*, incluyendo el tratamiento de valores faltantes.
+- Exploramos de manera breve el uso de **redes neuronales** dentro del mismo
+  flujo de trabajo, destacando la importancia del preprocesamiento y de la
+  representación de los datos.
+- Discutimos que la elección del modelo y del preprocesamiento depende del
+  problema y de los datos disponibles, y que modelos más complejos no garantizan
+  mejores resultados.
+
+El objetivo principal de este capítulo no fue agotar las capacidades de
+``scikit-learn``, sino proporcionar una **visión clara y coherente del flujo de
+trabajo básico** del aprendizaje automático en Python, sentando las bases para
+profundizar posteriormente en técnicas más avanzadas como la validación
+cruzada, el ajuste de hiperparámetros y el uso de modelos más complejos.
+
+Con esto, el lector cuenta ya con las herramientas necesarias para comenzar a
+experimentar con ``scikit-learn`` y continuar su aprendizaje en el área del
+aprendizaje automático.
 
 
 
