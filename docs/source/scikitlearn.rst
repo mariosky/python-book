@@ -198,7 +198,7 @@ desempeño antes de utilizarlo en un escenario real.
    conocidas del *dataset* de Iris.
 
 Cargamos el *dataset*
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 El *dataset* se encuentra en el repositorio público de GitHub de
 `Allison Horst <https://github.com/allisonhorst/palmerpenguins>`_ y consiste en
@@ -270,6 +270,23 @@ Las columnas del *dataset* incluyen los siguientes atributos:
 * ``body_mass_g``: masa corporal (g)
 * ``island``: nombre de la isla (Dream, Torgersen o Biscoe)
 * ``sex``: sexo del pingüino
+
+Como hay varios casos de datos categóricos a los que no se le asigna el tipo 
+de dato correcto, cargaremos de nuevo los datos con el `dtype` correspondiente:
+
+>>> df = pd.read_csv(
+...     'penguins_size.csv',
+...     dtype={
+...         'species': 'category',
+...         'island': 'category',
+...         'culmen_length_mm': 'float64',
+...         'culmen_depth_mm': 'float64',
+...         'flipper_length_mm': 'float64',
+...         'body_mass_g': 'float64',
+...         'sex': 'category'
+...     }
+... )
+
 
 Eliminamos registros con valores nulos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -353,4 +370,278 @@ cada categoría:
    Como vimos anteriormente, estas transformaciones también pueden realizarse con ``pandas``; aquí se
    presentan utilizando ``scikit-learn`` para mantener un flujo de trabajo
    coherente con el entrenamiento de modelos.
+
+Preparar los datos para el algoritmo de clasificación
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Un **clasificador** es un algoritmo cuyo objetivo es aprender un modelo a partir
+de un conjunto de **datos de entrenamiento**
+:cite:`tan2016introduction`. Los datos son objetos
+representados mediante un vector de características y la categoría a la que
+pertenece cada objeto.
+Podemos representar a cada objeto como una tupla
+:math:`(\vec{x}, y)`, donde :math:`\vec{x}` es el vector de características y
+:math:`y` es la categoría asociada, también llamada **etiqueta** o **clase**.
+
+En el caso de ``scikit-learn`` (y de la mayoría de las librerías de *machine
+learning*) el conjunto de vectores de características se representa como una
+matriz ``X``, mientras que las categorías correspondientes se representan como
+un vector ``y``. Los métodos que implementan los algoritmos de clasificación
+esperan, de manera estándar, recibir estos dos objetos como parámetros.
+
+Por esta razón, una tarea común al preparar los datos consiste en **separar el
+dataset** en ``X`` y ``y``. En este ejemplo, utilizaremos como clase objetivo
+la columna ``species`` y el resto de las columnas como características
+predictoras.
+
+Vamos al código.
+
+>>> X = df.drop(columns='species')
+>>> y = df['species']
+
+Podemos verificar las dimensiones de ambos objetos:
+
+>>> X.shape
+(333, 6)
+
+>>> y.shape
+(333,)
+
+La matriz ``X`` contiene una fila por cada pingüino y una columna por cada
+característica, mientras que el vector ``y`` contiene la clase asociada a cada
+observación. Con estos datos ya estamos listos para entrenar nuestro primer
+modelo de clasificación.
+Como primer modelo de clasificación utilizaremos un **árbol de decisión**.
+Este tipo de modelos es especialmente útil para comenzar, ya que su
+funcionamiento es intuitivo y permite inspeccionar fácilmente las reglas que
+aprende a partir de los datos.
+
+En ``scikit-learn``, los árboles de decisión se encuentran en el módulo
+``sklearn.tree``:
+
+>>> from sklearn import tree
+>>> clf = tree.DecisionTreeClassifier()
+>>> clf = clf.fit(X, y)
+
+¡Listo! En ``clf`` ya tenemos un modelo de clasificación entrenado y listo para
+ser utilizado. Una de las principales ventajas de los **árboles de decisión**
+es que permiten inspeccionar el modelo aprendido y, en muchos casos,
+interpretar sus decisiones.
+
+Para ello, podemos imprimir el árbol en formato de texto utilizando la función
+``export_text``:
+
+>>> from sklearn.tree import export_text
+>>> feature_names = X.columns.tolist()
+>>> r = export_text(clf, feature_names=feature_names)
+>>> print(r)
+
+.. warning::
+
+   En este ejemplo entrenamos el modelo utilizando **todos los datos
+   disponibles**, lo cual puede conducir a **sobreentrenamiento**
+   (*overfitting*). Más adelante veremos cómo dividir los datos en conjuntos de
+   entrenamiento y prueba para evaluar correctamente el desempeño del modelo.
+
+
+Evaluación del modelo
+~~~~~~~~~~~~~~~~~~~~~
+
+Dado que entrenamos el modelo con todo el *dataset*, no tendría sentido
+pedirle que clasifique un pingüino que **ya ha visto durante el entrenamiento**.
+Por esta razón, en la práctica es habitual separar el conjunto de datos en dos
+partes: un conjunto de **entrenamiento** y un conjunto de **prueba**.
+
+Esta separación nos permite evaluar qué tan bien generaliza el modelo a datos
+no vistos. Más adelante veremos cómo extender esta idea mediante técnicas más
+robustas, como la **validación cruzada**, para reducir el riesgo de
+sobreentrenamiento.
+
+
+Datos de entrenamiento y prueba
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Vamos a volver a crear el modelo, pero ahora separando el *dataset* en dos
+conjuntos aleatorios: **entrenamiento** y **prueba**. El parámetro
+``test_size`` indica el porcentaje de datos que se reservarán para la prueba. El
+tamaño del conjunto de entrenamiento será el complemento.
+
+Aunque la partición es aleatoria, con el parámetro ``random_state`` definimos
+la semilla para obtener experimentos repetibles:
+
+>>> from sklearn.model_selection import train_test_split
+>>> X_train, X_test, y_train, y_test = train_test_split(
+...     X, y, test_size=0.20, random_state=12
+... )
+
+Ahora entrenamos de nuevo con los datos de entrenamiento ``X_train`` y
+``y_train``:
+
+>>> from sklearn import tree
+>>> clf = tree.DecisionTreeClassifier(random_state=12)
+>>> clf = clf.fit(X_train, y_train)
+
+Podemos probar clasificando alguno de los pingüinos de prueba. Cuando el modelo
+se entrena utilizando un ``DataFrame`` de ``pandas``, es recomendable realizar
+las predicciones utilizando el mismo tipo de estructura. Por ello, al
+seleccionar una sola observación se debe conservar la forma bidimensional del
+``DataFrame``:
+
+>>> X_test.iloc[[0]]
+    island  culmen_length_mm  culmen_depth_mm  flipper_length_mm  body_mass_g  sex
+56     0.0              39.0             17.5              186.0       3550.0  1.0
+
+>>> clf.predict(X_test.iloc[[0]])
+array([0.])
+
+Veamos si la predicción es correcta:
+
+>>> y_test.iloc[0]
+2.0
+
+En este caso el clasificador no funcionó correctamente. Sin embargo, para evaluar
+el desempeño del modelo es necesario repetir este proceso para **todos** los
+registros del conjunto de prueba, utilizando una métrica apropiada.
+
+Evaluación con una métrica
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La forma más directa de evaluar un clasificador consiste en **predecir todas
+las etiquetas del conjunto de prueba** y compararlas contra las etiquetas
+reales.
+
+Comenzamos obteniendo las predicciones del modelo para los datos de prueba:
+
+>>> y_pred = clf.predict(X_test)
+>>> y_pred
+array([2., 0., 2., 0., 2., 1., 2., 0., 1., 2., 0., 0., 0., 2., 0., 2., 0.,
+       2., 1., 0., 2., 0., 2., 2., 0., 0., 1., 2., 2., 1., 0., 0., 0., 2.,
+       2., 1., 2., 0., 2., 1., 2., 2., 2., 2., 2., 0., 0., 2., 2., 0., 2.,
+       1., 1., 0., 0., 1., 1., 0., 1., 2., 2., 0., 2., 1., 2., 2., 0.])
+
+Exactitud (*accuracy*)
+^^^^^^^^^^^^^^^^^^^^^
+
+Vamos a evaluar nuestro modelo de clasificación utilizando la métrica de
+**exactitud** (*accuracy*), la cual mide el porcentaje de ejemplos que fueron
+clasificados correctamente:
+
+.. math::
+
+   \text{accuracy} = \frac{\#\text{aciertos}}{\#\text{ejemplos}}
+
+En ``scikit-learn`` esta métrica se encuentra disponible en el módulo
+``sklearn.metrics``:
+
+>>> from sklearn.metrics import accuracy_score
+>>> accuracy_score(y_test, y_pred)
+0.9850746268656716
+
+El modelo alcanza una exactitud cercana al **98 %**, lo cual indica que clasifica
+correctamente la gran mayoría de los ejemplos del conjunto de prueba.
+
+Preprocesamiento y modelos con *pipelines*
+*****************************************
+
+Hasta ahora hemos aplicado el preprocesamiento de los datos y el entrenamiento
+del modelo como pasos separados. En problemas reales, este enfoque puede
+volverse difícil de mantener, especialmente cuando el preprocesamiento es más
+complejo o cuando se prueban distintos modelos.
+
+Para resolver este problema, ``scikit-learn`` proporciona el concepto de
+*pipeline*, que permite **encadenar varias etapas del flujo de trabajo** en un
+solo objeto. De esta manera, el preprocesamiento y el modelo se tratan como una
+unidad coherente.
+
+Un *pipeline* típico incluye:
+
+- una o más etapas de **transformación de datos**, y
+- una etapa final de **aprendizaje automático**.
+
+Veamos cómo utilizar un *pipeline* sencillo con el mismo *dataset* de los
+pingüinos, incorporando ahora una transformación adicional para el
+**tratamiento de valores faltantes**.
+
+Hasta este punto eliminamos manualmente los registros con valores nulos para
+simplificar los ejemplos. Sin embargo, en problemas reales esta estrategia no
+siempre es adecuada, ya que puede implicar la pérdida de información valiosa.
+Una de las principales ventajas de los *pipelines* es que el tratamiento de
+valores faltantes puede **integrarse directamente como una etapa más del flujo
+de trabajo**, garantizando que el mismo preprocesamiento se aplique de forma
+consistente durante el entrenamiento y la predicción.
+
+Para ello utilizaremos el objeto ``SimpleImputer``, el cual permite reemplazar
+valores faltantes siguiendo una estrategia definida, como el promedio, la
+mediana o el valor más frecuente.
+
+En este ejemplo:
+
+- imputaremos las variables numéricas utilizando la **mediana**, y
+- codificaremos las variables categóricas mediante ``OrdinalEncoder``.
+
+Primero definimos las columnas numéricas y categóricas:
+
+>>> numeric_features = [
+...     'culmen_length_mm',
+...     'culmen_depth_mm',
+...     'flipper_length_mm',
+...     'body_mass_g'
+... ]
+>>> categorical_features = ['island', 'sex']
+
+Es importante notar que los *pipelines* en ``scikit-learn`` se aplican
+únicamente a las variables de entrada ``X``. La clase objetivo ``y`` no forma
+parte del *pipeline* y se proporciona directamente al método ``fit``.
+
+Esta separación refleja el flujo conceptual del aprendizaje automático: el
+preprocesamiento se aplica a los datos observables, mientras que las etiquetas
+se utilizan como referencia para el aprendizaje del modelo.
+
+Ahora construimos los transformadores correspondientes:
+
+>>> from sklearn.impute import SimpleImputer
+>>> from sklearn.preprocessing import OrdinalEncoder
+>>> from sklearn.compose import ColumnTransformer
+>>> from sklearn.pipeline import Pipeline
+
+>>> numeric_transformer = SimpleImputer(strategy='median')
+>>> categorical_transformer = Pipeline(steps=[
+...     ('imputer', SimpleImputer(strategy='most_frequent')),
+...     ('encoder', OrdinalEncoder())
+... ])
+
+A continuación combinamos ambos tipos de variables utilizando un
+``ColumnTransformer``:
+
+>>> preprocessor = ColumnTransformer(
+...     transformers=[
+...         ('num', numeric_transformer, numeric_features),
+...         ('cat', categorical_transformer, categorical_features)
+...     ]
+... )
+
+Finalmente, integramos el preprocesamiento y el modelo de clasificación en un
+solo *pipeline*:
+
+>>> from sklearn.tree import DecisionTreeClassifier
+
+>>> pipeline = Pipeline(steps=[
+...     ('preprocess', preprocessor),
+...     ('classifier', DecisionTreeClassifier(random_state=0))
+... ])
+
+Entrenamos el *pipeline* utilizando los datos de entrenamiento originales,
+**incluyendo valores nulos**:
+
+>>> pipeline.fit(X_train, y_train)
+
+Y realizamos una predicción sobre un ejemplo del conjunto de prueba:
+
+>>> pipeline.predict(X_test.iloc[[0]])
+array([0.])
+
+
+
+
+
 
