@@ -635,11 +635,85 @@ Entrenamos el *pipeline* utilizando los datos de entrenamiento originales,
 
 >>> pipeline.fit(X_train, y_train)
 
-Y realizamos una predicción sobre un ejemplo del conjunto de prueba:
+Finalmente calculamos la exactitud del modelo creado a partir del pipeline:
 
->>> pipeline.predict(X_test.iloc[[0]])
-array([0.])
+>>> y_pred = pipeline.predict(X_test)
+>>> from sklearn.metrics import accuracy_score
+>>> accuracy_score(y_test, y_pred)
+0.9855072463768116
 
+Aunque este valor de exactitud es alto, es importante recordar que el *dataset*
+es relativamente pequeño y que el modelo utilizado es capaz de ajustarse con
+facilidad a los datos. En problemas reales, es recomendable complementar esta
+evaluación con otras métricas y técnicas, como la validación cruzada, para
+obtener una estimación más robusta del desempeño del modelo.
+
+Un ejemplo breve con redes neuronales
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``scikit-learn`` también incluye implementaciones básicas de redes neuronales,
+útiles con fines educativos y para problemas de tamaño pequeño. En particular,
+podemos utilizar ``MLPClassifier`` (Perceptrón Multicapa) como clasificador.
+
+La idea es exactamente la misma que en el ejemplo anterior: reutilizamos el
+mismo preprocesamiento (imputación + codificación) y sustituimos el modelo
+final por una red neuronal.
+
+>>> from sklearn.neural_network import MLPClassifier
+>>> from sklearn.pipeline import Pipeline
+
+>>> nn_pipeline = Pipeline(steps=[
+...     ('preprocess', preprocessor),
+...     ('classifier', MLPClassifier(hidden_layer_sizes=(20,),
+...                                 max_iter=2000,
+...                                 random_state=0))
+... ])
+
+Entrenamos el modelo con los datos de entrenamiento:
+
+>>> nn_pipeline.fit(X_train, y_train)
+
+Y evaluamos su desempeño en el conjunto de prueba usando exactitud
+(*accuracy*):
+
+>>> y_pred = nn_pipeline.predict(X_test)
+>>> from sklearn.metrics import accuracy_score
+>>> accuracy_score(y_test, y_pred)
+0.6811594202898551
+
+Es importante notar que, en este ejemplo, utilizamos ``OrdinalEncoder`` para
+codificar las variables categóricas. Esta codificación introduce una relación
+numérica artificial entre categorías que no tienen un orden inherente.
+
+Mientras que modelos como los árboles de decisión son poco sensibles a esta
+representación, las **redes neuronales sí se ven fuertemente afectadas** por la
+forma en que se codifican las variables categóricas. En estos casos, suele ser
+preferible utilizar esquemas como ``OneHotEncoder``, que evitan introducir
+supuestos de orden inexistentes.
+
+El menor desempeño observado en este ejemplo ilustra la importancia de elegir
+el preprocesamiento adecuado en función del modelo utilizado.
+
+.. rubric:: Ejercicio
+
+En el ejemplo con redes neuronales utilizamos el mismo *pipeline* que en el
+caso del árbol de decisión, incluyendo la codificación de variables categóricas
+mediante ``OrdinalEncoder``. Como observamos, el desempeño del modelo fue
+considerablemente menor.
+
+1. Modifica el *pipeline* para utilizar ``OneHotEncoder`` en lugar de
+   ``OrdinalEncoder`` para las variables categóricas.
+
+2. Entrena nuevamente el modelo de red neuronal utilizando ``MLPClassifier`` y
+   evalúa su desempeño en el conjunto de prueba.
+
+3. Compara los resultados obtenidos con los del árbol de decisión y reflexiona
+   sobre cómo la representación de los datos influye en el desempeño del
+   modelo.
+
+Este ejercicio ilustra la importancia del preprocesamiento y muestra que
+distintos modelos pueden requerir distintas representaciones de los datos para
+obtener buenos resultados.
 
 
 
