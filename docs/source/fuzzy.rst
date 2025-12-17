@@ -499,39 +499,81 @@ controladores mediante técnicas de optimización.
    Puedes ver la librería en acción ya que en anexos se incluye el código de 
    la simulación.
 
+Control difuso de un sistema de seguimiento de ruta con rueda trasera
+--------------------------------------------------------------------
 
-Control difuso de un sistema de seguimiento de ruta rueda-trasera
------------------------------------------------------------------ 
+Como ejercicio principal de este capítulo, diseñaremos un sistema difuso para
+controlar el volante de un robot tipo bicicleta que debe seguir una ruta
+previamente establecida. Este es un **sistema dinámico**, ya que en cada instante
+de tiempo se toman lecturas de la posición del robot y, con base en ellas, se
+ajusta el volante mediante una velocidad angular.
 
-Como ejercicio vamos a diseñar un sistema difuso para controlar el volante de 
-un robot tipo bicicleta que debe seguir una ruta establecida. Este es un sistema 
-dinámico, ya que debemos ir tomando lecturas de la posición de la bicicleta y 
-en base a esto mover el volante con cierta velicidad angular. El esquema de los 
-elementos que intervienen en el sistema se muestra a contiuación:
+El esquema general de los elementos que intervienen en el sistema se muestra a
+continuación:
 
-En esta simulación el mundo esta en 2d y la escala está en metros. La unidad de tiempo está
-en segundos, y la simulación corre durante 50 segundos.
+.. figure:: ./images/bici.png
+   :align: center
+   :alt: Modelo de rueda trasera para control de seguimiento.
 
-Debemos definir la ruta. Podemos expresar la ruta en términos matemáticos
-con un spline (parecido a las curvas besier de los programas de ilustración. Para
-definirlo debemos epspecificar varios puntos (x,y) en el espacio 2D y función 
-spline que recibe un entero (podemos verlo como el tiemoi) y nos regresa la posición actual 
-de la ruta. Consultamos la posción con S(t).
+   Modelo de rueda trasera para control de seguimiento.
 
-El robot consiste en dos ruedas conectadas por un eje de tamaño L. Tiene una masa de 
-y solo se mueve en el eje 2d. No  salta, no hay fricción, no hay derrape. Automáticamente 
-se controla la velocidad utilizando un controlador interno tipo PID, la velocidad establecida es
-de 3 m/s. La posición del robot la tomamos de la rueda traseta e incia en el punto (0.0). 
-
-Las variables de entrada al controlador en un tiempo t_i son las siguientes:
-
-e : Es la distancia de la rueda trasera al punto más cercano posible de la ruta.
-Esto no es tan fácil de establecer, internamente la simulación busca este punto más 
-cercano llevando un registro de la posición en S(t_i-1). También se considera la dirección en 
-la que se está yendo. El error es en metros, negativo si vamos a la izquierda de la ruta y 
-positivo si vamos a la derecha, el objetivo es que el error sea cero.
+En esta simulación el mundo es bidimensional y la escala está expresada en
+metros. La unidad de tiempo es el segundo, y la simulación se ejecuta durante
+50 segundos.
 
 
 
+Definición de la ruta
+~~~~~~~~~~~~~~~~~~~~~
+
+La ruta a seguir se define mediante una curva suave generada a partir de un
+*spline*. Este tipo de representación es similar a las curvas Bézier utilizadas
+en programas de ilustración. Para definir la ruta se especifica un conjunto de
+puntos :math:`(x, y)` en el plano 2D y una función *spline* que, dado un parámetro
+(real o entero), devuelve la posición correspondiente sobre la trayectoria.
+
+Denotaremos la posición de la ruta como :math:`\mathbf{S}(t)`.
+
+Modelo del robot
+~~~~~~~~~~~~~~~~~
+
+El robot consiste en dos ruedas conectadas por un eje de longitud :math:`L` y se
+desplaza únicamente en el plano 2D. El modelo es puramente cinemático: no se
+consideran efectos de fricción, derrape ni dinámicas verticales. La velocidad
+lineal se regula automáticamente mediante un controlador interno tipo PID, y se
+mantiene constante en :math:`3\,\text{m/s}`.
+
+La posición del robot se toma a partir de la rueda trasera, la cual inicia en el
+punto :math:`(0, 0)`.
+
+Variables del controlador
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Las variables que intervienen en el controlador difuso, evaluadas en un instante
+de tiempo :math:`t_i`, son las siguientes:
+
+``e``
+   Distancia lateral de la rueda trasera al punto más cercano de la ruta. Este
+   punto se calcula internamente en la simulación utilizando información del
+   paso anterior :math:`t_{i-1}` y la dirección de avance. El error se mide en
+   metros y se define como negativo cuando el robot se encuentra a la izquierda
+   de la ruta y positivo cuando se encuentra a la derecha. El objetivo del
+   controlador es que este error tienda a cero.
+
+``e_\theta``
+   Error de orientación, definido como el ángulo entre el vector tangente a la
+   ruta en el punto más cercano y el eje longitudinal del robot.
+
+``\omega``
+   Salida del controlador difuso. Representa la velocidad angular utilizada para
+   calcular el ángulo de dirección :math:`\delta` del modelo tipo bicicleta.
+
+Condiciones iniciales y objetivo
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+La ruta y el robot inician en el punto :math:`(0, 0)` con velocidad inicial cero.
+El objetivo principal del control es minimizar el error de seguimiento, medido
+mediante el error cuadrático medio (*root mean square error*, RMSE) de la
+variable :math:`e`, y alcanzar la meta correspondiente al final de la ruta.
 
 
