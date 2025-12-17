@@ -396,4 +396,142 @@ Podemos ver gráficamente el resultado de la inferencia con una defuzzificación
    Gráfica de las funciones de membresía para la variable lingüística *propina*.
 
 
+Control Difuso
+**************
+
+Si estás estudiando ingeniería en electrónica, cibernética o algún área afín,
+es muy probable que hayas llevado algún curso de *Teoría de Control* o algo
+similar. En particular, en cibernética esta área es fundamental: incluso el
+nombre proviene del término griego que hace referencia a gobernar el timón de
+una embarcación.
+
+No te preocupes si esta no es tu área de especialidad. El enfoque que veremos
+en este libro será principalmente **computacional**, con el objetivo de mostrar
+cómo la lógica difusa puede aplicarse al diseño de sistemas de control sin
+necesidad de un trasfondo profundo en teoría clásica de control.
+
+¿Teoría de Control?
+===================
+
+La teoría de control tiene innumerables aplicaciones en la vida cotidiana, y
+disfrutamos de sus beneficios de manera constante. Por ejemplo, en un sistema
+de aire acondicionado, un controlador regula el encendido y la potencia para
+mantener una temperatura deseada. El *cruise control* de un automóvil es otro
+ejemplo, así como el piloto automático de un avión o un dron.
+
+Incluso dispositivos tan comunes como una lavadora o una cafetera de espresso
+utilizan sistemas de control para regular variables como el flujo y la
+temperatura del agua. En todos estos casos, el objetivo es el mismo: ajustar el
+comportamiento del sistema para que siga una referencia deseada.
+
+La teoría moderna de control se consolidó a finales de la década de 1960 con el
+desarrollo del control basado en modelos (*model-based control*, MBC) y del
+control óptimo. En este enfoque, el comportamiento de un sistema dinámico se
+describe mediante ecuaciones diferenciales o ecuaciones discretas en tiempo
+(*ecuaciones en diferencias*), generalmente no lineales, y el diseño del
+controlador se basa explícitamente en dicho modelo matemático.
+
+Para aplicar control basado en modelos, el diseñador debe primero obtener un
+modelo suficientemente preciso del sistema que se desea controlar (conocido en
+teoría de control como la *planta*) y, posteriormente, diseñar un controlador
+que garantice estabilidad y desempeño. Si bien este enfoque ha sido
+extraordinariamente exitoso, en muchos sistemas reales la obtención de modelos
+precisos resulta difícil, costosa o incluso inviable.
+
+Como alternativa a estos métodos, a principios de la década de 1970 surgió el
+control inteligente (*intelligent control*), el cual propone generar acciones
+de control a partir de conocimiento humano, experiencia operativa y evidencia
+experimental, en lugar de depender exclusivamente de un modelo matemático del
+sistema. Dentro de este paradigma, se han desarrollado múltiples técnicas que
+buscan emular la forma en que los humanos razonan y toman decisiones al controlar
+sistemas complejos.
+
+Entre las técnicas de control inteligente, el control difuso (*fuzzy logic
+control*) ha sido una de las más exitosas y ampliamente adoptadas. Desde los
+trabajos pioneros de Mamdani, hasta aplicaciones modernas en control industrial,
+robótica y sistemas complejos, el control difuso ha demostrado ser una
+herramienta robusta y flexible para enfrentar incertidumbre, no linealidades y
+conocimiento incompleto.
+
+De manera paralela, en años recientes ha cobrado gran relevancia el control
+basado en datos (*data-driven control*), un conjunto amplio de técnicas en las
+que el modelo del sistema o el diseño del controlador se obtiene directamente a
+partir de datos. Este enfoque incluye métodos como aprendizaje por refuerzo,
+control por aprendizaje iterativo, herramientas de control robusto basadas en
+datos, así como técnicas apoyadas en redes neuronales y algoritmos evolutivos.
+
+Una ventaja fundamental del control difuso frente a otros métodos de control
+inteligente es que se implementa mediante un **sistema de inferencia difusa**
+(*fuzzy inference system*, FIS), el cual representa explícitamente el
+conocimiento del sistema a través de reglas difusas. Estas reglas tienen una
+interpretación lingüística clara, lo que facilita su diseño, análisis y ajuste,
+ya sea de forma manual o automática.
+
+Al igual que en el control basado en modelos, el diseño de sistemas de control
+inteligente también requiere la **optimización de parámetros** para adaptarse a
+las particularidades de problemas reales. En el caso de los controladores
+difusos, múltiples elementos caracterizan un sistema basado en reglas: las
+variables difusas, los términos lingüísticos y las funciones de membresía que
+los definen.
+
+En este capítulo introduciremos los fundamentos del control difuso desde una
+perspectiva práctica, comenzando con la estructura de un sistema de inferencia
+difusa y culminando con la implementación de controladores difusos en Python.
+En capítulos posteriores se abordará el ajuste sistemático de estos
+controladores mediante técnicas de optimización.
+
+
+
+.. sidebar:: Simulación de sistemas dinámicos en Python (opcional)
+
+   En muchas aplicaciones de control, el comportamiento de un sistema físico se
+   describe mediante ecuaciones diferenciales que modelan cómo cambian las
+   variables de estado en el tiempo. En Python, una forma común de simular este
+   tipo de sistemas es utilizando integradores numéricos como
+   :func:`scipy.integrate.odeint`.
+
+   En este libro no modelaremos explícitamente los sistemas que controlamos; la
+   simulación se tratará como una caja negra. Sin embargo, es importante tener
+   presente que, internamente, estas simulaciones resuelven ecuaciones
+   diferenciales de manera numérica para obtener la evolución temporal del
+   sistema.
+
+   Puedes ver la librería en acción ya que en anexos se incluye el código de 
+   la simulación.
+
+
+Control difuso de un sistema de seguimiento de ruta rueda-trasera
+----------------------------------------------------------------- 
+
+Como ejercicio vamos a diseñar un sistema difuso para controlar el volante de 
+un robot tipo bicicleta que debe seguir una ruta establecida. Este es un sistema 
+dinámico, ya que debemos ir tomando lecturas de la posición de la bicicleta y 
+en base a esto mover el volante con cierta velicidad angular. El esquema de los 
+elementos que intervienen en el sistema se muestra a contiuación:
+
+En esta simulación el mundo esta en 2d y la escala está en metros. La unidad de tiempo está
+en segundos, y la simulación corre durante 50 segundos.
+
+Debemos definir la ruta. Podemos expresar la ruta en términos matemáticos
+con un spline (parecido a las curvas besier de los programas de ilustración. Para
+definirlo debemos epspecificar varios puntos (x,y) en el espacio 2D y función 
+spline que recibe un entero (podemos verlo como el tiemoi) y nos regresa la posición actual 
+de la ruta. Consultamos la posción con S(t).
+
+El robot consiste en dos ruedas conectadas por un eje de tamaño L. Tiene una masa de 
+y solo se mueve en el eje 2d. No  salta, no hay fricción, no hay derrape. Automáticamente 
+se controla la velocidad utilizando un controlador interno tipo PID, la velocidad establecida es
+de 3 m/s. La posición del robot la tomamos de la rueda traseta e incia en el punto (0.0). 
+
+Las variables de entrada al controlador en un tiempo t_i son las siguientes:
+
+e : Es la distancia de la rueda trasera al punto más cercano posible de la ruta.
+Esto no es tan fácil de establecer, internamente la simulación busca este punto más 
+cercano llevando un registro de la posición en S(t_i-1). También se considera la dirección en 
+la que se está yendo. El error es en metros, negativo si vamos a la izquierda de la ruta y 
+positivo si vamos a la derecha, el objetivo es que el error sea cero.
+
+
+
+
 
