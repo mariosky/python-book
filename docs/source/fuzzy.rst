@@ -521,7 +521,7 @@ Definición de la ruta
 
 La ruta a seguir se define mediante una curva suave generada a partir de un
 *spline*. Este tipo de representación es similar a las curvas Bézier utilizadas
-en programas de ilustración. Para definir la ruta se especifica un conjunto de
+en programas de ilustración. Para definir la ruta especificamos un conjunto de
 puntos :math:`(x, y)` en el plano 2D y una función *spline* que, dado un parámetro
 (real o entero), devuelve la posición correspondiente sobre la trayectoria.
 
@@ -640,6 +640,29 @@ La simulación se encarga de llamar a este controlador en cada instante de tiemp
 
         fis = ctrl.ControlSystem(rules)
         return fis
+
+Funciones de membresía
+-----------------------
+
+En esta primera propuesta utilizamos tres funciones de membresía con el los mismos términos
+difusos para cada variable, los nombres que utilizamos son abreviasiones en inglés utilizadas
+comúnmente para este tipo de controladores con errores positivos y negativos:
+
+- ``NS`` **Negative Small** Negativo Pequeño 
+- ``Z``  **Zero** Cero 
+- ``PS`` **Positive Small** Positivo Pequeño 
+
+Podemos agregar mayor granularidad 
+
+- ``NB`` **Negative Big** Negativo Grande   
+- ``PB`` **Negative Big** Positivo Grande   
+
+Incluso ``Scikit-fuzzy`` nos permite generar estas variables en con una sola instrucción, en 
+este caso hacemos la definición explicita para que sea más claro.
+
+Podemos representar las reglas en una tabla:
+
+
 
 Controlador de referencia
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
