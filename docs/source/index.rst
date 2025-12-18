@@ -58,6 +58,8 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
    :glob:
 
    instalación
+   controlador
+   bibliografía
 
 .. raw:: latex
 

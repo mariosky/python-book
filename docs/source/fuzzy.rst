@@ -11,9 +11,11 @@ Sistemas Difusos
 buena propina», «Vas lento, acelera un poco». 
 
 
-Por ejemplo, ¿qué porcentaje de la cuenta podría considerarse una propina *muy buena*? 
-Un 5\% claramente no lo es; un 10\% suele considerarse “normal” (sin considerar ciudades como Nueva York en la actualidad o países como Japón), 
-mientras que en algunas ciudades un 15\% o incluso un 18\% podrían ya considerarse *muy buenos*.
+Por ejemplo, ¿qué porcentaje de la cuenta podría considerarse una propina *muy
+buena*? Un 5\% claramente no lo es; un 10\% suele considerarse “normal” (sin
+considerar ciudades como Nueva York en la actualidad o países como Japón),
+mientras que en algunas ciudades un 15\% o incluso un 18\% podrían ya
+considerarse *muy buenos*.
 
 Estas son algunas de las frases que podemos escuchar y entender perfectamente
 en algún contexto dado. La pregunta es: ¿podemos representar esto
@@ -174,7 +176,7 @@ lingüístico *Excelente* (propina). En este esquema, porcentajes mayores al
 término *Excelente* que al término *Muy buena*.
 
 Variables lingüísticas
----------------------
+----------------------
 
 En el contexto de nuestro ejemplo, la **propina** puede considerarse una
 **variable lingüística** definida sobre el universo de discurso de los
@@ -201,8 +203,7 @@ el antecedente, conformado por un conjunto de condiciones y el consecuente const
 conjunto de conclusiones:
 
    .. code::
-
-   SI (condición) ENTONCES (conclusión).
+   # SI (condición) ENTONCES (conclusión).
 
 Utilizando lógica difusa podemos definir reglas de inferencia que busquen
 capturar la forma en que un humano razona en situaciones donde los límites
@@ -399,19 +400,21 @@ Podemos ver gráficamente el resultado de la inferencia con una defuzzificación
 Control Difuso
 **************
 
-Si estás estudiando ingeniería en electrónica, cibernética o algún área afín,
-es muy probable que hayas llevado algún curso de *Teoría de Control* o algo
-similar. En particular, en cibernética esta área es fundamental: incluso el
-nombre proviene del término griego que hace referencia a gobernar el timón de
-una embarcación.
-
 No te preocupes si esta no es tu área de especialidad. El enfoque que veremos
 en este libro será principalmente **computacional**, con el objetivo de mostrar
 cómo la lógica difusa puede aplicarse al diseño de sistemas de control sin
 necesidad de un trasfondo profundo en teoría clásica de control.
 
+Si estás estudiando ingeniería en electrónica, cibernética o algún área afín,
+es muy probable que hayas llevado algún curso de *Teoría de Control* o algo
+similar. En particular, en cibernética esta área es fundamental: incluso el
+nombre proviene del término griego que hace referencia a gobernar el timón de
+una embarcación. En este caso podrás profundizar análizando el código que 
+utilizaremos para simulación.
+
+
 ¿Teoría de Control?
-===================
+-------------------
 
 La teoría de control tiene innumerables aplicaciones en la vida cotidiana, y
 disfrutamos de sus beneficios de manera constante. Por ejemplo, en un sistema
@@ -438,13 +441,28 @@ que garantice estabilidad y desempeño. Si bien este enfoque ha sido
 extraordinariamente exitoso, en muchos sistemas reales la obtención de modelos
 precisos resulta difícil, costosa o incluso inviable.
 
+.. sidebar:: Simulación de sistemas dinámicos en Python (opcional)
+
+   En muchas aplicaciones de control, el comportamiento de un sistema físico se
+   describe mediante ecuaciones diferenciales que modelan cómo cambian las
+   variables de estado en el tiempo. En Python, una forma común de simular este
+   tipo de sistemas es utilizando integradores numéricos como
+   :func:`scipy.integrate.odeint`.
+
+   En este libro no modelaremos explícitamente los sistemas que controlamos; la
+   simulación se tratará como una caja negra. Sin embargo, es importante tener
+   presente que, internamente, estas simulaciones resuelven ecuaciones
+   diferenciales de manera numérica para obtener la evolución temporal del
+   sistema.
+
+   Puedes ver la librería en acción ya que en anexos se incluye el código de 
+   la simulación.
+
 Como alternativa a estos métodos, a principios de la década de 1970 surgió el
 control inteligente (*intelligent control*), el cual propone generar acciones
 de control a partir de conocimiento humano, experiencia operativa y evidencia
 experimental, en lugar de depender exclusivamente de un modelo matemático del
-sistema. Dentro de este paradigma, se han desarrollado múltiples técnicas que
-buscan emular la forma en que los humanos razonan y toman decisiones al controlar
-sistemas complejos.
+sistema. 
 
 Entre las técnicas de control inteligente, el control difuso (*fuzzy logic
 control*) ha sido una de las más exitosas y ampliamente adoptadas. Desde los
@@ -467,13 +485,6 @@ conocimiento del sistema a través de reglas difusas. Estas reglas tienen una
 interpretación lingüística clara, lo que facilita su diseño, análisis y ajuste,
 ya sea de forma manual o automática.
 
-Al igual que en el control basado en modelos, el diseño de sistemas de control
-inteligente también requiere la **optimización de parámetros** para adaptarse a
-las particularidades de problemas reales. En el caso de los controladores
-difusos, múltiples elementos caracterizan un sistema basado en reglas: las
-variables difusas, los términos lingüísticos y las funciones de membresía que
-los definen.
-
 En este capítulo introduciremos los fundamentos del control difuso desde una
 perspectiva práctica, comenzando con la estructura de un sistema de inferencia
 difusa y culminando con la implementación de controladores difusos en Python.
@@ -481,26 +492,8 @@ En capítulos posteriores se abordará el ajuste sistemático de estos
 controladores mediante técnicas de optimización.
 
 
-
-.. sidebar:: Simulación de sistemas dinámicos en Python (opcional)
-
-   En muchas aplicaciones de control, el comportamiento de un sistema físico se
-   describe mediante ecuaciones diferenciales que modelan cómo cambian las
-   variables de estado en el tiempo. En Python, una forma común de simular este
-   tipo de sistemas es utilizando integradores numéricos como
-   :func:`scipy.integrate.odeint`.
-
-   En este libro no modelaremos explícitamente los sistemas que controlamos; la
-   simulación se tratará como una caja negra. Sin embargo, es importante tener
-   presente que, internamente, estas simulaciones resuelven ecuaciones
-   diferenciales de manera numérica para obtener la evolución temporal del
-   sistema.
-
-   Puedes ver la librería en acción ya que en anexos se incluye el código de 
-   la simulación.
-
 Control difuso de un sistema de seguimiento de ruta con rueda trasera
---------------------------------------------------------------------
+---------------------------------------------------------------------
 
 Como ejercicio principal de este capítulo, diseñaremos un sistema difuso para
 controlar el volante de un robot tipo bicicleta que debe seguir una ruta
@@ -576,4 +569,196 @@ El objetivo principal del control es minimizar el error de seguimiento, medido
 mediante el error cuadrático medio (*root mean square error*, RMSE) de la
 variable :math:`e`, y alcanzar la meta correspondiente al final de la ruta.
 
+Plantilla del controlador difuso
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+El archivo ``my_fis.py`` debe definir una función ``build_fis`` que regrese
+el sistema difuso para ser utilizado en el controlador. 
+Dicho controlador recibirá como entradas el error de
+orientación ``e_th`` y el error lateral ``e``, y devuelve como salida la
+velocidad angular ``omega``.
+
+La simulación se encarga de llamar a este controlador en cada instante de tiempo.
+
+.. code-block:: python
+    :linenos:
+    :caption: Archivo plantilla ``my_fis.py``
+
+    import numpy as np
+    import skfuzzy as fuzz
+    from skfuzzy import control as ctrl
+
+    def build_fis(params=None):
+        """
+        Construye el sistema de inferencia difusa (FIS).
+
+        params: dict | None
+           Parámetros opcionales para modificar las funciones de membresía.
+           En esta versión base, se ignoran o se usan valores por defecto.
+        """
+
+        # Universos (sin normalizar todavía)
+        e_th = ctrl.Antecedent(np.linspace(-1.5, 1.5, 201), 'e_th')  # rad aprox.
+        e = ctrl.Antecedent(np.linspace(-3.0, 3.0, 201), 'e')  # m
+        omega = ctrl.Consequent(np.linspace(-8.0, 8.0, 201), 'omega')  # rad/s
+
+        # Parámetros por defecto (ajustables después)
+        # Nota: estos valores son intencionalmente simples; se optimizarán más adelante.
+        eth_z = params.get("eth_z", 0.15) if isinstance(params, dict) else 0.15
+        e_z = params.get("e_z", 0.30) if isinstance(params, dict) else 0.30
+        w_z = params.get("w_z", 0.80) if isinstance(params, dict) else 0.80
+
+        # e_th: NS, Z, PS
+        e_th['NS'] = fuzz.trapmf(e_th.universe, [-1.5, -1.5, -0.4, 0.0])
+        e_th['Z'] = fuzz.trimf(e_th.universe, [-eth_z, 0.0, eth_z])
+        e_th['PS'] = fuzz.trapmf(e_th.universe, [0.0, 0.4, 1.5, 1.5])
+
+        # e: NS, Z, PS
+        e['NS'] = fuzz.trapmf(e.universe, [-3.0, -3.0, -0.8, 0.0])
+        e['Z'] = fuzz.trimf(e.universe, [-e_z, 0.0, e_z])
+        e['PS'] = fuzz.trapmf(e.universe, [0.0, 0.8, 3.0, 3.0])
+
+        # omega: NS, Z, PS
+        omega['NS'] = fuzz.trapmf(omega.universe, [-8.0, -8.0, -2.5, 0.0])
+        omega['Z'] = fuzz.trimf(omega.universe, [-w_z, 0.0, w_z])
+        omega['PS'] = fuzz.trapmf(omega.universe, [0.0, 2.5, 8.0, 8.0])
+
+        # Reglas explícitas (3x3)
+        rules = [
+            ctrl.Rule(e_th['NS'] & e['NS'], omega['PS']),
+            ctrl.Rule(e_th['NS'] & e['Z'], omega['PS']),
+            ctrl.Rule(e_th['NS'] & e['PS'], omega['Z']),
+
+            ctrl.Rule(e_th['Z'] & e['NS'], omega['PS']),
+            ctrl.Rule(e_th['Z'] & e['Z'], omega['Z']),
+            ctrl.Rule(e_th['Z'] & e['PS'], omega['NS']),
+
+            ctrl.Rule(e_th['PS'] & e['NS'], omega['Z']),
+            ctrl.Rule(e_th['PS'] & e['Z'], omega['NS']),
+            ctrl.Rule(e_th['PS'] & e['PS'], omega['NS']),
+        ]
+
+        fis = ctrl.ControlSystem(rules)
+        return fis
+
+Controlador de referencia
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Antes de introducir el controlador difuso, utilizaremos un controlador de
+referencia basado en una ley de control clásica propuesta por Paden et al. Este
+controlador se utiliza cuando no se proporciona un controlador externo a la
+simulación.
+
+Esta es su implementación:
+
+.. code-block:: python
+    :linenos:
+    :caption: Implementación del controlador de referencia implementado en ``rear_wheel_sim.py``
+
+    def paden_control(error, error_theta, v, k):
+        """
+        Controlador de referencia basado en Paden et al.
+        """
+
+        # Constantes del controlador (baseline)
+        KTH = 1.0
+        KE = 0.5
+
+        omega = (
+            v * k * math.cos(error_theta) / (1.0 - k * error)
+            - KTH * abs(v) * error_theta
+            - KE * v * math.sin(error_theta) / error_theta * error
+        )
+
+        return omega
+
+El controlador de referencia:
+
+- utiliza un modelo cinemático explícito del sistema,
+
+- emplea la velocidad del robot ``v`` y parámetros geométricos de la ruta ``k``,
+- sirve como punto de comparación (baseline).
+
+No se espera que el controlador difuso supere a este controlador en esta etapa.
+Su propósito es ofrecer una referencia funcional y estable.
+
+La diferencia entre ambos enfoques:
+
+- El controlador de referencia utiliza información explícita del modelo y de la geometría de la ruta.
+- El controlador difuso no utiliza el modelo ni la velocidad del robot.
+- El controlador difuso se basa únicamente en errores geométricos y reglas lingüísticas.
+
+Generación de controlador difuso
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+En el mismo archivo está definida una funcion que devuelve el controlador
+
+.. code-block:: python
+    :linenos:
+    :caption: Archivo plantilla ``my_fis.py``
+
+    def get_controller(params=None):
+        """
+       Devuelve un controlador callable: (e_th, e) -> omega.
+       """
+
+        fis = build_fis(params)
+        sim = ctrl.ControlSystemSimulation(fis)
+
+        def controller(e_th, e):
+            # scikit-fuzzy acumula estado interno; para simulación en lazo cerrado
+            # suele ser más robusto reiniciar en cada evaluación.
+            sim.reset()
+            sim.input['e_th'] = float(e_th)
+            sim.input['e'] = float(e)
+            sim.compute()
+            return float(sim.output['omega'])
+
+
+.. code-block:: python
+    :linenos:
+    :caption: Archivo plantilla ``my_fis.py``
+
+    import my_fis as fc
+    import rear_wheel_sim as rw_sim
+    import path
+    import numpy as np
+
+    def compute_rmse(traces):
+        errors = np.array([tr.error for tr in traces])
+        return np.sqrt(np.mean(errors**2))
+
+
+
+    if __name__ == "__main__":
+        print("rear wheel feedback tracking start!!")
+
+        paths = [
+            ([0.0, 6.0, 12.5, 5.0, 7.5, 3.0, -1.0], [0.0, 0.0, 5.0, 6.5, 3.0, 5.0, -2.0]),
+            ([0.0, 1.0, 2.5, 5.0, 7.5, 3.0, -1.0], [0.0, -4.0, 6.0, 6.5, 3.0, 5.0, -2.0]),
+     #      ([0.0, 2.0, 2.5, 5.0, 7.5, -3.0, -1.0], [0.0, 3.0, 6.0, 6.5, 5.0, 5.0, -2.0]),
+        ]
+
+        #controller = None
+        controller = fc.get_controller()
+        rmses = []
+        for ax, ay in paths:
+            goal = [ax[-1], ay[-1]]
+            reference_path = path.CubicSplinePath(ax, ay)
+
+            result = rw_sim.simulacion(
+                reference_path,
+                goal,
+                controller=controller,
+            )
+
+            traces = result["traces"]
+            rmse = compute_rmse(traces)
+            rmses.append(rmse)
+
+
+        print(float(np.mean(rmses)))
+        # Visualización (opcional): se ejecuta después de la simulación
+        #rw_sim.animate(result, pause=0.001)
+        #rw_sim.plot(result)
 
