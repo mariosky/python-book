@@ -3,3 +3,7 @@ venv
 build
 .DS_Store
 *.sqlite
+*.idea
+*.pyc
+
+

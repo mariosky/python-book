@@ -12,7 +12,7 @@ import pathlib
 from angle import Pi_2_pi
 import warnings
 import path
-
+from my_fis import get_controller
 
 # Parámetros iniciales
 L= 2.9      # longitud del vehiculo en mts
@@ -22,7 +22,26 @@ Kp = 1      # Kp
 
 ERROR_MAX = 10 # En metros
 
-show_animation = True
+from dataclasses import dataclass
+
+
+@dataclass
+class SimulationTrace:
+    """
+    Registro temporal de la simulación.
+    """
+    t: int          # tiempo (s)
+    x: float        # posición x (m)
+    y: float        # posición y (m)
+    yaw: float      # orientación (rad)
+    v: float        # velocidad lineal (m/s)
+    error_theta: float  # error de orientación (rad)
+    error: float    # error lateral (m)
+    path_s: float   # parámetro de progreso sobre la ruta
+
+
+
+show_animation = False
 
 # Modelo del robot estilo bicicleta
 #
@@ -45,22 +64,12 @@ def modelo(z, t, delta, aceleracion):
 def control_rueda_trasera(v, yaw0, e, k, yaw_ref, controller, params):
     # calcular el error
     error_teta = Pi_2_pi(yaw0 - yaw_ref)
-    
-    print(error_teta,e)
     omega = 0.0
     if not controller:
         omega = v * k * math.cos(error_teta) / (1.0 - k * e) - KTH * abs(v) * error_teta - KE * v * math.sin(
             error_teta) / error_teta * e
-        print(error_teta,e, omega)
     else:
-        try:
-            controller.input['e_th'] = error_teta
-            controller.input['e'] = e
-            controller.compute()
-            omega = controller.output['omega']
-        except  Exception as e:
-            print('Exception', e)
-
+        omega = controller(error_teta, e)
     if error_teta == 0.0 or omega == 0.0 or v == 0.0:
         return 0.0
 
@@ -71,7 +80,7 @@ def pid_control(velocidad_objetivo, v):
     a = Kp * (velocidad_objetivo - v)
     return a
 
-def simulacion(ruta, meta_objetivo, show_animation=False, controller=None, params=None):
+def simulacion(ruta, meta_objetivo, controller=None, params=None):
     # posiciones iniciales
     x0 = 0.0
     y0 = 0.0
@@ -87,6 +96,8 @@ def simulacion(ruta, meta_objetivo, show_animation=False, controller=None, param
     direction = 1
     z0 = x0, y0, yaw0, v0
     error = []
+    traces = []
+
 
     # defines un arreglo de los tiempos que vas a medir de 0-10 seg, y los partes en 100 pedazos
     # lo pones en 101 para que haga 100 pedazos
@@ -127,7 +138,7 @@ def simulacion(ruta, meta_objetivo, show_animation=False, controller=None, param
         inputs = (di, aceleracion)
 
         z = None
-        # correr el modelo
+        # integración
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             z = odeint(modelo, z0, [0, 0.1], args=inputs)
@@ -135,10 +146,12 @@ def simulacion(ruta, meta_objetivo, show_animation=False, controller=None, param
         z0 = z[-1]
         x0, y0, yaw0, v0 = z0  # le asignas el ultimo valor de z que es donde estan los valores
 
+        traces.append(SimulationTrace(t=i, x=x0, y=y0, yaw=yaw0, v=v0, error_theta=error_t, error=e, path_s=s0))
         x.append(x0)
         y.append(y0)
         yaw.append(yaw0)
         v.append(v0)
+
 
         if show_animation:
             plt.cla()
@@ -162,14 +175,10 @@ def simulacion(ruta, meta_objetivo, show_animation=False, controller=None, param
             break
 
     sim_trace = {
-        't': i,  # tiempo
-        'x': x,
-        'y': y,
-        'yaw': yaw,
-        'v': v,
-        'error': error,
+        'traces':traces,
         'error_flag': error_flag,
         'goal_flag': goal_flag,
+        'ruta': ruta,
     }
 
     return sim_trace
@@ -189,36 +198,64 @@ def main(controller=None, params=None):
     # Test
     assert sim_trace['goal_flag'], "Cannot goal"
 
-    if show_animation:  # pragma: no cover
-        plt.close()
-        plt.subplots(1)
-        plt.plot(ax, ay, "xb", label="input")
-        plt.plot(reference_path.X(s), reference_path.Y(s), "-r", label="spline")
-        plt.plot(sim_trace['x'], sim_trace['y'], "-g", label="tracking")
-        plt.grid(True)
+    return sim_trace
+
+def animate(sim_trace, pause=0.0001):
+    ruta = sim_trace['ruta']
+    traces= sim_trace['traces']
+    for trace in traces:
+        #trace= traces[i]
+        plt.cla()
+        # for stopping simulation with the esc key.
+        plt.gcf().canvas.mpl_connect('key_release_event',
+                                     lambda event: [exit(0) if event.key == 'escape' else None])
+        spline = np.arange(0, ruta.length + 0.09, 0.1)
+        plt.plot(ruta.X(spline), ruta.Y(spline), "-r", label="course")
+        plt.plot(trace.x, trace.y, "ob", label="trajectory")
+        plt.plot(ruta.X(trace.path_s), ruta.Y(trace.path_s), "xg", label="target")
         plt.axis("equal")
-        plt.xlabel("x[m]")
-        plt.ylabel("y[m]")
-        plt.legend()
-
-        plt.subplots(1)
-        plt.plot(s, np.rad2deg(reference_path.calc_yaw(s)), "-r", label="yaw")
         plt.grid(True)
-        plt.legend()
-        plt.xlabel("line length[m]")
-        plt.ylabel("yaw angle[deg]")
+        plt.title(f"speed[km/h]:{round(trace.v * 3.6, 2):.2f}, target s-param:{trace.path_s:.2f}")
+        plt.pause(pause)
 
-        plt.subplots(1)
-        plt.plot(s, reference_path.calc_curvature(s), "-r", label="curvature")
-        plt.grid(True)
-        plt.legend()
-        plt.xlabel("line length[m]")
-        plt.ylabel("curvature [1/m]")
+def plot(sim_trace):
+    plt.close()
+    plt.subplots(1)
+    ruta = sim_trace['ruta']
+    traces= sim_trace['traces']
+    #plt.plot(ax, ay, "xb", label="input")
+    spline = np.arange(0, ruta.length + 0.09, 0.1)
+    plt.plot(ruta.X(spline), ruta.Y(spline), "-r", label="spline")
+    plt.plot(np.array([t.x for t in traces]), np.array([t.y for t in traces]), "-g", label="tracking")
+    plt.grid(True)
+    plt.axis("equal")
+    plt.xlabel("x[m]")
+    plt.ylabel("y[m]")
+    plt.legend()
 
-        plt.show()
+    plt.subplots(1)
+    plt.plot(spline, np.rad2deg(ruta.calc_yaw(spline)), "-r", label="yaw")
+    plt.grid(True)
+    plt.legend()
+    plt.xlabel("line length[m]")
+    plt.ylabel("yaw angle[deg]")
+
+    plt.subplots(1)
+    plt.plot(spline, ruta.calc_curvature(spline), "-r", label="curvature")
+    plt.grid(True)
+    plt.legend()
+    plt.xlabel("line length[m]")
+    plt.ylabel("curvature [1/m]")
+
+    plt.show()
 
 if __name__ == '__main__':
     from fis import get_fuzzy_controller 
-    fis = get_fuzzy_controller()
-    main(controller=fis, params=None)
+    fis = get_controller()
+    trace = main(controller=fis, params=None)
+    for k in trace.keys():
+        print(k)
+    print(trace)
+    animate(trace, 0.1)
+    #plot(trace)
     #main(controller=None, params=None)
