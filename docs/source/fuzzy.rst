@@ -588,58 +588,52 @@ La simulación se encarga de llamar a este controlador en cada instante de tiemp
     import skfuzzy as fuzz
     from skfuzzy import control as ctrl
 
-    def build_fis(params=None):
-        """
-        Construye el sistema de inferencia difusa (FIS).
+        def build_fis(params=None):
+            """
+           Construye el sistema de inferencia difusa (FIS).
 
-        params: dict | None
-           Parámetros opcionales para modificar las funciones de membresía.
-           En esta versión base, se ignoran o se usan valores por defecto.
-        """
+           params: dict | None
+               Parámetros opcionales para modificar las funciones de membresía.
+               En esta versión base, se ignoran o se usan valores por defecto.
+           """
 
-        # Universos (sin normalizar todavía)
-        e_th = ctrl.Antecedent(np.linspace(-1.5, 1.5, 201), 'e_th')  # rad aprox.
-        e = ctrl.Antecedent(np.linspace(-3.0, 3.0, 201), 'e')  # m
-        omega = ctrl.Consequent(np.linspace(-8.0, 8.0, 201), 'omega')  # rad/s
+            # Universos (sin normalizar todavía)
+            e_th = ctrl.Antecedent(np.linspace(-1.5, 1.5, 201), 'e_th')  # rad aprox.
+            e = ctrl.Antecedent(np.linspace(-3.0, 3.0, 201), 'e')  # m
+            omega = ctrl.Consequent(np.linspace(-8.0, 8.0, 201), 'omega')  # rad/s
 
-        # Parámetros por defecto (ajustables después)
-        # Nota: estos valores son intencionalmente simples; se optimizarán más adelante.
-        eth_z = params.get("eth_z", 0.15) if isinstance(params, dict) else 0.15
-        e_z = params.get("e_z", 0.30) if isinstance(params, dict) else 0.30
-        w_z = params.get("w_z", 0.80) if isinstance(params, dict) else 0.80
+            # e_th: NS, Z, PS
+            e_th['NS'] = fuzz.trapmf(e_th.universe, [-1.5, -1.5, -0.4, 0.0])
+            e_th['Z'] = fuzz.trimf(e_th.universe, [-0.15, 0.0, 0.15])
+            e_th['PS'] = fuzz.trapmf(e_th.universe, [0.0, 0.4, 1.5, 1.5])
 
-        # e_th: NS, Z, PS
-        e_th['NS'] = fuzz.trapmf(e_th.universe, [-1.5, -1.5, -0.4, 0.0])
-        e_th['Z'] = fuzz.trimf(e_th.universe, [-eth_z, 0.0, eth_z])
-        e_th['PS'] = fuzz.trapmf(e_th.universe, [0.0, 0.4, 1.5, 1.5])
+            # e: NS, Z, PS
+            e['NS'] = fuzz.trapmf(e.universe, [-3.0, -3.0, -0.8, 0.0])
+            e['Z'] = fuzz.trimf(e.universe, [0.30, 0.0, 0.30])
+            e['PS'] = fuzz.trapmf(e.universe, [0.0, 0.8, 3.0, 3.0])
 
-        # e: NS, Z, PS
-        e['NS'] = fuzz.trapmf(e.universe, [-3.0, -3.0, -0.8, 0.0])
-        e['Z'] = fuzz.trimf(e.universe, [-e_z, 0.0, e_z])
-        e['PS'] = fuzz.trapmf(e.universe, [0.0, 0.8, 3.0, 3.0])
+            # omega: NS, Z, PS
+            omega['NS'] = fuzz.trapmf(omega.universe, [-8.0, -8.0, -2.5, 0.0])
+            omega['Z'] = fuzz.trimf(omega.universe, [-0.80, 0.0, 0.80])
+            omega['PS'] = fuzz.trapmf(omega.universe, [0.0, 2.5, 8.0, 8.0])
 
-        # omega: NS, Z, PS
-        omega['NS'] = fuzz.trapmf(omega.universe, [-8.0, -8.0, -2.5, 0.0])
-        omega['Z'] = fuzz.trimf(omega.universe, [-w_z, 0.0, w_z])
-        omega['PS'] = fuzz.trapmf(omega.universe, [0.0, 2.5, 8.0, 8.0])
+            # Reglas explícitas (3x3)
+            rules = [
+                ctrl.Rule(e_th['NS'] & e['NS'], omega['PS']),
+                ctrl.Rule(e_th['NS'] & e['Z'], omega['PS']),
+                ctrl.Rule(e_th['NS'] & e['PS'], omega['Z']),
 
-        # Reglas explícitas (3x3)
-        rules = [
-            ctrl.Rule(e_th['NS'] & e['NS'], omega['PS']),
-            ctrl.Rule(e_th['NS'] & e['Z'], omega['PS']),
-            ctrl.Rule(e_th['NS'] & e['PS'], omega['Z']),
+                ctrl.Rule(e_th['Z'] & e['NS'], omega['PS']),
+                ctrl.Rule(e_th['Z'] & e['Z'], omega['Z']),
+                ctrl.Rule(e_th['Z'] & e['PS'], omega['NS']),
 
-            ctrl.Rule(e_th['Z'] & e['NS'], omega['PS']),
-            ctrl.Rule(e_th['Z'] & e['Z'], omega['Z']),
-            ctrl.Rule(e_th['Z'] & e['PS'], omega['NS']),
+                ctrl.Rule(e_th['PS'] & e['NS'], omega['Z']),
+                ctrl.Rule(e_th['PS'] & e['Z'], omega['NS']),
+                ctrl.Rule(e_th['PS'] & e['PS'], omega['NS']),
+            ]
 
-            ctrl.Rule(e_th['PS'] & e['NS'], omega['Z']),
-            ctrl.Rule(e_th['PS'] & e['Z'], omega['NS']),
-            ctrl.Rule(e_th['PS'] & e['PS'], omega['NS']),
-        ]
-
-        fis = ctrl.ControlSystem(rules)
-        return fis
+            fis = ctrl.ControlSystem(rules)
+            return fis
 
 Funciones de membresía
 -----------------------
@@ -660,8 +654,53 @@ Podemos agregar mayor granularidad
 Incluso ``Scikit-fuzzy`` nos permite generar estas variables en con una sola instrucción, en 
 este caso hacemos la definición explicita para que sea más claro.
 
-Podemos representar las reglas en una tabla:
 
+Tabla de reglas difusas
+----------------------
+
+Podemos representar las reglas del controlador difuso de forma compacta en forma de 
+tabla. Cada fila representa una regla difusa,
+indicando los términos lingüísticos de las variables de entrada ``e_th`` y ``e``,
+así como el término correspondiente de la variable de salida ``omega``.
+
+.. table:: Reglas del controlador difuso
+   :align: center
+
+   ======= ========= ========= =========
+   Regla   ``e_th``   ``e``     ``omega``
+   ======= ========= ========= =========
+   R1      ``NS``     ``NS``     ``PS``
+   R2      ``NS``     ``Z``      ``PS``
+   R3      ``NS``     ``PS``     ``Z``
+   R4      ``Z``      ``NS``     ``PS``
+   R5      ``Z``      ``Z``      ``Z``
+   R6      ``Z``      ``PS``     ``NS``
+   R7      ``PS``     ``NS``     ``Z``
+   R8      ``PS``     ``Z``      ``NS``
+   R9      ``PS``     ``PS``     ``NS``
+   ======= ========= ========= =========
+
+Cada regla se interpreta de la forma: *si ``e_th`` es A y ``e`` es B, entonces
+``omega`` es C*, donde A, B y C son términos lingüísticos.
+
+Un detalle importante que podemos notar es que el número de reglas difusas crece
+rápidamente al incrementar la granularidad de las variables lingüísticas. Por
+ejemplo, al pasar de tres términos difusos por variable (``NS``, ``Z``, ``PS``)
+a cinco términos (``NB``, ``NS``, ``Z``, ``PS``, ``PB``), el número total de
+reglas pasa de :math:`3 \\times 3 = 9` a :math:`5 \\times 5 = 25`.
+
+Este crecimiento combinatorial es una de las principales limitaciones de los
+sistemas difusos basados en reglas, ya que incrementa el esfuerzo de diseño y
+ajuste del controlador. Esta es una de las razones para considerar estrategias
+para manejar esta complejidad, incluyendo el ajuste automático de parámetros
+mediante algoritmos evolutivos.
+
+Visualización de funciones de membresía
+---------------------------------------
+
+El archivo ``my_fis.py`` incluye funciones para visualizar las funciones de
+membresía del controlador difuso. Esto permite inspeccionar gráficamente el
+universo de cada variable y la forma de sus términos lingüísticos.
 
 
 Controlador de referencia

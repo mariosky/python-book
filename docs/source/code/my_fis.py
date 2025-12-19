@@ -17,25 +17,19 @@ def build_fis(params=None):
     e = ctrl.Antecedent(np.linspace(-3.0, 3.0, 201), 'e')  # m
     omega = ctrl.Consequent(np.linspace(-8.0, 8.0, 201), 'omega')  # rad/s
 
-    # Parámetros por defecto (ajustables después)
-    # Nota: estos valores son intencionalmente simples; se optimizarán más adelante.
-    eth_z = params.get("eth_z", 0.15) if isinstance(params, dict) else 0.15
-    e_z = params.get("e_z", 0.30) if isinstance(params, dict) else 0.30
-    w_z = params.get("w_z", 0.80) if isinstance(params, dict) else 0.80
-
     # e_th: NS, Z, PS
     e_th['NS'] = fuzz.trapmf(e_th.universe, [-1.5, -1.5, -0.4, 0.0])
-    e_th['Z'] = fuzz.trimf(e_th.universe, [-eth_z, 0.0, eth_z])
+    e_th['Z'] = fuzz.trimf(e_th.universe, [-0.15, 0.0, 0.15])
     e_th['PS'] = fuzz.trapmf(e_th.universe, [0.0, 0.4, 1.5, 1.5])
 
     # e: NS, Z, PS
     e['NS'] = fuzz.trapmf(e.universe, [-3.0, -3.0, -0.8, 0.0])
-    e['Z'] = fuzz.trimf(e.universe, [-e_z, 0.0, e_z])
+    e['Z'] = fuzz.trimf(e.universe, [0.30, 0.0, 0.30])
     e['PS'] = fuzz.trapmf(e.universe, [0.0, 0.8, 3.0, 3.0])
 
     # omega: NS, Z, PS
     omega['NS'] = fuzz.trapmf(omega.universe, [-8.0, -8.0, -2.5, 0.0])
-    omega['Z'] = fuzz.trimf(omega.universe, [-w_z, 0.0, w_z])
+    omega['Z'] = fuzz.trimf(omega.universe, [-0.80, 0.0, 0.80])
     omega['PS'] = fuzz.trapmf(omega.universe, [0.0, 2.5, 8.0, 8.0])
 
     # Reglas explícitas (3x3)
