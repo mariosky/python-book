@@ -24,7 +24,7 @@ def build_fis(params=None):
 
     # e: NS, Z, PS
     e['NS'] = fuzz.trapmf(e.universe, [-3.0, -3.0, -0.8, 0.0])
-    e['Z'] = fuzz.trimf(e.universe, [0.30, 0.0, 0.30])
+    e['Z'] = fuzz.trimf(e.universe, [-0.30, 0.0, 0.30])
     e['PS'] = fuzz.trapmf(e.universe, [0.0, 0.8, 3.0, 3.0])
 
     # omega: NS, Z, PS
@@ -78,7 +78,7 @@ def plot_mfs(params=None):
     fis = build_fis(params)
     for variable in fis.fuzzy_variables:
         variable.view()
-
+    
 
 if __name__ == "__main__":
     # Ejecuta: python my_fis.py

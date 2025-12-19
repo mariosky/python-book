@@ -15,7 +15,7 @@ if __name__ == "__main__":
     paths = [
         ([0.0, 6.0, 12.5, 5.0, 7.5, 3.0, -1.0], [0.0, 0.0, 5.0, 6.5, 3.0, 5.0, -2.0]),
         ([0.0, 1.0, 2.5, 5.0, 7.5, 3.0, -1.0], [0.0, -4.0, 6.0, 6.5, 3.0, 5.0, -2.0]),
- #      ([0.0, 2.0, 2.5, 5.0, 7.5, -3.0, -1.0], [0.0, 3.0, 6.0, 6.5, 5.0, 5.0, -2.0]),
+        ([0.0, 2.0, 2.5, 5.0, 7.5, -3.0, -1.0], [0.0, 3.0, 6.0, 6.5, 5.0, 5.0, -2.0]),
     ]
 
     #controller = None
@@ -35,9 +35,9 @@ if __name__ == "__main__":
         rmse = compute_rmse(traces)
         rmses.append(rmse)
 
+        # Visualización (opcional): se ejecuta después de la simulación
+        #rw_sim.animate(result, pause=0.001)
+        rw_sim.plot(result)
 
     print(float(np.mean(rmses)))
-    # Visualización (opcional): se ejecuta después de la simulación
-    #rw_sim.animate(result, pause=0.001)
-    #rw_sim.plot(result)
 
