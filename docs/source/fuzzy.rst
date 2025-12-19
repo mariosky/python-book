@@ -202,8 +202,9 @@ Las reglas IF-THEN (también llamadas reglas de producción) tienen una dos part
 el antecedente, conformado por un conjunto de condiciones y el consecuente constituido por un
 conjunto de conclusiones:
 
-   .. code::
-   # SI (condición) ENTONCES (conclusión).
+.. code-block:: text
+
+   SI (condición) ENTONCES (conclusión).
 
 Utilizando lógica difusa podemos definir reglas de inferencia que busquen
 capturar la forma en que un humano razona en situaciones donde los límites
@@ -569,94 +570,99 @@ El objetivo principal del control es minimizar el error de seguimiento, medido
 mediante el error cuadrático medio (*root mean square error*, RMSE) de la
 variable :math:`e`, y alcanzar la meta correspondiente al final de la ruta.
 
-Plantilla del controlador difuso
+Código para implementar el controlador difuso
+----------------------------------------------
+
+El código para este ejemplo se encuentra en el directorio ``fuzzy_code`` y
+consiste en los siguientes archivos:
+
+.. code-block:: bash
+
+   fuzzy_code
+   ├── angle.py
+   ├── fuzzy_control.py
+   ├── LICENSE
+   ├── my_fis.py
+   ├── path.py
+   └── rear_wheel_sim.py
+
+En este capítulo solo editaremos los archivos ``my_fis.py`` y ``fuzzy_control``. Los otros
+scripts implementan la simulaciòn del robot tipo bicicleta que
+descrita anteriormente. Los archivos incluyen:
+
+.. rubric:: ``my_fis.py``
+
+- ``build_fis``
+
+  En este método definimos el sistema de inferencia difuso (FIS) del controlador.
+  Se definen las variables difusas, las funciones de membresía y las reglas. Al
+  final se construye y regresa un objeto ``ControlSystem``.
+
+- ``get_controller``
+
+  Esta función regresa un *callable* que implementa el controlador difuso. La
+  función interna (por ejemplo ``controller``) toma como entradas ``e`` y
+  ``e_th`` y regresa el valor defuzzificado de ``omega``.
+
+- ``plot_mfs``
+
+  Grafica las funciones de membresía de las variables del antecedente y del
+  consecuente del FIS (en este ejemplo: ``e``, ``e_th`` y ``omega``).
+
+.. rubric:: ``fuzzy_control.py``
+
+Este script une todo: define las rutas de prueba, ejecuta la simulación con el
+controlador seleccionado y muestra los resultados (gráficas y/o animación). En
+este capítulo lo usaremos como programa de prueba. Podemos editarlo y ver 
+los resultados de la simulación. 
+
+El sistema de inferencia difuso
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-El archivo ``my_fis.py`` debe definir una función ``build_fis`` que regrese
-el sistema difuso para ser utilizado en el controlador. 
-Dicho controlador recibirá como entradas el error de
-orientación ``e_th`` y el error lateral ``e``, y devuelve como salida la
-velocidad angular ``omega``.
+El primer paso para construir el controlador difuso es definir el sistema de inferencia 
+en ``sci-kit fuzzy``. Esto lo hacemos en  el archivo ``my_fis.py``. En 
+particular, se debe definir la función ``build_fis`` que regresa el FIS
+que será utilizado por el controlador.
 
-La simulación se encarga de llamar a este controlador en cada instante de tiempo.
-
-.. code-block:: python
-    :linenos:
-    :caption: Archivo plantilla ``my_fis.py``
-
-    import numpy as np
-    import skfuzzy as fuzz
-    from skfuzzy import control as ctrl
-
-        def build_fis(params=None):
-            """
-           Construye el sistema de inferencia difusa (FIS).
-
-           params: dict | None
-               Parámetros opcionales para modificar las funciones de membresía.
-               En esta versión base, se ignoran o se usan valores por defecto.
-           """
-
-            # Universos (sin normalizar todavía)
-            e_th = ctrl.Antecedent(np.linspace(-1.5, 1.5, 201), 'e_th')  # rad aprox.
-            e = ctrl.Antecedent(np.linspace(-3.0, 3.0, 201), 'e')  # m
-            omega = ctrl.Consequent(np.linspace(-8.0, 8.0, 201), 'omega')  # rad/s
-
-            # e_th: NS, Z, PS
-            e_th['NS'] = fuzz.trapmf(e_th.universe, [-1.5, -1.5, -0.4, 0.0])
-            e_th['Z'] = fuzz.trimf(e_th.universe, [-0.15, 0.0, 0.15])
-            e_th['PS'] = fuzz.trapmf(e_th.universe, [0.0, 0.4, 1.5, 1.5])
-
-            # e: NS, Z, PS
-            e['NS'] = fuzz.trapmf(e.universe, [-3.0, -3.0, -0.8, 0.0])
-            e['Z'] = fuzz.trimf(e.universe, [0.30, 0.0, 0.30])
-            e['PS'] = fuzz.trapmf(e.universe, [0.0, 0.8, 3.0, 3.0])
-
-            # omega: NS, Z, PS
-            omega['NS'] = fuzz.trapmf(omega.universe, [-8.0, -8.0, -2.5, 0.0])
-            omega['Z'] = fuzz.trimf(omega.universe, [-0.80, 0.0, 0.80])
-            omega['PS'] = fuzz.trapmf(omega.universe, [0.0, 2.5, 8.0, 8.0])
-
-            # Reglas explícitas (3x3)
-            rules = [
-                ctrl.Rule(e_th['NS'] & e['NS'], omega['PS']),
-                ctrl.Rule(e_th['NS'] & e['Z'], omega['PS']),
-                ctrl.Rule(e_th['NS'] & e['PS'], omega['Z']),
-
-                ctrl.Rule(e_th['Z'] & e['NS'], omega['PS']),
-                ctrl.Rule(e_th['Z'] & e['Z'], omega['Z']),
-                ctrl.Rule(e_th['Z'] & e['PS'], omega['NS']),
-
-                ctrl.Rule(e_th['PS'] & e['NS'], omega['Z']),
-                ctrl.Rule(e_th['PS'] & e['Z'], omega['NS']),
-                ctrl.Rule(e_th['PS'] & e['PS'], omega['NS']),
-            ]
-
-            fis = ctrl.ControlSystem(rules)
-            return fis
+Recordemos que el controlador recibe como entradas el error de orientación
+``e_th`` (rad) y el error lateral ``e`` (m), y devuelve como salida la
+velocidad angular ``omega`` (rad/s). Ya con estas variables, el siguiente paso
+es definir términos lingüísticos y sus funciones de membresía.
 
 Funciones de membresía
------------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
-En esta primera propuesta utilizamos tres funciones de membresía con el los mismos términos
-difusos para cada variable, los nombres que utilizamos son abreviasiones en inglés utilizadas
-comúnmente para este tipo de controladores con errores positivos y negativos:
+En esta primera propuesta utilizamos tres términos difusos por variable, con los
+mismos nombres en cada caso. Estos nombres son abreviaciones en inglés comunes
+cuando se trabaja con errores positivos y negativos:
 
-- ``NS`` **Negative Small** Negativo Pequeño 
-- ``Z``  **Zero** Cero 
-- ``PS`` **Positive Small** Positivo Pequeño 
+- ``NS``: **Negative Small** (Negativo pequeño)
+- ``Z``:  **Zero** (Cero)
+- ``PS``: **Positive Small** (Positivo pequeño)
 
-Podemos agregar mayor granularidad 
+Si se desea mayor granularidad, es común introducir términos adicionales:
 
-- ``NB`` **Negative Big** Negativo Grande   
-- ``PB`` **Negative Big** Positivo Grande   
+- ``NB``: **Negative Big** (Negativo grande)
+- ``PB``: **Positive Big** (Positivo grande)
 
-Incluso ``Scikit-fuzzy`` nos permite generar estas variables en con una sola instrucción, en 
-este caso hacemos la definición explicita para que sea más claro.
+Incluso ``scikit-fuzzy`` permite generar términos automáticamente; sin embargo,
+en este capítulo hacemos la definición explícita para que el proceso sea más
+claro.
+
+En este ejemplo, utilizaremos funciones trapezoidales en los extremos (``NS`` y
+``PS``) y una función triangular para la región cercana a cero (``Z``).
+
+.. note::
+
+   Un detalle importante es que los valores numéricos (rangos y puntos de quiebre)
+   que se usan en las funciones de membresía son **heurísticos**: se eligen para
+   obtener un comportamiento razonable en las rutas de prueba. En capítulos
+   posteriores aprenderemos a ajustar estos parámetros de forma sistemática y
+   automática.
 
 
 Tabla de reglas difusas
-----------------------
+-----------------------
 
 Podemos representar las reglas del controlador difuso de forma compacta en forma de 
 tabla. Cada fila representa una regla difusa,
@@ -695,21 +701,321 @@ ajuste del controlador. Esta es una de las razones para considerar estrategias
 para manejar esta complejidad, incluyendo el ajuste automático de parámetros
 mediante algoritmos evolutivos.
 
+
+Decisiones de diseño: rangos y parámetros
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+En este controlador base elegimos universos de discurso y parámetros de las
+funciones de membresía de forma heurística:
+
+- Para ``e_th`` (rad), se utiliza el intervalo :math:`[-1.5, 1.5]`. Este rango
+  cubre errores de orientación moderados (del orden de decenas de grados).
+- Para ``e`` (m), se utiliza el intervalo :math:`[-3.0, 3.0]`. Este rango es
+  suficiente para representar errores laterales típicos en las rutas de prueba.
+- Para ``omega`` (rad/s), se utiliza el intervalo :math:`[-8.0, 8.0]`. Esta
+  salida controla el giro del volante; valores grandes permiten maniobras más
+  agresivas, pero también pueden provocar oscilaciones o pérdida de la ruta.
+
+La región ``Z`` (cero) se define relativamente estrecha para que el controlador
+responda con cambios en ``omega`` aun con errores pequeños; sin embargo, esta
+elección no es única y puede ajustarse. Justamente, la posibilidad de ajustar
+estos parámetros (manual o automáticamente) es parte central del siguiente 
+capítulo.
+
+Aquí está el código que expresa las desciciones de diseño que tomamos:
+
+.. code-block:: python
+   :linenos:
+   :caption: Archivo plantilla ``my_fis.py``
+
+   import numpy as np
+   import skfuzzy as fuzz
+   from skfuzzy import control as ctrl
+
+
+   def build_fis(params=None):
+       """
+       Construye el sistema de inferencia difusa (FIS).
+
+       params : dict | None
+           Parámetros opcionales para modificar las funciones de membresía.
+           En esta versión base, se ignoran o se usan valores por defecto.
+       """
+
+       # Universos (sin normalizar todavía)
+       e_th = ctrl.Antecedent(np.linspace(-1.5, 1.5, 201), 'e_th')      # rad aprox.
+       e    = ctrl.Antecedent(np.linspace(-3.0, 3.0, 201), 'e')         # m
+       omega = ctrl.Consequent(np.linspace(-8.0, 8.0, 201), 'omega')    # rad/s
+
+       # e_th: NS, Z, PS
+       e_th['NS'] = fuzz.trapmf(e_th.universe, [-1.5, -1.5, -0.4, 0.0])
+       e_th['Z']  = fuzz.trimf(e_th.universe,  [-0.15, 0.0, 0.15])
+       e_th['PS'] = fuzz.trapmf(e_th.universe, [0.0, 0.4, 1.5, 1.5])
+
+       # e: NS, Z, PS
+       e['NS'] = fuzz.trapmf(e.universe, [-3.0, -3.0, -0.8, 0.0])
+       e['Z']  = fuzz.trimf(e.universe,  [-0.30, 0.0, 0.30])
+       e['PS'] = fuzz.trapmf(e.universe, [0.0, 0.8, 3.0, 3.0])
+
+       # omega: NS, Z, PS
+       omega['NS'] = fuzz.trapmf(omega.universe, [-8.0, -8.0, -2.5, 0.0])
+       omega['Z']  = fuzz.trimf(omega.universe,  [-0.80, 0.0, 0.80])
+       omega['PS'] = fuzz.trapmf(omega.universe, [0.0, 2.5, 8.0, 8.0])
+
+       # Reglas explícitas (3x3)
+       rules = [
+           ctrl.Rule(e_th['NS'] & e['NS'], omega['PS']),
+           ctrl.Rule(e_th['NS'] & e['Z'],  omega['PS']),
+           ctrl.Rule(e_th['NS'] & e['PS'], omega['Z']),
+
+           ctrl.Rule(e_th['Z']  & e['NS'], omega['PS']),
+           ctrl.Rule(e_th['Z']  & e['Z'],  omega['Z']),
+           ctrl.Rule(e_th['Z']  & e['PS'], omega['NS']),
+
+           ctrl.Rule(e_th['PS'] & e['NS'], omega['Z']),
+           ctrl.Rule(e_th['PS'] & e['Z'],  omega['NS']),
+           ctrl.Rule(e_th['PS'] & e['PS'], omega['NS']),
+       ]
+
+       fis = ctrl.ControlSystem(rules)
+       return fis
+
+
 Visualización de funciones de membresía
 ---------------------------------------
 
-El archivo ``my_fis.py`` incluye funciones para visualizar las funciones de
+El archivo ``my_fis.py`` incluye la función ``plot_mfs()`` para visualizar las funciones de
 membresía del controlador difuso. Esto permite inspeccionar gráficamente el
 universo de cada variable y la forma de sus términos lingüísticos.
 
+La visualización de funciones de membresía es especialmente útil durante la fase
+de diseño, ya que ayuda a verificar que:
+
+- los rangos (universos) de las variables sean consistentes con el problema,
+- exista traslape suficiente entre términos lingüísticos,
+- y la región cercana a cero (término ``Z``) tenga el ancho esperado.
+
+.. note::
+
+   En este proyecto la visualización se utiliza como herramienta de inspección.
+   No modifica el comportamiento del controlador, solo ayuda a entenderlo.
+
+Se pueden generar las gráficas ejecutando el script directamente:
+
+.. figure:: ./images/mf_eth.png
+   :align: center
+   :alt: Funciones de membresía de la variable ``e_th`` dede scikit fuzzy.
+
+   Funciones de membresía de la variable ``e_th`` dede scikit fuzzy.
+
+.. code-block:: bash
+
+   python my_fis.py
+
+
+Generación de controlador difuso
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+En el mismo archivo ``my_fis.py`` se define una función que genera el
+controlador como un *callable*. La simulación invoca este *callable* en cada
+instante de tiempo, por lo que el simulador no necesita conocer cómo está
+implementado internamente el FIS.
+
+.. code-block:: python
+   :linenos:
+   :caption: Generación del controlador en ``my_fis.py``
+
+   def get_controller(params=None):
+       """
+       Devuelve un controlador callable: (e_th, e) -> omega.
+
+       Este patrón es un ejemplo de programación funcional en Python:
+       la función retorna otra función que encapsula el estado interno
+       del sistema difuso.
+       """
+
+       fis = build_fis(params)
+       sim = ctrl.ControlSystemSimulation(fis)
+
+       def controller(e_th, e):
+           # scikit-fuzzy acumula estado interno; para simulación en lazo cerrado
+           # suele ser más robusto reiniciar en cada evaluación.
+           sim.reset()
+           sim.input['e_th'] = float(e_th)
+           sim.input['e'] = float(e)
+           sim.compute()
+           return float(sim.output['omega'])
+
+       return controller
+
+.. note::
+
+   La función ``get_controller`` es un ejemplo de programación funcional en
+   Python: regresa otra función (un *callable*) que encapsula el comportamiento
+   del controlador. Esto permite desacoplar la simulación de la implementación
+   interna del FIS.
+
+
+
+Script de prueba: ``fuzzy_control.py``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+El script ``fuzzy_control.py`` permite probar rápidamente el controlador en un
+conjunto pequeño de rutas. En esta sección utilizaremos una métrica simple (RMSE
+del error lateral) únicamente como referencia numérica para comparar ejecuciones
+entre distintas modificaciones del FIS.
+
+.. code-block:: python
+   :linenos:
+   :caption: Script de prueba ``fuzzy_control.py``
+
+   import my_fis as fc
+   import rear_wheel_sim as rw_sim
+   import path
+   import numpy as np
+
+
+   def compute_rmse(traces):
+       errors = np.array([tr.error for tr in traces])
+       return np.sqrt(np.mean(errors**2))
+
+
+   if __name__ == "__main__":
+       print("rear wheel feedback tracking start!!")
+
+       paths = [
+           ([0.0, 6.0, 12.5, 5.0, 7.5, 3.0, -1.0], [0.0, 0.0, 5.0, 6.5, 3.0, 5.0, -2.0]),
+           ([0.0, 1.0, 2.5, 5.0, 7.5, 3.0, -1.0], [0.0, -4.0, 6.0, 6.5, 3.0, 5.0, -2.0]),
+           # ([0.0, 2.0, 2.5, 5.0, 7.5, -3.0, -1.0], [0.0, 3.0, 6.0, 6.5, 5.0, 5.0, -2.0]),
+       ]
+
+       # Controlador de referencia (baseline): descomente si desea comparar
+       # controller = None
+
+       # Controlador difuso (edite my_fis.py para modificarlo)
+       controller = fc.get_controller()
+
+       rmses = []
+       for ax, ay in paths:
+           goal = [ax[-1], ay[-1]]
+           reference_path = path.CubicSplinePath(ax, ay)
+
+           result = rw_sim.simulacion(
+               reference_path,
+               goal,
+               controller=controller,
+           )
+
+           traces = result["traces"]
+           rmse = compute_rmse(traces)
+           rmses.append(rmse)
+
+       print(float(np.mean(rmses)))
+
+       # Visualización (opcional): se ejecuta después de la simulación
+       # rw_sim.animate(result, pause=0.001)
+       # rw_sim.plot(result)
+
+
+.. note::
+
+   En este capítulo utilizamos el RMSE únicamente como un indicador rápido para
+   comparar cambios en el controlador. En el capítulo de algoritmos genéticos
+   formalizaremos la evaluación del controlador como una función de aptitud
+   (*fitness*) y discutiremos criterios de penalización y corte temprano.
+
+Este script funciona como un **programa de prueba** que coordina los siguientes
+elementos:
+
+1. **Definición de rutas**
+
+   Se define una lista de rutas de referencia. Es posible comentar algunas de
+   ellas para analizar una ruta en particular o modificar los puntos que
+   definen cada curva y observar los cambios en el comportamiento del robot.
+   Como ejemplo, la primera ruta incluye una curva muy pronunciada al inicio.
+
+2. **Selección del controlador**
+
+   Existen dos opciones de controlador:
+
+   - Utilizar ``None``, lo que tiene como efecto emplear un **controlador de
+     referencia**, el cual se describe más adelante.
+   - Utilizar un **controlador difuso**, obtenido a partir del archivo
+     ``my_fis.py``.
+
+3. **Ejecución de la simulación**
+
+   Para cada ruta se ejecuta una simulación, enviando al simulador la ruta de
+   referencia, el punto meta y el controlador seleccionado.
+
+4. **Resultados de la simulación**
+
+   La simulación regresa un diccionario con la información completa de la
+   ejecución. Este resultado incluye una lista de lecturas tomadas en cada
+   instante de tiempo. Cada lectura se almacena en una estructura del tipo
+   ``dataclass``:
+
+   .. code-block:: python
+
+      @dataclass
+      class SimulationTrace:
+          """
+          Registro temporal de la simulación.
+          """
+          t: int              # tiempo (s)
+          x: float            # posición x (m)
+          y: float            # posición y (m)
+          yaw: float          # orientación (rad)
+          v: float            # velocidad lineal (m/s)
+          error_theta: float  # error de orientación (rad)
+          error: float        # error lateral (m)
+          path_s: float       # parámetro de progreso sobre la ruta
+
+A partir de esta lista de lecturas es posible:
+
+- trazar el recorrido que siguió el robot,
+- calcular métricas de desempeño como el **RMSE** del error lateral,
+- analizar la evolución del ángulo de orientación (``yaw``),
+- o estudiar cómo se comporta el controlador a lo largo del trayecto.
+
+Desde el punto de vista del diseño del software, ``fuzzy_control.py`` actúa como
+un *orquestador*: no implementa directamente ni la dinámica del robot ni la
+lógica del controlador, sino que conecta ambos componentes a través de una
+interfaz común.
+
+Un aspecto importante es que el simulador **no conoce el tipo de controlador**
+que se está utilizando. El controlador se pasa como un *callable* con la
+siguiente interfaz:
+
+.. math::
+
+   (e_{th}, e) \;\longrightarrow\; \omega
+
+Esto permite intercambiar fácilmente distintos controladores (por ejemplo, uno
+difuso o uno basado en una ley de control clásica) sin modificar el código de la
+simulación.
+
+
+.. figure:: ./images/track.png
+   :align: center
+   :alt: Seguimiento de ruta exitoso.
+
+   Seguimiento de ruta exitoso. 
+
+.. figure:: ./images/lost.png
+   :align: center
+   :alt: Seguimiento de ruta fallido.
+
+   Seguimiento de ruta fallido. 
 
 Controlador de referencia
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Antes de introducir el controlador difuso, utilizaremos un controlador de
-referencia basado en una ley de control clásica propuesta por Paden et al. Este
-controlador se utiliza cuando no se proporciona un controlador externo a la
-simulación.
+Una vez implementado y probado el controlador difuso, introducimos ahora un
+**controlador de referencia** basado en una ley de control clásica propuesta por
+Paden *et al.*. Este controlador se utiliza en la simulación cuando no se
+proporciona un controlador externo y sirve como **punto de comparación**
+(*baseline*).
 
 Esta es su implementación:
 
@@ -734,93 +1040,58 @@ Esta es su implementación:
 
         return omega
 
-El controlador de referencia:
+Comparación entre control difuso y control clásico
+---------------------------------------------------
 
-- utiliza un modelo cinemático explícito del sistema,
+La Tabla siguiente resume las principales diferencias conceptuales entre el
+controlador difuso y el controlador de referencia utilizado en la simulación.
 
-- emplea la velocidad del robot ``v`` y parámetros geométricos de la ruta ``k``,
-- sirve como punto de comparación (baseline).
+.. table:: Comparación entre control clásico y difuso
+   :align: center
+   :widths: 25 35 35
 
-No se espera que el controlador difuso supere a este controlador en esta etapa.
-Su propósito es ofrecer una referencia funcional y estable.
+   ===========================  ================================  ===========================================
+   Característica               Controlador difuso                Controlador de referencia
+   ===========================  ================================  ===========================================
+   Tipo de enfoque              Heurístico / basado en reglas     Analítico / basado en modelo
+   Uso de modelo                No requiere modelo explícito      Requiere modelo cinemático
+   Variables de entrada         Errores ``e`` y ``e_th``          Errores, velocidad ``v`` y curvatura ``k``
+   Dependencia de la ruta       Implícita (a través del error)    Explícita (curvatura de la ruta)
+   Uso de velocidad ``v``       No                                Sí
+   Interpretabilidad            Alta (reglas lingüísticas)        Media (expresión matemática)
+   Facilidad de ajuste          Intuitiva (funciones y reglas)    Requiere conocimiento analítico
+   Robustez ante incertidumbre  Alta                              Dependiente del modelo
+   Propósito en este capítulo   Ejemplo de control inteligente    Referencia (*baseline*)
+   ===========================  ================================  ===========================================
 
-La diferencia entre ambos enfoques:
+Limitaciones del controlador difuso base
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- El controlador de referencia utiliza información explícita del modelo y de la geometría de la ruta.
-- El controlador difuso no utiliza el modelo ni la velocidad del robot.
-- El controlador difuso se basa únicamente en errores geométricos y reglas lingüísticas.
+El controlador difuso presentado en este capítulo tiene algunas limitaciones.
+Como se observa en la figura anterior, incluso en ciertas rutas el robot pierde
+el seguimiento. Esto es una característica común de los sistemas de control
+heurísticos: su desempeño depende fuertemente de las decisiones de diseño que se
+toman durante su construcción.
 
-Generación de controlador difuso
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+En particular, el comportamiento del controlador difuso está altamente
+influenciado por los siguientes elementos:
 
-En el mismo archivo está definida una funcion que devuelve el controlador
+- La **granularidad de las variables difusas**, ya que puede ser necesario
+  introducir más términos lingüísticos para capturar comportamientos más finos.
+- Los **rangos** definidos para las variables difusas.
+- El tipo de **funciones de membresía** utilizadas.
+- Los **parámetros** específicos de dichas funciones de membresía.
+- El conjunto de **reglas difusas** que conforman la base de conocimiento.
 
-.. code-block:: python
-    :linenos:
-    :caption: Archivo plantilla ``my_fis.py``
+Esto implica que el controlador debe ser **optimizado**, es decir, debe existir
+un proceso de afinamiento (*tuning*) en el que se realicen ajustes sistemáticos a
+la parametrización del sistema. Dado que se trata de un enfoque heurístico, estos
+ajustes suelen validarse mediante pruebas repetidas en simulación.
 
-    def get_controller(params=None):
-        """
-       Devuelve un controlador callable: (e_th, e) -> omega.
-       """
+Como hemos visto, cada simulación requiere tiempo y recursos computacionales,
+especialmente cuando se evalúa el desempeño del controlador sobre múltiples
+rutas. Esta observación motiva naturalmente el uso de métodos automáticos de
+optimización, los cuales abordaremos en el siguiente capítulo mediante técnicas
+de **cómputo evolutivo**.
 
-        fis = build_fis(params)
-        sim = ctrl.ControlSystemSimulation(fis)
-
-        def controller(e_th, e):
-            # scikit-fuzzy acumula estado interno; para simulación en lazo cerrado
-            # suele ser más robusto reiniciar en cada evaluación.
-            sim.reset()
-            sim.input['e_th'] = float(e_th)
-            sim.input['e'] = float(e)
-            sim.compute()
-            return float(sim.output['omega'])
-
-
-.. code-block:: python
-    :linenos:
-    :caption: Archivo plantilla ``my_fis.py``
-
-    import my_fis as fc
-    import rear_wheel_sim as rw_sim
-    import path
-    import numpy as np
-
-    def compute_rmse(traces):
-        errors = np.array([tr.error for tr in traces])
-        return np.sqrt(np.mean(errors**2))
-
-
-
-    if __name__ == "__main__":
-        print("rear wheel feedback tracking start!!")
-
-        paths = [
-            ([0.0, 6.0, 12.5, 5.0, 7.5, 3.0, -1.0], [0.0, 0.0, 5.0, 6.5, 3.0, 5.0, -2.0]),
-            ([0.0, 1.0, 2.5, 5.0, 7.5, 3.0, -1.0], [0.0, -4.0, 6.0, 6.5, 3.0, 5.0, -2.0]),
-     #      ([0.0, 2.0, 2.5, 5.0, 7.5, -3.0, -1.0], [0.0, 3.0, 6.0, 6.5, 5.0, 5.0, -2.0]),
-        ]
-
-        #controller = None
-        controller = fc.get_controller()
-        rmses = []
-        for ax, ay in paths:
-            goal = [ax[-1], ay[-1]]
-            reference_path = path.CubicSplinePath(ax, ay)
-
-            result = rw_sim.simulacion(
-                reference_path,
-                goal,
-                controller=controller,
-            )
-
-            traces = result["traces"]
-            rmse = compute_rmse(traces)
-            rmses.append(rmse)
-
-
-        print(float(np.mean(rmses)))
-        # Visualización (opcional): se ejecuta después de la simulación
-        #rw_sim.animate(result, pause=0.001)
-        #rw_sim.plot(result)
 
