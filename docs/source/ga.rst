@@ -266,7 +266,7 @@ por ejemplo podemos listar a cada individuo con su aptitud:
 ([1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], 7)
 
 Evaluación de la población
-~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Los algoritmos genéticos se inspiran en el principio de **selección natural**:
 los individuos más aptos dentro de una población tienen mayor probabilidad de
@@ -326,7 +326,7 @@ genético, donde utilizaremos la aptitud de los individuos para **seleccionar**
 aquellos que participarán en los procesos de cruce y mutación.
 
 Selección por torneo
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 Una de las técnicas más sencillas y utilizadas para seleccionar a los mejores
 individuos de una población es la **selección por torneo**.
@@ -337,7 +337,7 @@ desempeño gana el torneo y es seleccionado para formar parte de la siguiente
 generación. Este procedimiento se repite tantas veces como individuos se
 necesiten.
 
-En este capítulo utilizaremos torneos de tamaño ``k = 2``, es decir, en cada
+En este capítulo utilizaremos torneos de tamaño ``k = 2``; es decir, en cada
 torneo compiten únicamente dos individuos y se selecciona el mejor de ellos.
 Este esquema es simple, eficiente y suele ofrecer buenos resultados en la
 práctica.
@@ -351,7 +351,7 @@ El parámetro ``k`` juega un papel importante en el comportamiento del algoritmo
   seleccionados.
 
 Un valor de ``k`` demasiado alto puede provocar que la población pierda
-diversidad rápidamente y se **estanqué en óptimos locales**, mientras que un
+diversidad rápidamente y se **estanque en óptimos locales**, mientras que un
 valor muy bajo puede ralentizar la convergencia del algoritmo. Por esta razón,
 el tamaño del torneo se considera un **parámetro de diseño** del algoritmo
 genético.
@@ -374,19 +374,105 @@ en Python:
        k : int
            Tamaño del torneo.
        """
-       selected = random.sample(list(zip(population, fitness)), k)
-       selected.sort(key=lambda x: x[1], reverse=True)
-       return selected[0][0]
+       candidates = random.sample(list(zip(population, fitness)), k)
+       candidates.sort(key=lambda x: x[1], reverse=True)
+       return candidates[0][0]
 
 Esta función devuelve un individuo seleccionado mediante torneo. Para construir
-una nueva población, basta con repetir este proceso hasta obtener el número de
-individuos deseado. Se utiliza una función lambda para ordenar la lista de seleccionados
-por el segundo elemento (el *fitness*)
+una nueva población basta con repetir este proceso hasta obtener el número de
+individuos deseado.
+
+En el código anterior se utiliza una función ``lambda`` para ordenar a los
+candidatos por el segundo elemento de la tupla, es decir, por el valor de
+*fitness*.
 
 La selección por torneo tiene varias ventajas prácticas: es fácil de
 implementar, no requiere normalizar los valores de *fitness* y se adapta bien a
 funciones objetivo ruidosas o no estacionarias. Por estas razones, es una opción
 muy común en implementaciones de algoritmos genéticos tanto académicas como
 aplicadas.
+
+Generación de la población seleccionada
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+El siguiente paso es generar una lista de individuos seleccionados mediante
+torneos. Los ganadores se eligen para reproducirse y transmitir su material
+genético a la siguiente generación.
+
+Es normal que algunos individuos ganen varios torneos; por lo tanto, pueden
+aparecer más de una vez en la población seleccionada. En términos de programación,
+es importante crear **copias** de los individuos seleccionados, ya que si dejamos
+referencias, una modificación posterior (por ejemplo, durante cruza o mutación)
+podría afectar a múltiples entradas de la lista.
+
+El código para crear la nueva población queda muy compacto utilizando listas
+por comprensión. El *slicing* ``[:]`` crea una copia superficial de la lista:
+
+.. code-block:: python
+
+   selected = [tournament_selection(population, fitness)[:] for _ in range(len(population))]
+
+En este ejemplo, el número de torneos se elige igual al tamaño de la población,
+de modo que la población seleccionada conserve el mismo número de individuos.
+
+Emparejamiento para cruza
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Una vez que tenemos la población seleccionada, debemos decidir cómo formar
+**parejas** para aplicar el operador de cruza. Una estrategia simple consiste en:
+
+1. barajar (*shuffle*) la población seleccionada para evitar sesgos debidos al orden,
+2. formar parejas consecutivas.
+
+Esta estrategia asume que el tamaño de la población es par. Si es impar, una
+opción sencilla es descartar al último individuo, o bien copiarlo directamente
+a la siguiente generación (*elitismo*).
+
+Una manera muy compacta de formar parejas consecutivas en Python es utilizar
+*slicing* junto con ``zip``:
+
+.. code-block:: python
+
+   import random
+
+   random.shuffle(selected)
+   pairs = list(zip(selected[::2], selected[1::2]))
+
+Cruce de un punto
+~~~~~~~~~~~~~~~~~
+
+El cruce más básico es el **cruce de un solo punto**. En este operador se
+selecciona un punto de corte al azar y se intercambian segmentos de los padres
+para generar un par de descendientes.
+
+.. code-block:: python
+
+   def one_point_crossover(p1, p2):
+       """
+       Cruce de un punto entre dos individuos binarios.
+       """
+       assert len(p1) == len(p2)
+       point = random.randint(1, len(p1) - 1)
+       c1 = p1[:point] + p2[point:]
+       c2 = p2[:point] + p1[point:]
+       return c1, c2
+
+En este caso nos aseguramos primero de que ambos individuos (listas) tienen la
+misma longitud. Elegimos el punto de corte con la librería ``random`` y, usando
+*slicing*, concatenamos los segmentos para construir los descendientes. La
+función regresa una tupla con dos hijos.
+
+Aplicación del cruce a toda la población
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A partir de las parejas generadas, podemos construir una nueva población
+aplicando el operador de cruza a cada par:
+
+.. code-block:: python
+
+   children = []
+   for p1, p2 in pairs:
+       c1, c2 = one_point_crossover(p1, p2)
+       children.extend([c1, c2])
 
 
