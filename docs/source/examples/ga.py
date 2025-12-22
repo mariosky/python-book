@@ -57,7 +57,7 @@ def one_point_crossover(ind1, ind2):
    ind1[point:], ind2[point:] = ind2[point:], ind1[point:]
    return ind1, ind2
 
-def bit_flip_mutation(individual, p=0.05):
+def bit_flip_mutation(individual, pb_flip=0.05):
    """
    Mutación bit-flip sobre un individuo binario.
 
@@ -71,26 +71,40 @@ def bit_flip_mutation(individual, p=0.05):
            individual[i] = 1 - individual[i]
    return individual
 
-CXPB, MUTPB, NGEN = 0.5, 0.1, 40
+    
+import random
+# Probabilidades y número de generaciones
+PB_CRUCE, PB_MUT, NGEN = 0.5, 0.1, 40
 
+# Población inicial (300 individuos, cromosomas de longitud 100)
 population = get_population(300, 100)
+
+# Desempeño de los individuos de la población
 fitness = [one_max(i) for i in population]
-print(max(fitness))
+print(f'Gen:{NGEN} Mejor:{max(fitness)}´')
 
 for n in range(NGEN):
+    # 1) Selección (con reemplazo) + copia para evitar referencias compartidas
+    selected = [tournament_selection(population, fitness)[:] 
+                for _ in range(len(population))]
 
-    selected = [tournament_selection(population, fitness)[:] for _ in range(len(population))]
+    # 2) Parejas aleatorias
     random.shuffle(selected)
     pairs = list(zip(selected[::2], selected[1::2]))
 
+    # 3) Cruce (in place) con probabilidad  PB_CRUCE por pareja
     for child1, child2 in pairs:
-       if random.random() < CXPB:
+       if random.random() < PB_CRUCE:
            one_point_crossover(child1, child2)
-
+           
+    # 4) Mutación (in place) con probabilidad MUTPB por individuo
     for individual in selected:
-        if random.random() < MUTPB:
-            bit_flip_mutation(individual)
-    
+        if random.random() < PB_MUT:
+            # Mutación Bit Flip con probabilidad pb_flip de 0.05   
+            bit_flip_mutation(individual, pb_flip=0.05)
+
+    # Reemplazamos la población anterior con la nueva
     population[:] = selected
+    # Calculamos el fitness de la nueva generación 
     fitness = [one_max(i) for i in population]
-    print(max(fitness))
+    print(f'Gen:{NGEN} Mejor:{max(fitness)}´')

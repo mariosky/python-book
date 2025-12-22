@@ -387,7 +387,7 @@ candidatos por el segundo elemento de la tupla, es decir, por el valor de
 *fitness*.
 
 Generación de la población seleccionada
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 los ganadores de los torneos son los **seleccionados para reproducirse** y
 transmitir su material genético a la siguiente generación.
@@ -499,7 +499,7 @@ tupla con referencias a ambos descendientes.
    copias explícitas de los padres antes de aplicar el cruce.
 
 Mutación
-^^^^^^^^
+~~~~~~~~~~~~~~~~~
 
 El operador de **mutación** introduce pequeñas modificaciones aleatorias en los
 individuos de una población. Su propósito principal es **mantener diversidad
@@ -552,12 +552,353 @@ Con la incorporación de los operadores de **selección**, **cruza** y
 básico. En la siguiente sección integraremos estos componentes en un ciclo
 completo de evolución generacional.
 
-Aplicación del cruce y mutación toda la población
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Aplicación del cruce y mutación a toda la población
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Ahora que tenemos los elementos necesarios podemos crear una nueva población 
-a partir de la copia de indivuos seleccionados:
+Ahora que ya tenemos los operadores genéticos de **selección**, **cruce** y
+**mutación**, podemos combinarlos para generar una nueva población a partir de
+los individuos seleccionados. Esta población resultante es la nueva generación.
+El número de generaciones es otro parámetro de diseño importante ``NGEN``. 
 
+El proceso general es el siguiente:
 
+1. Partimos de la selección de los mejores individuos de la población (obtenida, por ejemplo, mediante
+   selección por torneo). Esta selección es conformada por copias de los mejores.
+2. Barajamos la población para evitar sesgos debidos al orden.
+3. Formamos parejas consecutivas. Estas parejeas son referencias a los individuos seleccionados previamente.
+4. Con cierta probabilidasd ``PROB_CRUCE`` aplicamos el operador de cruce a cada pareja para generar descendientes.
+5. Con cierta probabilidad ``PROB_MUT`` aplicamos el operador de mutación a cada descendiente.
 
+A continuación vemos implementación básica de este proceso. El script completo
+lo podemos ver en anexos.
 
+.. code-block:: python
+   :linenos:
+
+    import random
+    # Probabilidades y número de generaciones
+    PB_CRUCE, PB_MUT, NGEN = 0.5, 0.1, 40
+
+    # Población inicial (300 individuos, cromosomas de longitud 100)
+    population = get_population(300, 100)
+
+    # Desempeño de los individuos de la población
+    fitness = [one_max(i) for i in population]
+    print(f'Gen:{NGEN} Mejor:{max(fitness)}´')
+
+    for n in range(NGEN):
+        # 1) Selección (con reemplazo) + copia para evitar referencias compartidas
+        selected = [tournament_selection(population, fitness)[:] 
+                for _ in range(len(population))]
+
+        # 2) Parejas aleatorias
+        random.shuffle(selected)
+        pairs = list(zip(selected[::2], selected[1::2]))
+
+        # 3) Cruce (in place) con probabilidad  PB_CRUCE por pareja
+        for child1, child2 in pairs:
+           if random.random() < PB_CRUCE:
+               one_point_crossover(child1, child2)
+               
+        # 4) Mutación (in place) con probabilidad MUTPB por individuo
+        for individual in selected:
+            if random.random() < PB_MUT:
+                # Mutación Bit Flip con probabilidad pb_flip de 0.05   
+                bit_flip_mutation(individual, pb_flip=0.05)
+
+        # Reemplazamos la población anterior con la nueva
+        population[:] = selected
+        # Calculamos el fitness de la nueva generación 
+        fitness = [one_max(i) for i in population]
+        print(f'Gen:{NGEN} Mejor:{max(fitness)}´')
+
+DEAP
+****
+
+En el script anterior, la única condición de paro es el número de
+generaciones. Sin embargo, en problemas reales debemos considerar 
+otras condiciones, por ejemplo:
+
+- **Solución parcial:** podemos detener el algoritmo si se alcanza un
+  valor de *fitness* mayor a un umbral (o un error menor).
+- **Estancamiento:** detener el algoritmo si el *fitness* no mejora durante un
+  número fijo de generaciones (criterio de convergencia práctica).
+- **Diversidad de la población:** monitorear si la población se vuelve demasiado
+  homogénea. En ese caso, podríamos ajustar parámetros dentro del ciclo (por
+  ejemplo, aumentar la probabilidad de mutación) para recuperar exploración.
+
+Otro aspecto importante son las variantes que podríamos implementar para atacar
+problemas más generales. Por ejemplo:
+
+- Representaciones distintas a listas binarias (valores enteros o **continuos**).
+- Operadores genéticos alternativos, como **cruce de dos puntos** o **cruce
+  uniforme**.
+- Mutaciones para variables continuas, como la **mutación gaussiana**.
+- Esquemas de reemplazo con elitismo explícito, o selección con presión
+  ajustable.
+
+Una solución práctica para acceder a estas variantes es utilizar una librería
+especializada que ya implemente los componentes más comunes. Una de las
+bibliotecas más utilizadas en Python para algoritmos evolutivos es `DEAP`_.
+
+Por ejemplo, el script anterior puede implementarse con DEAP de la siguiente
+manera:
+
+.. code-block:: python
+   :linenos:
+
+   import random
+   from deap import base, creator, tools, algorithms
+
+   creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+   creator.create("Individual", list, fitness=creator.FitnessMax)
+
+   toolbox = base.Toolbox()
+
+   toolbox.register("attr_bool", random.randint, 0, 1)
+   toolbox.register("individual", tools.initRepeat, creator.Individual,
+                    toolbox.attr_bool, n=100)
+   toolbox.register("population", tools.initRepeat, list, toolbox.individual)
+
+   def evalOneMax(individual):
+       return sum(individual),
+
+   toolbox.register("evaluate", evalOneMax)
+   toolbox.register("mate", tools.cxTwoPoint)
+   toolbox.register("mutate", tools.mutFlipBit, indpb=0.05)
+   toolbox.register("select", tools.selTournament, tournsize=3)
+
+   population = toolbox.population(n=300)
+
+   NGEN = 40
+   for gen in range(NGEN):
+       offspring = algorithms.varAnd(population, toolbox, cxpb=0.5, mutpb=0.1)
+       fits = toolbox.map(toolbox.evaluate, offspring)
+
+       for fit, ind in zip(fits, offspring):
+           ind.fitness.values = fit
+
+       population = toolbox.select(offspring, k=len(population))
+       print(tools.selBest(population, k=1))
+
+.. _DEAP: https://deap.readthedocs.io/en/master/
+
+Vemos algunas diferencias importantes:
+
+- En DEAP se define explícitamente una estructura ``Individual`` que incluye el
+  cromosoma y su atributo ``fitness``. Este atributo es una **tupla**, lo cual
+  permite abordar de forma natural problemas de **optimización multiobjetivo**.
+
+- Los operadores genéticos (selección, cruce, mutación y evaluación) se
+  registran en un objeto ``toolbox``, lo que facilita intercambiar componentes y
+  experimentar con distintas configuraciones del algoritmo.
+
+- El ciclo evolutivo se expresa mediante operaciones de **alto nivel** (por
+  ejemplo, ``algorithms.varAnd``), lo que hace que el código sea más compacto,
+  legible y reutilizable.
+
+- El objeto ``toolbox`` incluye otras estructuras y utilidades que simplifican
+  la construcción de algoritmos evolutivos más complejos.
+
+- Es posible implementar de manera sencilla problemas de **maximización** y
+  **minimización**, simplemente ajustando la definición del objeto ``Fitness``.
+
+- La librería proporciona herramientas para recopilar **estadísticas del
+  proceso evolutivo**, como promedios, máximos, mínimos y desviaciones estándar
+  del *fitness* por generación.
+
+- Además de algoritmos genéticos, DEAP implementa otros métodos de búsqueda
+  basados en poblaciones, como **optimización por enjambre de partículas
+  (PSO)**.
+
+PSO
+---
+
+Veamos ahora **PSO (Particle Swarm Optimization)**, un algoritmo bioinspirado
+propuesto por J. Kennedy y R. Eberhart en 1995 :cite:. El algoritmo que ataca
+problemas de **optimización continua** de una manera conceptualmente distinta a
+los algoritmos genéticos.  Mientras que los algoritmos genéticos se inspiran en
+la selección natural y operan mediante operadores discretos como selección,
+cruce y mutación, PSO se basa en el comportamiento colectivo observado en
+sistemas naturales como parvadas de aves o bancos de peces. En lugar de
+recombinar soluciones, PSO ajusta de manera iterativa un conjunto de
+**partículas** que se desplazan en el espacio de búsqueda siguiendo reglas
+simples de movimiento.
+
+Cada partícula representa una solución candidata y mantiene información tanto
+de su **mejor posición individual** como de la **mejor posición encontrada por
+el grupo**. A partir de estas referencias, las partículas actualizan su
+velocidad y posición, logrando un balance entre exploración global y
+explotación local.
+
+La velocidad de cada partícula se actualiza únicamente a partir de
+la atracción hacia su mejor posición individual y la mejor posición global del
+enjambre. 
+
+Tenemos:
+
+- :math:`x_i(t)` la posición de la partícula :math:`i` en la iteración :math:`t`,
+- :math:`v_i(t)` su velocidad,
+- :math:`p_i` la mejor posición encontrada por la partícula (*personal best*),
+- :math:`g` la mejor posición encontrada por el enjambre (*global best*).
+
+La ecuación de actualización de la velocidad se define como:
+
+.. math::
+
+   v_i(t+1) = c_1 r_1 \big(p_i - x_i(t)\big)
+              + c_2 r_2 \big(g - x_i(t)\big)
+
+y la actualización de la posición como:
+
+.. math::
+
+   x_i(t+1) = x_i(t) + v_i(t+1)
+
+donde:
+
+- :math:`c_1` es el **coeficiente cognitivo**, que mide cuánto confía la partícula
+  en su propia experiencia,
+- :math:`c_2` es el **coeficiente social**, que mide la influencia del enjambre,
+- :math:`r_1, r_2 \sim \mathcal{U}(0,1)` son números aleatorios uniformes que
+  introducen variabilidad estocástica en el movimiento.
+
+En esta versión elemental del algoritmo, cada partícula se mueve directamente
+hacia una combinación de su mejor solución conocida y la mejor solución global.
+
+Estas ecuaciones reflejan el comportamiento colectivo del enjambre: cada
+partícula es atraída tanto por su experiencia individual como por el
+conocimiento compartido del grupo. 
+
+..note ::
+
+    Una de las mejoras a este algoritmo básico es agregar un término de inercia
+    que permite regular mejor el balance entre **exploración** y
+    **explotación** del espacio de búsqueda.
+
+Vamos a utilizar el ejemplo básico de la documentación de la librería ``DEAP``
+para discutir su implementación en Python. De la descripción del algoritmo
+vemos que ahora necesitamos almacenar información adicional para cada
+partícula. Su posición, velocidad y mejor fitness hasta el momento. También
+debemos almacenar información de la mejor partícula hasta el momento. 
+Para esto ``DEAP`` utiliza una nueva estructura ``Particle``:
+
+.. code-block:: python
+    :linenos:
+
+    import operator
+    import random
+
+    import numpy
+    import math
+
+    from deap import base
+    from deap import benchmarks
+    from deap import creator
+    from deap import tools
+
+    creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+    creator.create("Particle", list, fitness=creator.FitnessMax, speed=list, 
+        smin=None, smax=None, best=None)
+
+En este caso importamos la librería ``benchmarks`` que incluye el problema de optimización 
+a resolver. Vemos que es un problema de maximización. 
+
+Debemos agregar una función para crear de manera aleatoria las partículas de tamaño ``size``. Tanto la posición 
+como la velocidad incluyen limites mínimos y máximos para evitar que las particulas 
+se salgan del espacio de búsqueda. En este caso los valores aleatorios son contínuos y 
+se generan dentro del rango ``smin`` y ``smax``:
+
+.. code-block:: python
+    :linenos:
+
+    def generate(size, pmin, pmax, smin, smax):
+        part = creator.Particle(random.uniform(pmin, pmax) for _ in range(size)) 
+        part.speed = [random.uniform(smin, smax) for _ in range(size)]
+        part.smin = smin
+        part.smax = smax
+        return part
+
+``DEAP`` nos permite incluir un método para actualizar a la partícula en cada iteración. 
+En este caso lo hacemos de manera básica utilizando las reglas de actualización vistas
+anteriormente:
+
+.. code-block:: python
+    :linenos:
+
+    def updateParticle(part, best, phi1, phi2):
+        u1 = (random.uniform(0, phi1) for _ in range(len(part)))
+        u2 = (random.uniform(0, phi2) for _ in range(len(part)))
+        v_u1 = map(operator.mul, u1, map(operator.sub, part.best, part))
+        v_u2 = map(operator.mul, u2, map(operator.sub, best, part))
+        part.speed = list(map(operator.add, part.speed, map(operator.add, v_u1, v_u2)))
+        for i, speed in enumerate(part.speed):
+            if abs(speed) < part.smin:
+                part.speed[i] = math.copysign(part.smin, speed)
+            elif abs(speed) > part.smax:
+                part.speed[i] = math.copysign(part.smax, speed)
+        part[:] = list(map(operator.add, part, part.speed))
+
+El método de acutalización recibe los parámetros ``phi1`` y ``phi2`` que
+corresponden a los coeficientes *cognitivo* y *social* de PSO. Los vectores
+``u1`` y ``u2`` son los factores estocásticos. Por último se restringe la
+particula al espacio de búsqueda.
+
+Se registran los elemento en el ``toolbox``:
+
+.. code-block:: python
+    :linenos:
+
+    toolbox = base.Toolbox()
+    toolbox.register("particle", generate, size=2, pmin=-6, pmax=6, smin=-3, smax=3)
+    toolbox.register("population", tools.initRepeat, list, toolbox.particle)
+    toolbox.register("update", updateParticle, phi1=2.0, phi2=2.0)
+    toolbox.register("evaluate", benchmarks.h1)
+
+El benchmark utilizado es h1. Los valores para ``phi1`` y ``phi2`` son los 
+recomendados por los autores de PSO. Para este benchmark se utilizan dos dimensiones ``size`` = 2, y
+el espacio de búsqueda se limita entre [-6. 6]- Y velocidad entre [-3.3]. 
+
+Finalmente, el ciclo del algoritmo propuesto por la documentación es el siguiente:
+
+.. code-block:: python
+    :linenos:
+
+     def main():
+        pop = toolbox.population(n=5)
+        stats = tools.Statistics(lambda ind: ind.fitness.values)
+        stats.register("avg", numpy.mean)
+        stats.register("std", numpy.std)
+        stats.register("min", numpy.min)
+        stats.register("max", numpy.max)
+
+        logbook = tools.Logbook()
+        logbook.header = ["gen", "evals"] + stats.fields
+
+        GEN = 1000
+        best = None
+
+        for g in range(GEN):
+            for part in pop:
+                part.fitness.values = toolbox.evaluate(part)
+                if not part.best or part.best.fitness < part.fitness:
+                    part.best = creator.Particle(part)
+                    part.best.fitness.values = part.fitness.values
+                if not best or best.fitness < part.fitness:
+                    best = creator.Particle(part)
+                    best.fitness.values = part.fitness.values
+            for part in pop:
+                toolbox.update(part, best)
+
+            # Gather all the fitnesses in one list and print the stats
+            logbook.record(gen=g, evals=len(pop), **stats.compile(pop))
+            print(logbook.stream)
+
+        return pop, logbook, best
+
+    if __name__ == "__main__":
+        main()
+
+En este caso se lleva un registro del avance del algoritmo utilizando la estructura ``stats``. 
+El ciclo es parecido al de la evolución genética que vimos anteriormente, pero en lugar
+de generar nuevos individuos mantenemos a las particulas y acutalizamos su posición.
