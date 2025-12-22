@@ -855,9 +855,16 @@ Se registran los elemento en el ``toolbox``:
     toolbox.register("update", updateParticle, phi1=2.0, phi2=2.0)
     toolbox.register("evaluate", benchmarks.h1)
 
-El benchmark utilizado es h1. Los valores para ``phi1`` y ``phi2`` son los 
-recomendados por los autores de PSO. Para este benchmark se utilizan dos dimensiones ``size`` = 2, y
-el espacio de búsqueda se limita entre [-6. 6]- Y velocidad entre [-3.3]. 
+El *benchmark* utilizado es ``h1`` y el ejemplo trabaja en dos dimensiones
+(``size=2``). Los valores ``phi1=2.0`` y ``phi2=2.0`` se utilizan comúnmente en
+ejemplos introductorios y son una elección estándar en múltiples referencias de
+PSO.
+
+.. note::
+
+   En este ejemplo, el espacio de búsqueda se limita a ``[-6, 6]`` y la velocidad
+   a ``[-3, 3]``. En problemas reales, estos rangos deben elegirse con base en la
+   interpretación física o numérica de los parámetros que se están optimizando.
 
 Finalmente, el ciclo del algoritmo propuesto por la documentación es el siguiente:
 
@@ -899,6 +906,12 @@ Finalmente, el ciclo del algoritmo propuesto por la documentación es el siguien
     if __name__ == "__main__":
         main()
 
-En este caso se lleva un registro del avance del algoritmo utilizando la estructura ``stats``. 
-El ciclo es parecido al de la evolución genética que vimos anteriormente, pero en lugar
-de generar nuevos individuos mantenemos a las particulas y acutalizamos su posición.
+En este caso se lleva un registro del avance del algoritmo mediante los objetos
+``stats`` y ``logbook``. El ciclo es conceptualmente parecido al que vimos en
+algoritmos genéticos: se evalúa a la población y se registra su desempeño. La
+diferencia principal es que en PSO **no se generan descendientes** por cruza y
+mutación; en su lugar, se mantienen las partículas y se **actualiza su posición**
+iterativamente con base en la información de su mejor solución personal y la
+mejor solución global del enjambre.
+
+
