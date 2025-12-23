@@ -5,12 +5,12 @@ from skfuzzy import control as ctrl
 
 def build_fis(params=None):
     """
-   Construye el sistema de inferencia difusa (FIS).
+    Construye el sistema de inferencia difusa (FIS).
 
-   params: dict | None
-       Parámetros opcionales para modificar las funciones de membresía.
-       En esta versión base, se ignoran o se usan valores por defecto.
-   """
+    params: dict | None
+        Parámetros opcionales para modificar las funciones de membresía.
+        En esta versión base, se ignoran o se usan valores por defecto.
+    """
 
     # Universos (sin normalizar todavía)
     e_th = ctrl.Antecedent(np.linspace(-1.5, 1.5, 201), 'e_th')  # rad aprox.
