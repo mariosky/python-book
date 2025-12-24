@@ -1,33 +1,24 @@
-# Example from:
-#https://deap.readthedocs.io/en/master/examples/pso_basic.html#poli2007
 import operator
 import random
+
 import numpy
 import math
-import json
+
 from deap import base
-import time
 from deap import creator
 from deap import tools
-from evaluate_controller import evaluate_controller
 
-inicio_tiempo = time.time()  # te asigna el tiempo actual
+from evaluate_controller import evaluate_controller
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
-creator.create("Particle", list, fitness=creator.FitnessMin, speed=list, smin=0.5, smax=0.5, best=None)
-# pmax y pmin rango de valores que va a tomar la partícula
-# smin y smax velocidades máximas
+creator.create("Particle", list, fitness=creator.FitnessMin, speed=list,
+    smin=None, smax=None, best=None)
+
 def generate(size, pmin, pmax, smin, smax):
-    part = creator.Particle(random.uniform(pmin, pmax) for _ in range(size)) 
+    part = creator.Particle(random.uniform(pmin, pmax) for _ in range(size))
     part.speed = [random.uniform(smin, smax) for _ in range(size)]
     part.smin = smin
     part.smax = smax
     return part
-
-# phi1 y phi2 
-# son los limites superiores del los valores aleatorios 
-# de U_1 y U_2
-# part.best la mejor posicion de la particula
-# best, la mejor de todas.
 
 def updateParticle(part, best, phi1, phi2):
     u1 = (random.uniform(0, phi1) for _ in range(len(part)))
@@ -42,15 +33,14 @@ def updateParticle(part, best, phi1, phi2):
             part.speed[i] = math.copysign(part.smax, speed)
     part[:] = list(map(operator.add, part, part.speed))
 
-def main(config):
-    toolbox = base.Toolbox()
-    toolbox.register("particle", generate,  size=6, pmin=0.0, pmax=1.0, smin=0.0, smax=0.4)
-    toolbox.register("evaluate", evaluate_controller)# parametro   get_eval(fis, px control)
-    toolbox.register("population", tools.initRepeat, list, toolbox.particle)
-    # para variable c1 y c2
-    toolbox.register("update", updateParticle, phi1=2, phi2=2)
+toolbox = base.Toolbox()
+toolbox.register("particle", generate, size=6, pmin=-0.05, pmax=1.5, smin=-0.1, smax=0.1)
+toolbox.register("population", tools.initRepeat, list, toolbox.particle)
+toolbox.register("update", updateParticle, phi1=2.0, phi2=2.0)
+toolbox.register("evaluate", evaluate_controller)
 
-
+def main():
+    pop = toolbox.population(n=50)
     stats = tools.Statistics(lambda ind: ind.fitness.values)
     stats.register("avg", numpy.mean)
     stats.register("std", numpy.std)
@@ -60,10 +50,11 @@ def main(config):
     logbook = tools.Logbook()
     logbook.header = ["gen", "evals"] + stats.fields
 
-    GEN = config['ngen']
-    pop = config['pop']
+    GEN = 20
     best = None
+
     for g in range(GEN):
+        print(g)
         for part in pop:
             part.fitness.values = toolbox.evaluate(part)
             if not part.best or part.best.fitness < part.fitness:
@@ -73,23 +64,15 @@ def main(config):
                 best = creator.Particle(part)
                 best.fitness.values = part.fitness.values
 
-
+            print(best.fitness, best.fitness.values, part.best.fitness, part.fitness.values)
         for part in pop:
-            #toolbox.update(part, best)
-            updateParticle(part,best,phi1,phi2)
-            # imprime la diversidd despues de acualizar en cada generacion
-        #print("diversidad real", diversidad(best,pop))
-
+            toolbox.update(part, best)
+        print(best.fitness.values, best)
         # Gather all the fitnesses in one list and print the stats
         logbook.record(gen=g, evals=len(pop), **stats.compile(pop))
-        ##    time.time() - inicio_tiempo
-    print(logbook.chapters)
-
-
+        print(logbook.stream)
+        
+    return pop, logbook, best
 
 if __name__ == "__main__":
-    config = None
-    with open(r"..\config.json", "r") as conf_file:
-        config = json.load(conf_file)
-    results = main(config)
-    print(results)
+    main()
