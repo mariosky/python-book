@@ -60,6 +60,7 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
 
    instalación
    controlador
+   controlpso
    bibliografía
 
 .. raw:: latex

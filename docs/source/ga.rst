@@ -914,4 +914,183 @@ mutación; en su lugar, se mantienen las partículas y se **actualiza su posici�
 iterativamente con base en la información de su mejor solución personal y la
 mejor solución global del enjambre.
 
+Optimización del Controlador Difuso con PSO
+-------------------------------------------
 
+En secciones anteriores diseñamos un **controlador difuso base** para el
+problema de seguimiento de ruta. Si bien este controlador es funcional, su
+desempeño depende de múltiples parámetros, como la forma y los rangos de las
+funciones de membresía.
+
+El ajuste manual de estos parámetros puede resultar complicado, costoso en
+tiempo y altamente dependiente de la experiencia del diseñador. En esta
+sección abordamos este problema utilizando una **metaheurística basada en
+poblaciones**, específicamente **optimización por enjambre de partículas
+(PSO)**, para ajustar automáticamente los parámetros del controlador difuso.
+
+El objetivo no es obtener el controlador “perfecto”, sino ilustrar cómo
+**técnicas de cómputo inteligente pueden combinarse** para resolver problemas
+complejos de manera práctica.
+
+Parametrización del controlador difuso
+--------------------------------------
+
+Para poder optimizar el controlador, primero es necesario **hacer explícitos
+los parámetros ajustables** del sistema difuso. En nuestro caso, estos
+parámetros corresponden a valores que definen la forma y el ancho de las
+funciones de membresía de las variables difusas.
+
+En lugar de codificar estos valores directamente en el código, se utiliza un
+vector de parámetros reales:
+
+.. math::
+
+   \mathbf{p} = [p_1, p_2, \dots, p_n]
+
+Cada partícula del algoritmo PSO representa una posible configuración del
+controlador difuso, es decir, un conjunto particular de parámetros que definen
+las funciones de membresía.
+
+El archivo ``tunable_fuzzy.py`` implementa esta idea, permitiendo construir un
+FIS a partir de un vector de parámetros.
+
+.. note::
+   En esta implementación, el controlador difuso sigue utilizando únicamente
+   las variables de error geométrico ``e`` y ``e_{th}``. No se introduce
+   conocimiento adicional del modelo ni de la velocidad del robot.
+
+Normalización de variables difusas
+----------------------------------
+
+Un paso clave para facilitar la optimización es la **normalización de las
+variables difusas**. En lugar de trabajar directamente con unidades físicas
+(metros, radianes), los errores se escalan a rangos adimensionales fijos, por
+ejemplo:
+
+.. math::
+
+   e, e_{th} \in [-1, 1]
+
+Esto tiene varias ventajas:
+
+- Reduce la sensibilidad del algoritmo a la escala de las variables.
+- Permite reutilizar la misma estructura del FIS en distintos escenarios.
+- Facilita la búsqueda en el espacio de parámetros por parte del PSO.
+
+La normalización se realiza fuera del FIS, manteniendo el controlador como una
+*caja negra* desde el punto de vista del optimizador.
+
+Definición de la función objetivo
+---------------------------------
+
+Para evaluar la calidad de un controlador difuso necesitamos definir una
+**función objetivo** (*fitness*). En este trabajo utilizamos como métrica
+principal el **error cuadrático medio (RMSE)** del error lateral a lo largo de
+una o varias rutas de referencia.
+
+La función de evaluación sigue el siguiente esquema:
+
+1. Construir el controlador difuso a partir del vector de parámetros.
+2. Ejecutar la simulación para un conjunto fijo de rutas.
+3. Calcular el RMSE del error lateral.
+4. Penalizar configuraciones que no alcanzan la meta o divergen.
+
+Desde el punto de vista del optimizador, el proceso completo se ve como una
+función:
+
+.. math::
+
+   \mathbf{p} \;\longrightarrow\; \text{RMSE}
+
+El archivo ``evaluate_controller.py`` implementa esta lógica y actúa como
+interfaz entre el simulador y el algoritmo PSO.
+
+.. note::
+   El simulador puede terminar anticipadamente si el error crece demasiado o si
+   el robot no alcanza la meta. Esto reduce el costo computacional durante la
+   optimización.
+
+Optimización mediante PSO
+-------------------------
+
+Una vez definida la función objetivo, el problema se reduce a minimizarla en un
+espacio continuo de parámetros. Para ello utilizamos **PSO**, una
+metaheurística inspirada en el movimiento colectivo de enjambres.
+
+Cada partícula representa un controlador difuso distinto. Durante el proceso:
+
+- Las partículas exploran el espacio de parámetros.
+- Cada partícula recuerda su mejor solución histórica.
+- El enjambre comparte información sobre la mejor solución global encontrada.
+
+La implementación se basa en la librería ``DEAP`` y se encuentra en el archivo
+``pso.py``.
+
+El resultado del proceso es un vector de parámetros que produce el mejor
+desempeño observado durante la optimización. Este resultado se guarda en un
+archivo de configuración:
+
+.. code-block:: text
+
+   best_controller.json
+
+Este archivo permite **reproducir y analizar** el controlador optimizado sin
+necesidad de volver a ejecutar el algoritmo PSO.
+
+Visualización y análisis del controlador optimizado
+---------------------------------------------------
+
+Una vez obtenido el mejor conjunto de parámetros, es posible:
+
+- visualizar las funciones de membresía resultantes,
+- ejecutar la simulación para rutas individuales,
+- comparar visualmente el desempeño frente al controlador base.
+
+El script ``show_controller.py`` cumple esta función y permite seleccionar la
+ruta a evaluar como parámetro de entrada.
+
+Este paso es importante desde un punto de vista pedagógico: aunque el proceso
+de optimización es automático, **la interpretación del resultado sigue siendo
+humana**.
+
+Limitaciones
+------------
+
+El enfoque presentado ilustra varias ideas clave:
+
+- El control difuso es **heurístico** y altamente parametrizable.
+- Las metaheurísticas permiten automatizar el ajuste de sistemas complejos.
+- El resultado no es necesariamente óptimo ni único.
+- El costo computacional puede ser elevado.
+
+En este capítulo hemos dejado deliberadamente fuera varios aspectos, como la
+optimización multiobjetivo, la selección automática de reglas o la adaptación
+en línea del controlador. Estos temas quedan como trabajo futuro o ejercicios
+avanzados.
+
+Control inteligente y cómputo suave
+-------------------------------------------
+
+El controlador difuso optimizado mediante PSO es un ejemplo representativo de
+**computación inteligente** o **cómputo suave** (*soft computing*): una
+combinación de técnicas aproximadas, interpretables y adaptativas que permiten
+resolver problemas para los cuales los enfoques clásicos resultan poco
+prácticos.
+
+Más que reemplazar a la teoría de control tradicional, estas técnicas la
+complementan, ofreciendo herramientas flexibles para enfrentar incertidumbre,
+no linealidades y complejidad creciente.
+
+En el siguiente capítulo abordaremos el problema del **alto costo computacional**
+asociado a este tipo de métodos, utilizando técnicas de **cómputo distribuido**.
+
+Las metaheurísticas basadas en poblaciones son **altamente paralelizables**, ya
+que la evaluación de cada individuo o partícula puede realizarse de manera
+independiente. Esta característica las hace particularmente adecuadas para
+aprovechar arquitecturas de cómputo modernas, como sistemas multinúcleo,
+clusters o entornos distribuidos.
+
+Con esta motivación, implementaremos una variante de **PSO multi-enjambre**, en
+la cual varios enjambres evolucionan en paralelo e intercambian información de
+forma controlada. Este enfoque permite reducir el tiempo total de optimización y,
+al mismo tiempo, mejorar la exploración del espacio de búsqueda.
