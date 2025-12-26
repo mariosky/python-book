@@ -9,8 +9,9 @@ flujo de trabajo general es:
    controlador callable.
 2. ``evaluate_controller.py`` evalúa el controlador como una *caja negra* y
    devuelve un valor escalar (fitness), típicamente el **RMSE**.
-3. ``pso.py`` ejecuta PSO (con DEAP) para minimizar ese fitness.
-4. ``best_controller.json`` guarda el mejor vector de parámetros encontrado.
+3. ``pso.py`` ejecuta PSO (con DEAP) para minimizar el **RMSE** del controlador parametrizable.
+4. ``best_controller.json`` guarda el mejor vector de parámetros encontrado, 
+   también las ruta utilizadas para el entrenamiento.
 5. ``show_controller.py`` carga el mejor controlador y permite visualizar una
    ruta específica (animación, gráficas y funciones de membresía).
 
@@ -21,7 +22,7 @@ El directorio del ejemplo contiene los siguientes archivos:
 
 .. code-block:: bash
 
-   pso_code/
+   fuzzy_code/
    ├── tunable_fuzzy.py
    ├── evaluate_controller.py
    ├── pso.py
@@ -49,9 +50,7 @@ Este archivo define el **FIS ajustable**. Su responsabilidad es:
 
    (e_{th}, e) \;\longrightarrow\; \omega
 
-- (Opcional) incluir funciones para visualizar las funciones de membresía.
-
-.. literalinclude:: pso_code/tunable_fuzzy.py
+.. literalinclude:: fuzzy_code/tunable_fuzzy.py
    :language: python
    :linenos:
    :caption: FIS parametrizable para optimización (``tunable_fuzzy.py``)
@@ -65,9 +64,9 @@ Este script implementa la **función objetivo** (*fitness*). En la práctica:
 - Construye el controlador difuso mediante ``tunable_fuzzy.get_controller``.
 - Ejecuta la simulación sobre un conjunto fijo de rutas.
 - Calcula el desempeño (por ejemplo, RMSE del error lateral).
-- Penaliza escenarios donde el robot no llega a la meta o diverge.
+- Penaliza escenarios donde el robot no llega a la meta o pierde la referencia.
 
-.. literalinclude:: pso_code/evaluate_controller.py
+.. literalinclude:: fuzzy_code/evaluate_controller.py
    :language: python
    :linenos:
    :caption: Evaluación del controlador como función objetivo (``evaluate_controller.py``)
@@ -79,10 +78,10 @@ Implementación del algoritmo **PSO** utilizando ``DEAP``. Su función es:
 
 - Definir la representación de la partícula (posición/velocidad/mejor histórico).
 - Definir el espacio de búsqueda (rangos mínimos y máximos por parámetro).
-- Ejecutar el ciclo de optimización llamando a ``evaluate_controller``.
-- Guardar el mejor vector de parámetros encontrado en ``best_controller.json``.
+- Ejecutar el ciclo de optimización llamando a ``evaluate_controller.py``.
+- Imprime el mejor vector de parámetros.
 
-.. literalinclude:: pso_code/pso.py
+.. literalinclude:: fuzzy_code/pso.py
    :language: python
    :linenos:
    :caption: Optimización del FIS mediante PSO (``pso.py``)
@@ -96,7 +95,7 @@ principalmente:
 - ``params``: vector de parámetros (lista de ``float``) que define el FIS.
 - (Opcional) rutas utilizadas, métricas y metadatos para reproducibilidad.
 
-.. literalinclude:: pso_code/best_controller.json
+.. literalinclude:: fuzzy_code/best_controller.json
    :language: json
    :linenos:
    :caption: Mejor controlador encontrado (``best_controller.json``)
@@ -112,7 +111,7 @@ Script de **visualización y diagnóstico**. Este archivo:
 - Muestra animación y gráficas del seguimiento.
 - Despliega las funciones de membresía resultantes.
 
-.. literalinclude:: pso_code/show_controller.py
+.. literalinclude:: fuzzy_code/show_controller.py
    :language: python
    :linenos:
    :caption: Visualización del mejor controlador (``show_controller.py``)
@@ -121,11 +120,11 @@ Ejemplo de uso
 --------------
 
 Para mostrar el mejor controlador sobre una ruta específica (por ejemplo, la
-ruta con índice 2):
+ruta con índice 2) y la ubicación del archivo con la configuración del FIS:
 
 .. code-block:: bash
 
-   python show_controller.py 2
+   python show_controller.py 2 --configure ./best_controller.json
 
 Para ejecutar la optimización con PSO (puede tomar tiempo dependiendo del número
 de partículas y generaciones):
@@ -133,16 +132,4 @@ de partículas y generaciones):
 .. code-block:: bash
 
    python pso.py
-
-Sugerencia de reproducibilidad
-------------------------------
-
-Si se desea hacer el experimento reproducible, conviene registrar:
-
-- semilla aleatoria (``seed``),
-- número de partículas,
-- número de iteraciones,
-- límites del espacio de búsqueda,
-
-y guardarlos junto con ``params`` en ``best_controller.json``.
 
