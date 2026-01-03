@@ -8,10 +8,17 @@ from deap import base
 from deap import creator
 from deap import tools
 
+import ray
 from evaluate_controller import evaluate_controller
+
+remote_ev_controller = ray.remote(evaluate_controller)
+
+
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Particle", list, fitness=creator.FitnessMin, speed=list,
     smin=None, smax=None, best=None)
+
+
 
 def generate(size, pmin, pmax, smin, smax):
     part = creator.Particle(random.uniform(pmin, pmax) for _ in range(size))
@@ -37,7 +44,18 @@ toolbox = base.Toolbox()
 toolbox.register("particle", generate, size=6, pmin=-0.05, pmax=1.5, smin=-0.1, smax=0.1)
 toolbox.register("population", tools.initRepeat, list, toolbox.particle)
 toolbox.register("update", updateParticle, phi1=2.0, phi2=2.0)
-toolbox.register("evaluate", evaluate_controller)
+#toolbox.register("evaluate", ev_controller)
+
+
+def evaluate_population_ray(pop):
+    futures_fitness_values = [ remote_ev_controller.remote(particle) for particle in pop] 
+    results = ray.get(futures_fitness_values)
+    assert len(pop) == len(results)
+    
+    for i, part in enumerate(pop):
+        part.fitness.values = results[i]
+
+    return pop
 
 def main():
     pop = toolbox.population(n=50)
@@ -52,10 +70,12 @@ def main():
 
     GEN = 20
     best = None
+    
 
     for g in range(GEN):
+        evaluate_population_ray(pop)
         for part in pop:
-            part.fitness.values = toolbox.evaluate(part)
+            # part.fitness.values = toolbox.evaluate(part)
             if not part.best or part.best.fitness < part.fitness:
                 part.best = creator.Particle(part)
                 part.best.fitness.values = part.fitness.values
@@ -68,8 +88,14 @@ def main():
         # Gather all the fitnesses in one list and print the stats
         logbook.record(gen=g, evals=len(pop), **stats.compile(pop))
         print(logbook.stream)
-    print(best.fitness, best.fitness.values, part.best.fitness, part.fitness.values)
+        
+    print(best.fitness.values, best)
     return pop, logbook, best
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
