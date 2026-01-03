@@ -46,6 +46,7 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
    scikitlearn
    fuzzy
    ga
+   distribuido
 
 .. raw:: latex
 
