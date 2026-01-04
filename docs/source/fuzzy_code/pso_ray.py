@@ -11,7 +11,9 @@ from deap import tools
 import ray
 from evaluate_controller import evaluate_controller
 
-remote_ev_controller = ray.remote(evaluate_controller)
+@ray.remote
+def remote_ev_controller(particle):
+    return evaluate_controller(particle)
 
 
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
@@ -48,13 +50,12 @@ toolbox.register("update", updateParticle, phi1=2.0, phi2=2.0)
 
 
 def evaluate_population_ray(pop):
-    futures_fitness_values = [ remote_ev_controller.remote(particle) for particle in pop] 
+    futures_fitness_values = [remote_ev_controller.remote(list(particle)) for particle in pop] 
     results = ray.get(futures_fitness_values)
     assert len(pop) == len(results)
     
     for i, part in enumerate(pop):
         part.fitness.values = results[i]
-
     return pop
 
 def main():
@@ -75,7 +76,15 @@ def main():
     for g in range(GEN):
         evaluate_population_ray(pop)
         for part in pop:
+            # No calculamos el fitnes utilizando el toolbox
+            # lo hacemos con la función evaluate_population_ray(pop)
+
             # part.fitness.values = toolbox.evaluate(part)
+        
+            # Se compara el fitness no el valor del RMSE
+            # en este caso los controladores con menor RMSE
+            # tienen un mayor fitness. DEAP internamente 
+            # hace la multiplicación por -1 ya que estamos minimizando. 
             if not part.best or part.best.fitness < part.fitness:
                 part.best = creator.Particle(part)
                 part.best.fitness.values = part.fitness.values
@@ -93,7 +102,9 @@ def main():
     return pop, logbook, best
 
 if __name__ == "__main__":
+    ray.init()
     main()
+    ray.shutdown()
 
 
 

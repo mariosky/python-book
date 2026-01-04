@@ -1,17 +1,23 @@
+import math
 import operator
 import random
 
 import numpy
-import math
-
-from deap import base
-from deap import creator
-from deap import tools
-
+import ray
+from deap import base, creator, tools
 from evaluate_controller import evaluate_controller
+
+
+@ray.remote
+def remote_ev_controller(particle):
+    return evaluate_controller(particle)
+
+
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Particle", list, fitness=creator.FitnessMin, speed=list,
     smin=None, smax=None, best=None)
+
+
 
 def generate(size, pmin, pmax, smin, smax):
     part = creator.Particle(random.uniform(pmin, pmax) for _ in range(size))
@@ -36,7 +42,18 @@ def updateParticle(part, best, phi1, phi2):
 toolbox = base.Toolbox()
 toolbox.register("particle", generate, size=6, pmin=-0.05, pmax=1.5, smin=-0.1, smax=0.1)
 toolbox.register("population", tools.initRepeat, list, toolbox.particle)
-toolbox.register("update", updateParticle, phi1=2.0, phi2=2.0)toolbox.register("evaluate", evaluate_controller)
+toolbox.register("update", updateParticle, phi1=2.0, phi2=2.0)
+#toolbox.register("evaluate", ev_controller)
+
+
+def evaluate_population_ray(pop):
+    futures_fitness_values = [remote_ev_controller.remote(list(particle)) for particle in pop] 
+    results = ray.get(futures_fitness_values)
+    assert len(pop) == len(results)
+    
+    for i, part in enumerate(pop):
+        part.fitness.values = results[i]
+    return pop
 
 def main():
     pop = toolbox.population(n=50)
@@ -50,11 +67,20 @@ def main():
     logbook.header = ["gen", "evals"] + stats.fields
 
     GEN = 20
-    best = None
 
     for g in range(GEN):
+        evaluate_population_ray(pop)
         for part in pop:
-            part.fitness.values = toolbox.evaluate(part)
+            # No calculamos el fitnes utilizando el toolbox
+            # lo hacemos con la función evaluate_population_ray(pop)
+
+            # part.fitness.values = toolbox.evaluate(part)
+        
+            # Se compara el fitness no el valor del RMSE
+            # en este caso los controladores con menor RMSE
+            # tienen un mayor fitness. DEAP internamente 
+            # hace la multiplicación por -1 ya que estamos minimizando. 
+
             if not part.best or part.best.fitness < part.fitness:
                 part.best = creator.Particle(part)
                 part.best.fitness.values = part.fitness.values
@@ -67,8 +93,17 @@ def main():
         # Gather all the fitnesses in one list and print the stats
         logbook.record(gen=g, evals=len(pop), **stats.compile(pop))
         print(logbook.stream)
-    print(best.fitness, best.fitness.values, part.best.fitness, part.fitness.values)
+        
+    print(best.fitness.values, best)
     return pop, logbook, best
 
 if __name__ == "__main__":
+    ray.init()
     main()
+    ray.shutdown()
+
+
+
+
+
+
