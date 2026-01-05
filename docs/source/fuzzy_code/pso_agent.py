@@ -51,7 +51,7 @@ class SwarmAgent:
 
 
 
-    def evaluate_population_ray(self,pop):
+    def evaluate_population_ray(self):
         futures_fitness_values = [remote_ev_controller.remote(list(particle)) for particle in self.pop] 
         results = ray.get(futures_fitness_values)
         assert len(self.pop) == len(results)
@@ -91,7 +91,7 @@ class SwarmAgent:
         GEN = config['ngen']
         best = None
         for g in range(GEN):
-            self.evaluate_population_ray(self.pop)
+            self.evaluate_population_ray()
             for part in self.pop:
                 if part.best is None or part.best.fitness < part.fitness:
                     part.best = creator.Particle(part)
@@ -133,13 +133,20 @@ config = {
 creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
 creator.create("Particle", list, fitness=creator.FitnessMin, speed=list, smin=None, smax=None, best=None)
 
+
+import os
+os.environ["RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO"] = "0"
+os.environ["RAY_DISABLE_DASHBOARD"] = "1"
+os.environ["RAY_USAGE_STATS_ENABLED"] = "0"
+
 ray.init(ignore_reinit_error=True, include_dashboard=False)
+
 try:
-   agents = [SwarmAgent.remote(config) for i in range(config['num_swarms'])
-   ]
+    agents = [SwarmAgent.remote(config) for i in range(config['num_swarms'])
+    ]
    
-   best_global = None
-   for r in range(config["num_rounds"]):
+    best_global = None
+    for r in range(config["num_rounds"]):
        # 1) Cada agente ejecuta varias iteraciones locales en paralelo
        futures = [a.main.remote(config) for a in agents]
        bests = [best for best, _ in ray.get(futures)]  # [(f, x), ...]
@@ -151,18 +158,21 @@ try:
        if best_global is None or best_global.fitness < best.fitness:
            best_global = creator.Particle(best)
            best_global.fitness.values = best.fitness.values
-       print(f"Ronda {r:02d} | mejor global = {best_global.fitness.values[0]:.6f} | {best_global}")
+       print(f"Ronda {r:02d} | Mejor: {best_global.fitness.values[0]:.6f}")
        
        # 3) Migración: intercambio de candidatos entre agentes
-       migration_futures = []
-       migration_particles = [(list(p), p.fitness.values) for p in bests[:config['migrate_k']]]
-       for a in agents:
-           # Candidatos: enviamos los k mejores a los otros agentes 
-           migration_futures.append(a.migrate.remote(migration_particles))
-       ray.get(migration_futures)
-
+       if (r + 1) % int(config["migrate_interval"]) == 0:
+           print(f"Migrando")
+           migration_futures = []
+           migration_particles = [(list(p), p.fitness.values) for p in bests[:config['migrate_k']]]
+           for a in agents:
+               # Candidatos: enviamos los k mejores a los otros agentes 
+               migration_futures.append(a.migrate.remote(migration_particles))
+           ray.get(migration_futures)
+    
+    print(f"Mejor global: {best_global.fitness.values[0]:.6f} | {best_global}")
 finally:
-   ray.shutdown()
+    ray.shutdown()
 
 
 
