@@ -262,61 +262,271 @@ poblaciones, donde cada población se modela como un actor con estado encapsulad
 
 Estos ejemplos muestran cómo los modelos de funciones sin estado y actores con
 estado pueden utilizarse de forma independiente o combinada para escalar
-algoritmos computacionalmente intensivos.
+algoritmos costosos computacionalmente.
+
+Funciones *stateless*
+---------------------
+
+Desde los primeros trabajos en el campo de la optimización basada en
+poblaciones se han propuesto diversas arquitecturas y estrategias para
+escalar este tipo de algoritmos. De hecho, estos métodos suelen considerarse
+especialmente adecuados para el cómputo en paralelo. La razón principal es
+que la parte más costosa del algoritmo consiste en evaluar las soluciones
+candidatas, y dicha evaluación puede realizarse de manera independiente.
+
+En particular, la evaluación de la aptitud presenta las siguientes
+características:
+
+- Cada evaluación recibe como entrada únicamente la representación de la
+  solución candidata (normalmente un vector de parámetros) y produce como
+  salida una medida de aptitud (*fitness*).
+
+- Una función que realiza esta evaluación no requiere mantener información
+  entre llamadas consecutivas; es decir, no depende de un estado interno
+  persistente.
+
+- Para dos soluciones candidatas idénticas, el valor de aptitud obtenido es
+  siempre el mismo.
+
+Debido a estas propiedades, las funciones de aptitud pueden considerarse
+**funciones sin estado (*stateless*)**. Esto permite ejecutarlas en paralelo
+sin introducir problemas de consistencia, ya que no requieren leer ni
+modificar memoria compartida.
+
+Como ejemplo, modificaremos el código del algoritmo PSO presentado en el
+capítulo anterior para que la evaluación de las soluciones candidatas se
+realice en paralelo. Primero, recordemos la versión secuencial:
+
+.. code-block:: python
+
+   # Fragmento del algoritmo original
+   for g in range(GEN):
+       for part in pop:
+           part.fitness.values = toolbox.evaluate(part)
+
+En este fragmento, el algoritmo itera sobre cada elemento de la población
+(en este caso, cada partícula) y evalúa su aptitud de manera secuencial.
+Este ciclo se repite durante un número fijo de generaciones. El costo
+computacional total del algoritmo puede estimarse, de forma aproximada, como
+el producto del número de generaciones por el tamaño de la población.
+
+En la versión secuencial, el programa se bloquea esperando a que cada llamada
+a ``toolbox.evaluate(part)`` finalice antes de continuar con la siguiente
+evaluación.
+
+Al utilizar una librería de cómputo distribuido, el mismo ciclo de evaluación
+toma una forma distinta:
+
+.. code-block:: python
+
+   futures_fitness_values = [
+       remote_ev_controller.remote(list(particle))
+       for particle in pop
+   ]
+   results = ray.get(futures_fitness_values)
+
+De nuevo, se recorre la población para evaluar cada partícula. Sin embargo,
+en lugar de devolver directamente el resultado de la evaluación, cada llamada
+a una función remota devuelve una **referencia** y estas no bloquean la ejecución
+mientras realizan el cálculo. 
+
+La lista ``futures_fitness_values`` contiene referencias especiales a los
+resultados que estarán disponibles en el futuro. Este tipo de referencias se
+conoce comúnmente como **futures** o **promesas** (*promises*). En Ray, estas
+referencias se denominan ``ObjectRef``.
+
+De manera conceptual, cada llamada a la función remota puede entenderse como
+una tarea que se agrega a una cola de trabajo. Cuando un *worker* toma una de
+estas tareas y completa su ejecución, el resultado se almacena y queda
+asociado a la referencia correspondiente.
+
+Esta ejecución es **asíncrona**, ya que no importa el orden en el que se
+realicen las evaluaciones. Dado que las funciones de aptitud son *stateless*,
+el resultado no depende de la intercalación de las tareas.
+
+No obstante, en este punto del algoritmo es necesario esperar a que todas las
+evaluaciones de la población hayan concluido antes de continuar. Esto ocurre
+en la segunda línea del fragmento anterior. La instrucción
+``ray.get(futures_fitness_values)`` bloquea la ejecución hasta que todos los
+resultados estén disponibles. Una vez completada esta llamada, la variable
+``results`` contiene los valores de aptitud de todas las partículas, y el
+algoritmo puede continuar con la siguiente etapa.
+
+Para poder utilizar esta infraestructura de cómputo distribuido es necesario
+instalar la librería Ray y sus dependencias. Una vez hecho esto, Ray puede
+ejecutarse de manera local, utilizando automáticamente los núcleos de CPU
+disponibles en la máquina.
+
+El primer paso consiste en definir una función remota. Para ello basta con
+importar el módulo ``ray`` y decorar la función que se desea ejecutar de forma
+distribuida utilizando el decorador ``@ray.remote``:
+
+.. code-block:: python
+
+   import ray
+   from evaluate_controller import evaluate_controller
+
+   @ray.remote
+   def remote_ev_controller(particle):
+       return evaluate_controller(particle)
+
+En este ejemplo, la función remota ``remote_ev_controller`` simplemente invoca
+a la función local ``evaluate_controller`` para evaluar una solución candidata.
+Es importante notar que **no es necesario modificar la lógica de evaluación
+existente**: Ray se encarga de ejecutar la función en un *worker* disponible y
+de gestionar la comunicación de los resultados.
+
+A partir de este punto, cada llamada a
+``remote_ev_controller.remote(...)`` crea una tarea independiente que puede
+ejecutarse en paralelo con otras evaluaciones.
+
+.. note::
+
+   **Ejecución en clúster**
+
+   Aunque en los ejemplos de este capítulo utilizamos Ray en modo local, el
+   mismo código puede ejecutarse sin cambios en un entorno distribuido.
+   Ray permite crear *clústeres* formados por varias máquinas físicas en una
+   red local o por máquinas virtuales en la nube.
+
+   Desde el punto de vista del programador, el modelo de programación es el
+   mismo: las funciones remotas, los *workers* y las referencias a resultados
+   se utilizan de manera idéntica. La diferencia radica únicamente en la
+   infraestructura subyacente sobre la cual se ejecutan las tareas.
+
+A continuación se muestran los resultados impresos de la ejecución del algoritmo
+secuencial y del algoritmo distribuido (utilizando Ray). En ambos casos se
+imprime el resumen estadístico por generación y el tiempo total de ejecución
+medido con el comando ``time``.
+
+Ejecución secuencial
+^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
-    (base)> time python pso.py
-    gen	evals	avg    	std    	min     	max
-    0  	50   	9.80625	1.35624	0.312589	10
-    1  	50   	9.80706	1.35057	0.353079	10
-    2  	50   	10     	0      	10      	10
-    3  	50   	9.4191 	2.29927	0.299577	10
-    4  	50   	9.41963	2.29719	0.304851	10
-    5  	50   	8.83545	3.15362	0.268492	10
-    6  	50   	9.41942	2.298  	0.284945	10
-    7  	50   	9.22013	2.64468	0.244499	10
-    8  	50   	8.83136	3.16469	0.227427	10
-    9  	50   	9.02514	2.9246 	0.224242	10
-    10 	50   	8.63399	3.38564	0.225814	10
-    11 	50   	9.21839	2.65056	0.224037	10
-    12 	50   	8.43915	3.57639	0.224305	10
-    13 	50   	8.43975	3.57501	0.224878	10
-    14 	50   	8.43744	3.58027	0.223422	10
-    15 	50   	8.63654	3.37933	0.224132	10
-    16 	50   	8.24333	3.7494 	0.222354	10
-    17 	50   	8.05008	3.89985	0.224733	10
-    18 	50   	7.85437	4.04011	0.222289	10
-    19 	50   	7.46457	4.27742	0.224036	10
-    (0.22228923395729627,) (0.22228923395729627,) (10.0,) (10.0,)
-    python pso.py  504.70s user 7.01s system 100% cpu 8:26.91 total
+   (base)> time python pso.py
+   gen  evals  avg     std     min       max
+   0    50     9.80625 1.35624 0.312589  10
+   1    50     9.80706 1.35057 0.353079  10
+   2    50     10      0       10        10
+   3    50     9.4191  2.29927 0.299577  10
+   4    50     9.41963 2.29719 0.304851  10
+   5    50     8.83545 3.15362 0.268492  10
+   6    50     9.41942 2.298   0.284945  10
+   7    50     9.22013 2.64468 0.244499  10
+   8    50     8.83136 3.16469 0.227427  10
+   9    50     9.02514 2.9246  0.224242  10
+   10   50     8.63399 3.38564 0.225814  10
+   11   50     9.21839 2.65056 0.224037  10
+   12   50     8.43915 3.57639 0.224305  10
+   13   50     8.43975 3.57501 0.224878  10
+   14   50     8.43744 3.58027 0.223422  10
+   15   50     8.63654 3.37933 0.224132  10
+   16   50     8.24333 3.7494  0.222354  10
+   17   50     8.05008 3.89985 0.224733  10
+   18   50     7.85437 4.04011 0.222289  10
+   19   50     7.46457 4.27742 0.224036  10
+   (0.22228923395729627,) (0.22228923395729627,) (10.0,) (10.0,)
+   python pso.py  504.70s user 7.01s system 100% cpu 8:26.91 total
+
+Ejecución distribuida con Ray
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: bash
 
-    (base) > time python pso_ray.py
-    gen	evals	avg    	std    	min     	max
-    0  	50   	9.80543	1.36197	0.271625	10
-    1  	50   	9.61276	1.89707	0.280407	10
-    2  	50   	9.80485	1.36607	0.242367	10
-    3  	50   	9.80578	1.35951	0.289244	10
-    4  	50   	9.60888	1.91607	0.204239	10
-    5  	50   	9.80572	1.35997	0.285893	10
-    6  	50   	9.80547	1.36173	0.273391	10
-    7  	50   	10     	0      	10      	10
-    8  	50   	9.60917	1.91469	0.221329	10
-    9  	50   	9.80477	1.36661	0.238504	10
-    10 	50   	9.60828	1.91905	0.203851	10
-    11 	50   	10     	0      	10      	10
-    12 	50   	9.6083 	1.91892	0.202428	10
-    13 	50   	9.60891	1.91593	0.210575	10
-    14 	50   	9.60819	1.91945	0.20373 	10
-    15 	50   	10     	0      	10      	10
-    16 	50   	9.80411	1.37123	0.205466	10
-    17 	50   	9.60842	1.91836	0.206088	10
-    18 	50   	9.41338	2.32192	0.20295 	10
-    19 	50   	9.41237	2.32592	0.187824	10
-    (0.18782377160030547,) [0.8161546994505915, 0.540860845936098, 0.4939122355299173, 0.4528654762091597, 0.048719238941010434, 0.38885999252028464]
-    python pso_ray.py  3.91s user 6.51s system 20% cpu 50.445 total
+   (base) > time python pso_ray.py
+   gen  evals  avg     std     min       max
+   0    50     9.80543 1.36197 0.271625  10
+   1    50     9.61276 1.89707 0.280407  10
+   2    50     9.80485 1.36607 0.242367  10
+   3    50     9.80578 1.35951 0.289244  10
+   4    50     9.60888 1.91607 0.204239  10
+   5    50     9.80572 1.35997 0.285893  10
+   6    50     9.80547 1.36173 0.273391  10
+   7    50     10      0       10        10
+   8    50     9.60917 1.91469 0.221329  10
+   9    50     9.80477 1.36661 0.238504  10
+   10   50     9.60828 1.91905 0.203851  10
+   11   50     10      0       10        10
+   12   50     9.6083  1.91892 0.202428  10
+   13   50     9.60891 1.91593 0.210575  10
+   14   50     9.60819 1.91945 0.20373   10
+   15   50     10      0       10        10
+   16   50     9.80411 1.37123 0.205466  10
+   17   50     9.60842 1.91836 0.206088  10
+   18   50     9.41338 2.32192 0.20295   10
+   19   50     9.41237 2.32592 0.187824  10
+   (0.18782377160030547,) [0.8161546994505915, 0.540860845936098, 0.4939122355299173, 0.4528654762091597, 0.048719238941010434, 0.38885999252028464]
+   python pso_ray.py  3.91s user 6.51s system 20% cpu 50.445 total
+
+En este experimento se observa una reducción significativa en el tiempo total de
+ejecución al paralelizar la evaluación de la población. En el caso secuencial,
+el tiempo total fue de aproximadamente 8.45 minutos, mientras que con Ray fue de
+aproximadamente 50.4 segundos.
+
+.. note::
+
+   Los tiempos dependen del número de núcleos disponibles, de la carga de la
+   máquina y del costo relativo de la función de evaluación. En particular, si
+   la evaluación es muy rápida, el *overhead* de crear tareas y transferir datos
+   puede reducir el beneficio del paralelismo.
+
+Funciones remotas que invocan funciones remotas
+------------------------------------------------
+
+Otra alternativa que podríamos considerar en este caso particular es escalar
+el **método de evaluación del controlador**, paralelizando las simulaciones
+internas necesarias para calcular su desempeño. Recordemos que, para evaluar
+un controlador, se ejecutan varias simulaciones independientes y se calcula
+el promedio del error obtenido.
+
+Desde el punto de vista conceptual, esta estrategia también es válida: cada
+simulación es independiente de las demás y, por lo tanto, puede ejecutarse en
+paralelo. En términos prácticos, esto implicaría que, en lugar de paralelizar
+la evaluación de múltiples controladores, paralelizamos las simulaciones que
+componen la evaluación de un solo controlador.
+
+Por ejemplo, el siguiente fragmento de código muestra cómo podrían lanzarse
+varias simulaciones en paralelo utilizando tareas remotas:
+
+.. code-block:: python
+
+   futures = []
+   for ax, ay in paths:
+       goal = [ax[-1], ay[-1]]
+       reference_path = path.CubicSplinePath(ax, ay)
+
+       future = remote_sim.remote(
+           reference_path,
+           goal,
+           controller=controller,
+       )
+       futures.append(future)
+
+En este caso, cada llamada a ``remote_sim.remote(...)`` ejecuta una simulación
+independiente, y las referencias a los resultados se almacenan en la lista
+``futures``. Posteriormente, sería posible sincronizar todas las simulaciones
+mediante una llamada a ``ray.get(futures)`` para obtener los resultados y
+calcular el promedio del error.
+
+Sin embargo, en este problema específico, esta estrategia **no produce una
+mejora significativa en el tiempo total de ejecución**. La razón es que cada
+simulación individual tiene un costo computacional relativamente bajo, por lo
+que el *overhead* asociado a la creación de tareas y a la comunicación de datos
+domina el tiempo total.
+
+Este ejemplo ilustra un punto importante: **no todo paralelismo es igualmente
+efectivo**. En general, resulta más conveniente paralelizar las partes del
+algoritmo cuyo costo computacional es alto en comparación con el *overhead* del
+sistema distribuido. En el caso del PSO, esto suele lograrse paralelizando la
+evaluación de múltiples soluciones candidatas, en lugar de paralelizar los
+componentes internos de una sola evaluación.
+
+
+PSO Multipoblaciones con Agentes
+--------------------------------
+
+
 
 .. code-block:: bash 
 
