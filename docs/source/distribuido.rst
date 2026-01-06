@@ -318,4 +318,21 @@ algoritmos computacionalmente intensivos.
     (0.18782377160030547,) [0.8161546994505915, 0.540860845936098, 0.4939122355299173, 0.4528654762091597, 0.048719238941010434, 0.38885999252028464]
     python pso_ray.py  3.91s user 6.51s system 20% cpu 50.445 total
 
+.. code-block:: bash 
 
+    time python pso_agent.py
+    2026-01-05 16:53:13,151	INFO worker.py:2007 -- Started a local Ray instance.
+    Ronda 00 | Mejor: 0.214788
+    Ronda 01 | Mejor: 0.209654
+    Migrando
+    Ronda 02 | Mejor: 0.177159
+    Ronda 03 | Mejor: 0.172730
+    Migrando
+    Ronda 04 | Mejor: 0.156348
+    Ronda 05 | Mejor: 0.152842
+    Migrando
+    Ronda 06 | Mejor: 0.149235
+    Ronda 07 | Mejor: 0.148310
+    Migrando
+    Mejor global: 0.148310 | [0.014552263021165864, 0.09644121641148923, 0.5106944656555066, 0.5283209236361381, 0.01189209106007404, 0.40691584824379534]
+    python pso_agent.py  7.15s user 9.41s system 11% cpu 2:25.43 total
