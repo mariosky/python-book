@@ -133,3 +133,28 @@ de partículas y generaciones):
 
    python pso.py
 
+Código fuente para los ejemplos de Escalado Computacional
+=========================================================
+
+El siguiente archivo muestra la versión del algoritmo PSO donde la evaluación
+de la aptitud de cada partícula se realiza en paralelo utilizando **tareas
+remotas** de Ray. El resto del algoritmo se ejecuta de manera secuencial en un
+solo proceso coordinador.
+
+.. literalinclude:: fuzzy_code/pso_ray.py
+   :language: python
+   :linenos:
+   :caption: Uso de Ray para ejecutar la evaluación distribuida (``pso_ray.py``)
+
+
+A continuación se muestra el código completo del ejemplo de **PSO
+multi-enjambre**, donde cada población se implementa como un **actor con estado**
+(``SwarmAgent``). En este caso, Ray se utiliza tanto para ejecutar evaluaciones
+*stateless* como para mantener poblaciones persistentes que evolucionan y
+migran soluciones de manera coordinada.
+
+.. literalinclude:: fuzzy_code/pso_agent.py
+   :language: python
+   :linenos:
+   :caption: Uso de Ray para implementar PSO multi-enjambre (``pso_agent.py``)
+

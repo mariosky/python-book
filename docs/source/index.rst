@@ -69,7 +69,3 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
    \backmatter
 
 
-.. bibliography:: biblio.bib
-    :style: plain
-    :all:
-

@@ -7,7 +7,7 @@ recursos computacionales**. Cuando el costo computacional de estas tareas
 crece demasiado, el escalado deja de ser algo opcional y se convierte en una
 necesidad. Algunas de las tareas con alta demanda de recursos son:
 
-- **Optimización basada en poblaciones.**  
+- **Optimización basada en poblaciones**  
 
   Los algoritmos de optimización basados en poblaciones requieren evaluar de
   manera repetida el desempeño de un conjunto de soluciones candidatas. Esta
@@ -15,7 +15,7 @@ necesidad. Algunas de las tareas con alta demanda de recursos son:
   de simulaciones o requieren modelos computacionales complejos. Un ejemplo es
   la evaluación del desempeño del controlador difuso del capítulo anterior.
 
-- **Ajuste de los hiperparámetros de algoritmos de aprendizaje automático.**  
+- **Ajuste de los hiperparámetros de algoritmos de aprendizaje automático**  
 
   Muchos algoritmos de aprendizaje automático requieren una etapa de
   entrenamiento computacionalmente intensiva, y su desempeño depende de los
@@ -25,7 +25,7 @@ necesidad. Algunas de las tareas con alta demanda de recursos son:
   necesitamos múltiples muestras de ejecuciones del algoritmo cuando realizamos
   **comparaciones estadísticas**.
 
-- **Flujos de trabajo de aprendizaje automático.**  
+- **Flujos de trabajo de aprendizaje automático**  
 
   Más allá del entrenamiento de modelos, los flujos de trabajo completos de
   aprendizaje automático suelen incluir etapas de preprocesamiento de datos,
@@ -33,7 +33,7 @@ necesidad. Algunas de las tareas con alta demanda de recursos son:
   operaciones pueden demandar una cantidad considerable de recursos de
   procesamiento, especialmente cuando se trabaja con conjuntos de datos grandes.
 
-- **Análisis de datos.**  
+- **Análisis de datos**  
 
   El procesamiento y análisis de grandes volúmenes de datos, por ejemplo, en
   tareas de clasificación de texto o análisis de sentimientos, puede superar
@@ -523,26 +523,393 @@ evaluación de múltiples soluciones candidatas, en lugar de paralelizar los
 componentes internos de una sola evaluación.
 
 
-PSO Multipoblaciones con Agentes
+PSO multipoblaciones con agentes
 --------------------------------
 
+Una estrategia común para escalar algoritmos bioinspirados consiste en dividir
+la población global en **subpoblaciones más pequeñas**, las cuales evolucionan
+de manera independiente, paralela y, en algunos casos, asíncrona. A este enfoque
+se le conoce tradicionalmente como **multipoblaciones** o **modelo de islas**.
 
+En el contexto de la optimización por enjambre de partículas (*Particle Swarm
+Optimization*, PSO), esta estrategia se denomina usualmente **multi-enjambre**
+(*multi-swarm*). En este esquema, cada enjambre explora una región distinta del
+espacio de búsqueda, lo que favorece la diversidad y reduce la probabilidad de
+estancamiento en óptimos locales.
 
-.. code-block:: bash 
+Un aspecto crítico en la implementación de algoritmos multipoblaciones es el
+**mecanismo de comunicación entre poblaciones**. El intercambio controlado de
+soluciones candidatas permite combinar exploración y explotación, mejorando el
+desempeño global del algoritmo. Este proceso de comunicación involucra varias
+decisiones de diseño importantes:
 
-    time python pso_agent.py
-    2026-01-05 16:53:13,151	INFO worker.py:2007 -- Started a local Ray instance.
-    Ronda 00 | Mejor: 0.214788
-    Ronda 01 | Mejor: 0.209654
-    Migrando
-    Ronda 02 | Mejor: 0.177159
-    Ronda 03 | Mejor: 0.172730
-    Migrando
-    Ronda 04 | Mejor: 0.156348
-    Ronda 05 | Mejor: 0.152842
-    Migrando
-    Ronda 06 | Mejor: 0.149235
-    Ronda 07 | Mejor: 0.148310
-    Migrando
-    Mejor global: 0.148310 | [0.014552263021165864, 0.09644121641148923, 0.5106944656555066, 0.5283209236361381, 0.01189209106007404, 0.40691584824379534]
-    python pso_agent.py  7.15s user 9.41s system 11% cpu 2:25.43 total
+- El tamaño :math:`k`, que define cuántas soluciones candidatas se intercambian
+  entre poblaciones en cada evento de migración.
+
+- La **política de selección**, que determina qué soluciones migran hacia otras
+  poblaciones (por ejemplo, las mejores, las aleatorias o una combinación) y
+  cuáles serán reemplazadas localmente.
+
+- El **intervalo de intercambio**, que especifica con qué frecuencia se realiza
+  la migración de soluciones entre poblaciones.
+
+- La **topología de comunicación**, que define qué poblaciones intercambian
+  individuos entre sí (por ejemplo, anillo, estrella, completamente conectada
+  o vecindarios locales).
+
+En las siguientes secciones utilizaremos el modelo de **actores con estado**
+para implementar una versión de PSO multipoblaciones, donde cada enjambre se
+representa como un agente independiente que evoluciona de forma autónoma y
+se comunica con otros agentes mediante el intercambio explícito de soluciones
+candidatas.
+
+Ejemplo: PSO multipoblaciones con agentes (``SwarmAgent``)
+----------------------------------------------------------
+
+En este ejemplo implementaremos un PSO **multi-enjambre** utilizando el modelo
+de **actores con estado**. Cada enjambre se representa como un actor
+``SwarmAgent`` que mantiene su propia población de partículas y ejecuta varias
+iteraciones locales de PSO de forma autónoma. Un proceso coordinador (el script
+principal) se encarga de:
+
+1. Ejecutar a todos los agentes en paralelo por rondas.
+2. Recolectar los mejores resultados de cada enjambre.
+3. Realizar un intercambio periódico de soluciones candidatas (*migración*).
+
+Además, utilizamos tareas remotas (*stateless*) para evaluar la aptitud de cada
+partícula, delegando a Ray el paralelismo en las evaluaciones.
+
+.. note::
+
+   En este ejemplo no utilizamos la librería DEAP, ya que se intercambian datos
+   entre el proceso local y los agentes remotos. Esto requiere serializar los
+   objetos y almacenarlos en memoria distribuida. Para este propósito resulta
+   más conveniente emplear **estructuras de datos básicas de Python**, en lugar
+   de mecanismos de creación dinámica de tipos en tiempo de ejecución, como los
+   utilizados por el módulo ``creator`` de DEAP.
+
+   No obstante, se mantienen algunos nombres y convenciones del ejemplo
+   anterior, como ``speed`` y la notación ``smin`` y ``smax`` para acotar la
+   velocidad de las partículas, con el fin de preservar la continuidad entre
+   capítulos. En otras referencias, estos límites suelen denotarse como ``vmin``
+   y ``vmax``. Asimismo, se introduce el parámetro de **inercia** mediante la
+   variable ``weight``.
+
+Dataclass Particle
+------------------ 
+
+Utilizamos un ``dataclass`` para manterner el estado de cada 
+partícula. Recoredemos que cada partícula almacena su velocidad y la 
+mejor posición alcanzada en su propia historia:
+
+.. code-block:: python
+
+    @dataclass
+    class Particle:
+        """
+        Partícula para PSO.
+
+        Attributes
+        ----------
+        x : list[float]
+            Posición (solución candidata).
+        speed : list[float]
+            Velocidad.
+        fitness : float 
+            Aptitud
+        best_x : list[float]
+            Mejor posición personal encontrada hasta el momento.
+        best_f : float
+            Mejor valor de fitness (a minimizar) asociado a best_x.
+        """
+        x: List[float] = field(default_factory=list)
+        speed: List[float] = field(default_factory=list)
+        fitness: float = float('inf')
+        best_x: List[float] = field(default_factory=list)
+        best_f: float = float("inf")
+
+Recordemos que el método de evaluación original devuelve una **tupla** cuyo
+primer elemento corresponde al valor de *fitness*. Este comportamiento se debe
+a la forma en que opera la librería DEAP, la cual permite manejar **múltiples
+valores de aptitud** de manera general.
+
+En este capítulo no requerimos dicha funcionalidad, ya que trabajamos con un
+solo criterio de optimización. Por esta razón, resulta conveniente adaptar el
+método de evaluación para que devuelva directamente un único valor numérico de
+*fitness*. Este tipo de normalización es una operación común en Python cuando se
+reutiliza código diseñado para interfaces más generales.
+
+El siguiente fragmento muestra cómo se realiza esta adaptación de manera local,
+sin modificar la función original de evaluación:
+
+.. code-block:: python
+
+   @ray.remote
+   def remote_ev_controller(x: List[float]) -> float:
+       fitness = evaluate_controller(x)
+       # Normaliza a float aunque venga como (valor,)
+       if isinstance(fitness, tuple):
+           return float(fitness[0])
+       return float(fitness)
+
+De esta forma, la función remota ``remote_ev_controller`` siempre devuelve un
+valor escalar de tipo ``float``, lo que simplifica su uso dentro de las tareas
+distribuidas y evita introducir dependencias innecesarias con la interfaz de
+DEAP.
+
+Ahora vayamos a la definición de la clase ``SwarmAgent``. Recordemos que, en
+este caso, los objetos remotos (actores) **persisten en los *workers***: el
+objeto no se destruye al terminar una llamada remota, sino que conserva su
+estado para llamadas posteriores.
+
+Por esta razón, queremos que cada agente mantenga de forma persistente:
+
+- Su **población local** (la lista de partículas).
+- Los **parámetros del PSO** que utilizará en cada iteración.
+- Una copia de su **mejor solución local** (``gbest``), la cual sirve como
+  referencia para el componente social de la actualización de velocidades.
+
+La inicialización de estos elementos se realiza en el constructor
+``__init__``:
+
+.. code-block:: python
+
+    @ray.remote
+    class SwarmAgent:
+        def __init__(self, config: Dict) -> None:
+            self.config = config
+            self.swarm_size = int(config["swarm_size"])
+            self.size = int(config['dim'])
+
+            self.smin = float(config['smin'])
+            self.smax = float(config['smax'])
+            self.pmax = float(config['pmax'])
+            self.pmin = float(config['pmin'])
+            self.weight = float(config.get("w", 0.7))
+            self.phi1 = float(config['phi1'])
+            self.phi2 = float(config['phi2'])
+            self.pop: List[Particle] = [self.generate() for _ in range(self.swarm_size)]
+            self.gbest = Particle(
+                x=self.pop[0].x.copy(),
+                speed=[0.0] * self.size,
+                fitness=float("inf"),
+                best_x=self.pop[0].x.copy(),
+                best_f=float("inf"),
+            )
+
+Antes de pasar al script de control, mostramos el diccionario de configuración
+del algoritmo multi-enjambre:
+
+.. code-block:: python
+
+   config = {
+       "smin": -0.2,
+       "smax":  0.20,
+       "pmin": 0.0,
+       "pmax": 1.0,
+       "phi1": 2.0,
+       "phi2": 2.0,
+
+       "dim": 6,
+       "swarm_size": 10,
+
+       # Número de iteraciones locales que ejecuta cada agente por ronda
+       "ngen": 4,
+
+       # Migración: cada migrate_interval rondas, se intercambian migrate_k élites
+       "migrate_interval": 2,
+       "migrate_k": 2,
+
+       # Número de enjambres (agentes) y número de rondas de coordinación
+       "num_swarms": 6,
+       "num_rounds": 8,
+   }
+
+El script de control se muestra a continuación. Este script actúa como
+**coordinador**: lanza a los agentes, ejecuta rondas de cómputo local en
+paralelo, recolecta los mejores resultados y, de manera periódica, realiza la
+migración de élites entre enjambres.
+
+.. code-block:: python
+
+   import os
+   import ray
+
+   # Reducir ruido en consola y desactivar componentes no esenciales para el ejemplo
+   os.environ["RAY_ACCEL_ENV_VAR_OVERRIDE_ON_ZERO"] = "0"
+   os.environ["RAY_DISABLE_DASHBOARD"] = "1"
+   os.environ["RAY_USAGE_STATS_ENABLED"] = "0"
+
+   ray.init(ignore_reinit_error=True, include_dashboard=False)
+
+   try:
+       # 1) Crear los agentes (actores remotos), uno por enjambre
+       agents = [SwarmAgent.remote(config) for _ in range(config["num_swarms"])]
+
+       # Mejor global del sistema (coordinador)
+       best_global = Particle()
+
+       for r in range(config["num_rounds"]):
+           # 2) Cada agente ejecuta varias iteraciones locales en paralelo
+           futures = [a.step.remote(config["ngen"]) for a in agents]
+           bests = ray.get(futures)  # List[Particle]
+           bests.sort(key=lambda p: p.fitness)
+
+           # 3) Actualizar mejor global (coordinador)
+           best = bests[0]
+           if best.fitness < best_global.fitness:
+               best_global.x = best.x.copy()
+               best_global.fitness = best.fitness
+
+           print(f"Ronda {r:02d} | Mejor global = {best_global.fitness:.6f}")
+
+           # 4) Migración periódica: intercambio de k élites
+           if (r + 1) % int(config["migrate_interval"]) == 0:
+               k = int(config["migrate_k"])
+               elites = [(p.fitness, p.x) for p in bests[:k]]
+               ray.get([a.migrate.remote(elites) for a in agents])
+
+       print(f"Mejor global: {best_global.fitness:.6f} | {best_global.x}")
+
+   finally:
+       ray.shutdown()
+
+.. note::
+
+   En este ejemplo el coordinador intercambia únicamente pares ``(fitness, x)``
+   en la migración. Esto mantiene la comunicación ligera y evita transferir
+   estructuras internas innecesarias (por ejemplo, velocidades o mejores
+   personales), ya que cada enjambre puede reinicializar la velocidad de las
+   partículas migrantes y continuar su dinámica local.
+
+Por último, analicemos con mayor detalle el método de **migración** implementado
+en cada agente. Este método define **cómo se intercambian soluciones candidatas
+entre enjambres**, uno de los elementos clave en los algoritmos
+multi-población.
+
+.. code-block:: python
+
+   def migrate(self, candidates: List[Tuple[float, List[float]]]) -> None:
+       """
+       candidates: lista de (fitness, x) (tipos planos).
+       Reemplaza las peores partículas por estos candidatos.
+       """
+       # Asegurar fitness actualizado para identificar peores
+       self.evaluate_population_ray()
+
+       # Peores primero
+       worst_idx = sorted(
+           range(self.swarm_size),
+           key=lambda i: self.pop[i].fitness,
+           reverse=True
+       )
+       k = min(len(candidates), self.swarm_size)
+
+       for j in range(k):
+           f_cand, x_cand = candidates[j]
+           i = worst_idx[j]
+           # Insertar candidato con velocidad nueva (para no heredar dinámica ajena)
+           self.pop[i] = Particle(
+               x=list(x_cand),
+               speed=[random.uniform(self.smin, self.smax) for _ in range(self.size)],
+               fitness=float(f_cand),
+               best_x=list(x_cand),
+               best_f=float(f_cand),
+           )
+
+           if f_cand < self.gbest.fitness:
+               self.gbest.fitness = float(f_cand)
+               self.gbest.x = list(x_cand)
+
+Este esquema de migración sigue una estrategia **simple y ampliamente utilizada**
+en algoritmos multipoblación:
+
+- Primero se identifican las **peores partículas** del enjambre local, ordenando
+  la población por su valor de *fitness*.
+- A continuación, se reemplazan estas partículas por las soluciones candidatas
+  recibidas desde otros enjambres.
+- Únicamente se intercambian la posición ``x`` y el valor de *fitness*,
+  reinicializando la velocidad de las partículas migrantes. Esto evita introducir
+  dinámicas inconsistentes provenientes de otros enjambres.
+- Finalmente, si alguna de las soluciones migrantes mejora el mejor resultado
+  local, se actualiza ``gbest``.
+
+Desde el punto de vista algorítmico, esta política introduce **diversidad**
+en la población sin interrumpir la dinámica local del PSO. Desde el punto de
+vista computacional, la migración es una operación poco costosa que ocurre con
+baja frecuencia en comparación con las evaluaciones de aptitud.
+
+Existen muchas variantes más sofisticadas (topologías en anillo, migración
+aleatoria, reemplazo probabilístico, entre otras). Sin embargo, este esquema
+resulta suficiente para ilustrar los principios fundamentales de los algoritmos
+PSO multi-enjambre y su implementación mediante actores con estado.
+
+Ahora veamos la ejecución y el tiempo de cómputo del ejemplo multi-enjambre con
+agentes. En este caso ejecutamos un número mayor de evaluaciones (véase la
+configuración), por lo que el tiempo total es mayor que en la versión basada
+únicamente en tareas *stateless*. Además, ahora existe un costo adicional
+asociado a la coordinación por rondas y a la migración periódica de soluciones.
+
+.. code-block:: bash
+
+   time python pso_agent.py
+   2026-01-05 16:53:13,151  INFO worker.py:2007 -- Started a local Ray instance.
+   Ronda 00 | Mejor: 0.214788
+   Ronda 01 | Mejor: 0.209654
+   Migrando
+   Ronda 02 | Mejor: 0.177159
+   Ronda 03 | Mejor: 0.172730
+   Migrando
+   Ronda 04 | Mejor: 0.156348
+   Ronda 05 | Mejor: 0.152842
+   Migrando
+   Ronda 06 | Mejor: 0.149235
+   Ronda 07 | Mejor: 0.148310
+   Migrando
+   Mejor global: 0.148310 | [0.014552263021165864, 0.09644121641148923, 0.5106944656555066, 0.5283209236361381, 0.01189209106007404, 0.40691584824379534]
+   python pso_agent.py  7.15s user 9.41s system 11% cpu 2:25.43 total
+
+En esta salida observamos dos elementos importantes:
+
+- En cada ronda se reporta el mejor valor global encontrado hasta el momento
+  (menor es mejor, ya que estamos minimizando el error).
+
+- Cada cierto número de rondas aparece el mensaje ``Migrando``, indicando que
+  el coordinador ejecutó el intercambio de élites entre enjambres conforme a
+  los parámetros ``migrate_interval`` y ``migrate_k``.
+
+.. note::
+
+   El porcentaje de CPU reportado por ``time`` puede ser menor a 100\% aun cuando
+   exista paralelismo. Esto depende de la plataforma, del número de núcleos, y
+   del tiempo que los *workers* pasan esperando resultados de E/S o sincronización
+   (por ejemplo, al recolectar resultados con ``ray.get``).
+
+El código completo se puede completar en el anexo de PSO multi-enjambre.
+
+Resumen del capítulo
+--------------------
+
+En este capítulo hemos explorado distintos **modelos de escalado computacional
+en Python**, partiendo de la observación de que muchas aplicaciones en
+optimización, aprendizaje automático y análisis de datos presentan una
+estructura naturalmente paralelizable.
+
+Primero analizamos el uso de **funciones sin estado (*stateless*)**, mostrando
+cómo la evaluación de soluciones candidatas puede distribuirse eficientemente
+mediante tareas remotas. Posteriormente introdujimos el **Modelo Actor**, donde
+los componentes mantienen estado persistente y se comunican explícitamente,
+permitiendo implementar arquitecturas más ricas como los algoritmos
+multi-población.
+
+A través del ejemplo de un **PSO multi-enjambre**, ilustramos cómo combinar ambos
+enfoques: actores con estado que coordinan poblaciones locales, y tareas
+*stateless* para realizar los cálculos más costosos. Este patrón resulta
+especialmente útil cuando se requiere escalar algoritmos iterativos sin perder
+claridad en la estructura del código.
+
+Más allá del caso específico de PSO, los principios presentados en este capítulo
+desacoplamiento, estado encapsulado, paralelismo explícito y coordinación por
+mensajes son aplicables a una amplia gama de problemas en ciencia de datos y
+aprendizaje automático. 
+

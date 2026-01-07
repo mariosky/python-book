@@ -347,15 +347,15 @@ automáticamente mediante un ROLLBACK.
   # cierra la conexión
   con.close()
 
+.. 
+    PostgreSQL
+    ^^^^^^^^^^
 
-PostgreSQL
-^^^^^^^^^^
+    No SQL
+    *******
 
-No SQL
-*******
+    Redis
+    ^^^^^
 
-Redis
-^^^^^
-
-MongoDB
-^^^^^^^
+    MongoDB
+    ^^^^^^^
