@@ -23,15 +23,14 @@ vemos respecto a otros lenguajes compilados como *C#* o *Java*:
 
 .. code-block:: python
 
-   x = 34 - 23            # Comentario
-   y = "Hola"             # Otro comentario
-   z = 3.45
+   x = 3 * 2              # Comentario
+   y = "Tec"              # Otro comentario
+   z = 2.33
 
-   if z == 3.45 or y == "Hola":
+   if z == 2.33 or y == "tec":
        x = x + 1
-       y = y + " Mundo"  # Concatenación de cadenas
+       y = y + "NM"       # Concatenación de cadenas
 
-   print(x)
    print(y)
 
 Echando un vistazo general al programa, nos llama primero la atención el hecho
@@ -45,14 +44,14 @@ línea.
 .. rubric:: Los nombres se atan a objetos
 
 En la primera línea vemos la declaración de una variable llamada ``x`` a la cual
-se le asigna el resultado de una resta entre dos números enteros. Aquí
+se le asigna el resultado de una multiplicación entre dos números enteros. Aquí
 encontramos la primera diferencia: en Python las "variables" no tienen un tipo
 de dato, son simplemente nombres o etiquetas que hacen referencia a objetos. Los
 objetos por su parte, sí tienen un tipo de dato. Entonces, en esta línea, el
 resultado de la operación se almacena en memoria en una dirección específica,
 una referencia. Lo que sucede entonces es que el nombre ``x`` se ata a la
-referencia del objeto entero que se crea de la operación :python:`34-23`, el
-:python:`11` en la memoria.  Esto es distinto al concepto de variable en otros
+referencia del objeto entero que se crea de la operación :python:`3 * 2`, el
+:python:`6` en la memoria.  Esto es distinto al concepto de variable en otros
 lenguajes. Por ejemplo, en C# las variables *tipo valor* reservan un espacio en
 la memoria donde se guarda literalmente el valor que contienen, y los valores
 deben ser del tipo correspondiente. Si yo declaro una variable como entera de 16
@@ -65,7 +64,7 @@ ejemplo, :python:`x = 2.3` o :python:`x = "Hola"`. De nuevo, los objetos en
 memoria son tipo :python:`float` y :python:`str` respectivamente y nuestra
 etiqueta ``x`` se puede atar a cualquiera de ellos sin ningún problema. Vemos
 entonces que se atan los nombres ``y`` y ``z`` a la cadena de caracteres
-:python:`"Hola"` y al flotante :python:`3.44` respectivamente.
+:python:`"Tec"` y al flotante :python:`2.33` respectivamente.
 
 .. note::
 
@@ -94,9 +93,9 @@ Otra diferencia importante la encontramos en este bloque de código:
 
 .. code-block:: python
 
-   if z == 3.45 or y == "Hola":
+   if z == 2.33 or y == "Tec":
        x = x + 1
-       y = y + " Mundo"  # Concatenación de cadenas
+       y = y + "NM"  # Concatenación de cadenas
    print(x)
    print(y)
 
@@ -605,7 +604,7 @@ Si intentamos esto con una tupla, no es posible ya que es inmutable:
    Traceback (most recent call last):
    File "<pyshell#75>", line 1, in -toplevel-
       tu[2] = 3.14
-   TypeError: object doesn't support item assignment
+   TypeError: object doesnt support item assignment
 
 Una manera de "modificar" una tupla o cualquier estructura inmutable es creando
 una nueva estructura con la modificación y reasignandola al nombre nuevamente.
@@ -1516,3 +1515,34 @@ se elimina, recuperando espacio de memoria.  Veamos un ejemplo:
    La técnica de conteo no puede detectar casos en los que dos objetos se referencían
    mutuamente, pero nadie hace referencia a ninguno de los dos. Para esto Python utiliza
    un módulo especial que los detecta y recupera la memoria.
+
+Resumen del capítulo
+--------------------
+
+En este capítulo presentamos los **fundamentos del lenguaje Python** desde la
+perspectiva de un programador con experiencia previa en algún otro lenguaje. Se
+revisaron los elementos esenciales de la sintaxis, los tipos de datos básicos,
+las estructuras de control y el modelo de ejecución del lenguaje.
+
+En particular, podemo destacar que:
+
+- Python es un lenguaje interpretado, con tipado dinámico y fuerte, lo que
+  favorece un desarrollo rápido pero requiere atención al tipo de los datos en
+  tiempo de ejecución.
+
+- Las estructuras de datos integradas (listas, tuplas, diccionarios y conjuntos)
+  son fundamentales para escribir código claro y expresivo, y se utilizan de
+  forma extensiva en librerías científicas y de ingeniería.
+
+- El manejo de variables y referencias es distinto al de muchos lenguajes
+  compilados, por lo que es importante comprender conceptos como mutabilidad y
+  asignación para evitar errores sutiles.
+
+- La claridad y legibilidad del código son principios centrales en Python, y
+  se reflejan tanto en la sintaxis como en las convenciones del lenguaje.
+
+Este capítulo establece la base necesaria para los siguientes temas del libro.
+En los capítulos posteriores se profundizará en paradigmas de programación,
+manejo de datos y desarrollo de aplicaciones más complejas, siempre apoyándose
+en los conceptos que vimos aquí.
+
