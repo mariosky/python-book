@@ -29,7 +29,7 @@ que no es mucho problema buscar en el código y ver qué modifica a qué.
    >>> x
    10
 
-.. note:::
+.. note::
 
    Como vemos en este ejemplo, la variable ``x`` cambia de estado (valor) varias
    veces durante el transcurso del programa. Esta es una característica que trata de evitar la
@@ -70,16 +70,17 @@ En este paradigma se reduce bastante el uso de variables globales.
 .. rubric::  Programación Orientada a Objetos
 
 
-Python nos permite encapsular el estado de un sistema en distintos objetos, cada
-uno con su propio estado interno y comportamiento privado responsable de
+Python nos permite encapsular el estado de un sistema en distintos objetos,
+cada uno con su propio estado interno y comportamiento privado responsable de
 manipular el estado interno del objeto.  En los ejercicios anteriores, ya
 utilizamos a varios objetos, como las listas o las cadenas de texto. Estos
 objetos tienen métodos, por ejemplo, :python:`list.append()` con los cuales
 podemos modificar el estado del objeto.  En este caso agregando un elemento (o
-un objeto) a la lista. Algo importante es que no podemos agregar directamente un
-objeto a la lista, lo debemos hacer mediante alguno de sus métodos.  En Python
-entonces, podemos definir nuestros propios tipos de objetos utilizando clases y
-herencia.  El lenguaje también perimite de manera naturar utilizar polimorfismo.
+un objeto) a la lista. Algo importante es que no podemos agregar directamente
+un objeto a la lista, lo debemos hacer mediante alguno de sus métodos.  En
+Python entonces, podemos definir nuestros propios tipos de objetos utilizando
+clases y herencia.  El lenguaje también perimite de manera naturar utilizar
+polimorfismo.
 
 .. code-block:: python
 
@@ -237,9 +238,10 @@ Funciones lambda
 ----------------
 
 Cuando queremos definir una función al mismo tiempo que la envíamos como
-parámetro, la más práctico es que pasemos una función lambda. Las funciones lambda son
-simplemente funciones anónimas que son utilizadas para enviarse como parámetro
-y no tenemos la intención de rutilizar dicha función en otros contextos.
+parámetro, la más práctico es que pasemos una función lambda. Las funciones
+lambda son simplemente funciones anónimas que son utilizadas para enviarse como
+parámetro y no tenemos la intención de rutilizar dicha función en otros
+contextos.
 
 Veámoslo con un ejemplo. Vamos a suponer que tenemos una lista
 de películas y los datos de cada película los guardamos simplmente en
@@ -413,10 +415,11 @@ Veamos las características funcionales de este código:
 :python:`filter()`
 ^^^^^^^^^^^^^^^^^^^
 
-De manera similar a :python:`map()`, la función toma como primer parámetro una función de prueba que sirver para filtrar
-elementos del iterable que se recibe como segundo argumento. La función de prueba debe regresar verdadero para
-que el elemento se incluya en el resultado. Por ejemplo, para regresar las películas más recientes
-que el año 2023. Podemos hacer lo siguiente:
+De manera similar a :python:`map()`, la función toma como primer parámetro una
+función de prueba que sirver para filtrar elementos del iterable que se recibe
+como segundo argumento. La función de prueba debe regresar verdadero para que
+el elemento se incluya en el resultado. Por ejemplo, para regresar las
+películas más recientes que el año 2023. Podemos hacer lo siguiente:
 
 .. code-block:: python
 
@@ -579,6 +582,88 @@ La clausuras son importantes en el paradigma funcional ya que nos permiten
 tener funciones que mantienen un estado interno sin tener que utilizar
 clases.
 
+Decoradores
+-----------
+
+Utilizando **clausuras**, podemos definir funciones que regresan otras funciones.
+Estas funciones resultantes pueden **envolver**, **especializar** o **extender**
+el comportamiento de una función original, agregando funcionalidad adicional sin
+modificar su implementación interna.
+
+Hasta ahora hemos visto cómo las clausuras permiten capturar variables de su
+entorno, pero no hemos considerado cómo aplicar este mecanismo de manera
+**general y reutilizable**. En particular, podemos preguntarnos: ¿qué sucede si
+queremos agregar el mismo comportamiento adicional a muchas funciones distintas?
+
+Por ejemplo, supongamos que tenemos un conjunto de funciones que requieren
+ejecutar cierto código **antes y después** de su funcionalidad principal, como:
+
+- **Imprimir información de depuración** antes y después de la ejecución de una
+  función, lo cual facilita el análisis del flujo del programa.
+
+- **Medir el tiempo de ejecución**, registrando el instante inicial antes de
+  llamar a la función y comparándolo con el tiempo al finalizar su ejecución.
+
+- **Validar los argumentos de entrada**, asegurando que cumplan ciertas
+  condiciones antes de ejecutar la lógica principal.
+
+- **Conectarse a un sistema remoto de monitoreo o registro**, para reportar
+  métricas, errores o eventos relevantes de la ejecución.
+
+Agregar manualmente este código a cada función no solo es repetitivo, 
+también dificulta el mantenimiento del programa. Lo ideal sería poder
+**aplicar esta funcionalidad de forma declarativa**, sin modificar el cuerpo de
+cada función.
+
+Los **decoradores** resuelven este problema. Un decorador es una función que
+recibe otra función como argumento y regresa una nueva función que extiende o
+modifica su comportamiento. Desde el punto de vista de la programación
+funcional, los decoradores son un caso particular de **funciones de orden
+superior**.
+
+Python proporciona una sintaxis especial basada en el símbolo ``@`` que permite
+aplicar decoradores de forma clara y concisa, haciendo explícita la intención de
+extender el comportamiento de una función sin alterar su definición original.
+
+Como ejemplo, supongamos que estamos depurando un programa y queremos imprimir
+un mensaje **antes y después** de ejecutar ciertas funciones. Una solución
+ingenua sería agregar manualmente una instrucción como ``print("función x")``
+al inicio del código de cada función.
+
+Sin embargo, esta aproximación rompe el **principio de separación de intereses**
+(*separation of concerns*), ya que imprimir mensajes de depuración no es una
+responsabilidad central de las funciones en cuestión. Además, este enfoque no
+es escalable ni fácil de mantener.
+
+Podríamos resolver este problema utilizando clausuras, pero en Python la forma
+más adecuada y flexible de hacerlo es mediante **decoradores**, ya que estos nos
+permiten **activar o desactivar** esta funcionalidad adicional sin modificar el
+código original de las funciones.
+
+Veamos un ejemplo sencillo de un decorador que imprime mensajes antes y después
+de ejecutar una función:
+
+>>> def imprime(funcion):
+...     def funcion_imprime(*args, **kwargs):
+...         print(f"Iniciando {funcion.__name__}")
+...         resultado = funcion(*args, **kwargs)
+...         print(f"Fin de {funcion.__name__}")
+...         return resultado
+...     return funcion_imprime
+...
+>>>
+>>> @imprime
+... def hola(nombre):
+...     print(f"Hola {nombre}")
+...
+>>>
+>>> hola("Ana")
+Iniciando hola
+Hola Ana
+Fin de hola
+>>>
+
+
 
 Listas por comprensión
 ----------------------
@@ -691,6 +776,7 @@ conjuntos:
    {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
    >>> {x**2 for x in range(5)}          # conjunto por comprensión
    {0, 1, 4, 9, 16}
+
 
 .. Important::
    Otros temas de importancia para implementar la programación funcional en
