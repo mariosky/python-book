@@ -162,7 +162,7 @@ deseables también en las funciones que escribimos en nuestros programas (sean f
 
 .. rubric::  Inmutabilidad como principio
 
-La mutabilidad aunque es natural en los paradigmas inperativos y orientados a
+La mutabilidad aunque es natural en los paradigmas imperativos y orientados a
 objetos (de manera controlada en estos últimos) en los lenguajes funcionales se
 trata de eliminar ya que se argumenta que es esta es la causa de muchos errores
 o bichos (bugs) en estos otros paradigmas.
@@ -183,6 +183,8 @@ En lugar de promover los ciclos con estructuras como ``for`` o ``while``, en la
 programación funcional se promuebe el uso de distintas variantes de
 recursividad.
 
+.. Nota editorial 
+   Falta agregar un ejemplo de recursividad.
 
 .. rubric::  Evaluación `Lazy`
 
@@ -206,7 +208,7 @@ de la lista:
 Si se utilizara evaluación no estricta, la instrucción no fallaría ya que
 no es necesario realizar la división para conocer el tamaño de la lista.
 
-Python utiliza evaluación no estrícta en el uso de operadores lógicos,
+Python utiliza evaluación no estricta en el uso de operadores lógicos,
 por ejemplo aquí no hay problema aunque también se incluye la división
 entre cero en la instrucción:
 
@@ -255,7 +257,7 @@ una tupla:
    ...    ('10', 'The Substance', 2024, ('Drama', 'Horror', 'Science Fiction'), '2h 21m', 71),
    ...             ]
 
-Si ordenamos la lista *in place* y luego la imprimimos, vemos que el órden se
+Si ordenamos la lista *in place* y luego la imprimimos, vemos que el orden se
 establece ordenando por el primer elemento de la tupla y en este caso como son
 cadenas de caracteres se ordenan lexicográficamente por el identificador.
 
@@ -295,7 +297,7 @@ La función toma como argumento la tupla con la información de la película y n
 
 En lugar de tener que definir la función `select_año`, podemos enviar una función anónima
 escrita de una manera mucho más compacta. Por ejemplo, para ordenar por
-título, podriamos llamar a `peliculas.sort()` utilizando la palabra `lamda` de esta manera:
+título, podriamos llamar a `peliculas.sort()` utilizando la palabra `lambda` de esta manera:
 
 .. code-block:: python
 
@@ -341,7 +343,7 @@ se recomienda utilizar una función convencional.
       >>> (lambda a, b: a + b)(2,3)
       5
 
-Funciones de órden superior incluidas en Python
+Funciones de orden superior incluidas en Python
 -----------------------------------------------
 
 :python:`map()`
@@ -370,16 +372,23 @@ imperativa para ralizar esta tarea sería la siguiente:
 Vamos a tratar de reconocer algunos elementos de este código que no concuerdan
 con el paradigma funcional:
 
-   - Declaramos a ``titulos``, recordemos que es un objeto mutable. Esto no es recomendado en el paradigma.
-   - Tenemos un ciclo ``for`` que de manera explicita (imperativa) modificamos el estado (mutamos) de la lista. Esto
-     es mejor que el estilo mucho más imperativo de utilizar un índice el cual vamos modificando en cada iteración.
-   - Podemos decir que el bloque dentro del ciclo tiene 'efectos colaterales' ya que modifica el estado de la lista.
+   - Declaramos a ``titulos``, recordemos que es un objeto mutable. Esto no es
+     recomendado en el paradigma. 
 
+   - Tenemos un ciclo ``for`` que de manera
+     explicita (imperativa) modificamos el estado (mutamos) de la lista. Esto
+     es mejor que el estilo mucho más imperativo de utilizar un índice el cual
+     vamos modificando en cada iteración. 
+
+   - Podemos decir que el bloque dentro
+     del ciclo tiene 'efectos colaterales' ya que modifica el estado de la
+     lista.
 
 Ahora vamos a resolver el mismo problema pero siguiendo un estilo funcional. Una
 manera de relizar esto es utilizando la función :python:`map()` la cual sirve
 precisamente para este tipo de problemas. Esta función genera un objeto tipo
-:python:`map` el cual es **iterable** pero **inmutable**. La función toma como primer
+:python:`map` el cual es un **iterador** que evalúa los elementos de 
+forma **perozosa**. La función toma como primer
 parámetro una función la cual se aplica de manera secuencial a al iterable que
 se pasa como segundo parámetro y con esto se genera el objeto :python:`map` antes
 mencionado.
@@ -474,7 +483,7 @@ regresa un **iterador**, regresa un solo valor.
 :python:`zip()`
 ^^^^^^^^^^^^^^^
 
-Aunque la función :python:`zip()` no es considerada una función de órden
+Aunque la función :python:`zip()` no es considerada una función de orden
 superior ya que no toma como argumento o produce una función, si es una
 función utilizada en el estilo de programación funcional, ya que nos
 evita crear ciclos y secuencias mutables para generar un nuevo iterable que
@@ -529,7 +538,7 @@ elemento:
 Clausuras
 ---------
 
-Las **funciones de órden superior** pueden recibir argumentos o declarar variables
+Las **funciones de orden superior** pueden recibir argumentos o declarar variables
 locales, las cuales pueden ser referenciadas por funciones internas que ellas mismas crean
 y devuelven.
 
@@ -663,6 +672,33 @@ Hola Ana
 Fin de hola
 >>>
 
+En este ejemplo, la función ``hola(nombre)`` no contiene ninguna instrucción relacionada
+con la impresión de mensajes. Toda la lógica adicional se encuentra encapsulada en el
+decorador ``imprime(funcion)``. De esta manera:
+
+- La funcionalidad principal de la función permanece clara y limpia.
+- El comportamiento adicional puede reutilizarse en múltiples funciones.
+- La depuración puede activarse o desactivarse simplemente agregando o quitando
+  el decorador.
+
+.. note::
+   
+    Los decoradores no son solo una característica sintáctica del lenguaje, sino
+    una herramienta fundamental en muchos *frameworks* y librerías modernas de
+    Python. A lo largo de este libro los utilizaremos de manera recurrente, por
+    ejemplo:
+
+    - En **Ray**, el decorador ``@ray.remote`` transforma una función o clase
+      ordinaria en una tarea o actor distribuido.
+    - En **programación orientada a objetos**, el decorador ``@dataclass``
+      genera automáticamente métodos especiales como ``__init__`` y ``__repr__``.
+    - En aplicaciones web, decoradores se utilizan para definir rutas, validar
+      permisos o manejar autenticación.
+
+    En todos estos casos, la idea central es la misma: **extender el comportamiento
+    de funciones o clases sin modificar su implementación original**, manteniendo
+    una clara separación de intereses.
+
 
 
 Listas por comprensión
@@ -779,8 +815,37 @@ conjuntos:
 
 
 .. Important::
+
    Otros temas de importancia para implementar la programación funcional en
    python son los siguientes:
 
-      - Iteradores e Iterables
-      - Expresiones Generadoras
+   - Iteradores e Iterables
+   - Expresiones Generadoras
+
+Resumen del capítulo
+---------------------
+
+En este capítulo exploramos el **paradigma de programación funcional** y su
+relación con Python, entendiendo al lenguaje como una herramienta
+**multiparadigma** que permite combinar distintos estilos según el problema a
+resolver. En este contexto, introdujimos los principios
+fundamentales de la programación funcional en Python, tales como:
+
+- Tratar a las **funciones como objetos de primera clase**.
+- Favorecer el uso de **funciones puras** y la **inmutabilidad**.
+- Emplear **funciones de orden superior**.
+
+A lo largo del capítulo revisamos herramientas funcionales disponibles en Python,
+como las funciones ``lambda``, ``map()``, ``filter()``, ``reduce()``,
+``zip()`` y ``enumerate()``, así como las **listas, diccionarios y conjuntos por
+comprensión**, mostrando cómo estas construcciones permiten escribir código más
+conciso.
+
+Finalmente, estudiamos el concepto de **clausuras** y su aplicación práctica en
+la implementación de **decoradores**, una técnica central en Python moderno que
+permite extender el comportamiento de funciones y clases sin modificar su
+implementación original. Este mecanismo será fundamental en capítulos
+posteriores, por ejemplo, al utilizar decoradores como ``@dataclass`` en
+programación orientada a objetos o ``@ray.remote`` en cómputo distribuido.
+
+

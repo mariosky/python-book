@@ -4,25 +4,26 @@
 Procesamiento de Texto
 ======================
 
-Una de las especialidades de Python es el procesamiento de texto. El
-lenguaje es incluye en la librería estándar herramientas para la manipulación
-básica de las cadenas de caracteres y manipulación avanzadad utilizando expresiones regulares.
-Además existen librerías avalnzadas para el procesamiento del lenguaje
-natural. Desde la clásica NLTK a las más moderna spaCY. Además utiliza de manera
-nativa el formato unicode. En esta sección daremos un repazo rápido a estas
-herramientas. Aunque el lenguaje no es el más rápido para el procesamiento
-el ecosistema compensa esta desventaja, además se puede utilizar cómputo
-distribuido y multiprocesamiento en caso de ser necesario.
+Una de las especialidades de Python es el procesamiento de texto. El lenguaje
+incluye en la librería estándar herramientas para la manipulación básica de
+cadenas de caracteres y manipulación avanzada utilizando expresiones
+regulares. Además existen librerías avanzadas para el procesamiento del
+lenguaje natural. Desde la clásica NLTK a las más moderna spaCY. Además utiliza
+de manera nativa el formato unicode. En esta sección daremos un repaso rápido a
+estas herramientas. Aunque el lenguaje no es el más rápido para el
+procesamiento el ecosistema compensa esta desventaja, además se puede utilizar
+cómputo distribuido y multiprocesamiento en caso de ser necesario.
 
-Ya hemos visto que las cadenasd de caracteres son  secuencias inmutables parecidas a las
-tuplas y por lo tanto pueden utilizar los métodos que se aplican a estas. Pero además
-se incluyen muchas funciones útiles para operar sobre este tipo de datos.
-Veamos primero las funciones básicas para crear y leer cadenas de caracteres:
+Ya hemos visto que las cadenasd de caracteres son  secuencias inmutables
+parecidas a las tuplas y por lo tanto pueden utilizar los métodos que se
+aplican a estas. Pero además se incluyen muchas funciones útiles para operar
+sobre este tipo de datos. Veamos primero las funciones básicas para crear y
+leer cadenas de caracteres:
 
 
 
-Operaciones básicas: crear y codificar de caracteres
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Operaciones básicas: creación y codificación de texto
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. rubric:: :python:`str(objeto='', encoding='utf-8', errors='strict')`
 
@@ -77,7 +78,7 @@ Vamos a crear una cadena de caractéres que incluye un acento. En este caso ``Jo
 estamos utilizando el valor literal de la cadena, el intérprete codifica la cadena como utf-8 y
 representa al carácter ``é`` correctamente.
 
-.. code-block:: python
+.. code-block:: pycon
 
     >>> nombre = 'José'
     >>> nombre
@@ -87,6 +88,8 @@ Si intentamos convertir la cadena a una cadena de bytes utilizando el método :p
 con el tipo de codificación ``ascii`` obtenemos un error. Esto es porque el método ``encode``
 no puede representar el caracter ``é`` en ``ascii``.
 
+.. code-block:: pycon
+
     >>> nombre_bytes = nombre.encode( 'ascii')
     Traceback (most recent call last):
     File "<python-input-2>", line 1, in <module>
@@ -94,6 +97,8 @@ no puede representar el caracter ``é`` en ``ascii``.
     UnicodeEncodeError: 'ascii' codec can't encode character '\xe9' in position 3: ordinal not in range(128)
 
 Si ahora utilizamos el tipo de codificación ``Latin-1`` podemos representar el carácter ``é``:
+
+.. code-block:: pycon
 
     >>> nombre_bytes = nombre.encode( 'Latin-1')
     >>> nombre_bytes
@@ -106,6 +111,8 @@ la representación del caracter ``é`` como ``\xe9``. Ahora vamos a suponer que 
 queremos convertir a una cadena utilizando ``str`` pero utilizando una codificación
 incorrecta:
 
+.. code-block:: pycon
+   
     >>> str(nombre_bytes, encoding='utf-8')
     Traceback (most recent call last):
     File "<python-input-6>", line 1, in <module>
@@ -115,10 +122,14 @@ incorrecta:
 
 Podemos, cambiar el tipo de gestión de errores a ``ignorar``:
 
+.. code-block:: pycon
+   
     >>> str(nombre_bytes, encoding='utf-8', errors='ignore')
     'Jos'
 
 Como vemos se ignora el caracter problemático. Enviemos la codificación correcta:
+
+.. code-block:: pycon
 
     >>> str(nombre_bytes, encoding='Latin-1', errors='ignore')
     'José'
@@ -128,11 +139,13 @@ En este ejemplo hemos visto como aunque Python utiliza por defecto una codificac
 y que puede representar muchos tipos de caracteres, hay que tener cuidado al leer o escribir
 datos codificados en otros formatos.
 
-.. rubric:: :python:`string.split(separator, maxsplit)`
+.. rubric:: :python:`str.split(separator, maxsplit)`
 
 El método :python:`split` crea una nueva lista,  cortando en pedacitos la cadena original.
 Los cortes se hacen utilizando un *separador*, por defecto el separador es uno o más espacios en blanco.
 Veamos un ejemplo:
+
+.. code-block:: pycon
 
     >>> 'Hola, ¿qué tal?, esta es una    palabra   separada con algunos espacios.'
     'Hola, ¿qué tal?, esta es una    palabra   separada con algunos espacios.'
@@ -142,6 +155,8 @@ Veamos un ejemplo:
 
 El objeto utiliza el espacio como separador. Fíjate como elimina múltiples espacios.
 
+.. code-block:: pycon
+
     >>> texto.split(',')
     ['Hola', ' ¿qué tal?', ' esta es una    palabra   separada con algunos espacios.']
     >>> texto.split(' ') # El separador es un espacio
@@ -150,11 +165,13 @@ El objeto utiliza el espacio como separador. Fíjate como elimina múltiples esp
 En caso de incluir el caracter de espacio ` ` como separador, se agregan a la lista cadenas vacías.
 Cuando veamos el tema de expresiones regulares vamos a ver como atacar este tipo de casos.
 
-.. rubric:: :python:`string.join(iterable)`
+.. rubric:: :python:`str.join(iterable)`
 
 Por otro lado, si tenemos una lista de cadenas de caracteres, podemos construir una sola cadena concatenando
 los elementos de la lista. En este caso, el objeto que realiza la operación es el caracter separador, que en
 esta operación se debería llamar caracter de unión:
+
+.. code-block:: pycon
 
     >>> lista = texto.split()
     >>> lista
@@ -163,7 +180,7 @@ esta operación se debería llamar caracter de unión:
     'Hola,#¿qué#tal?,#esta#es#una#palabra#separada#con#algunos#espacios.'
     >>>
 
-.. rubric:: replace
+.. rubric:: :python:`str.replace(old, new[, count])`
 
 Podemos crear una nueva cadena de texto reemplazando uno o más caracteres del texto original:
     >>> texto = 'Estudio en el Tec'
@@ -182,11 +199,13 @@ Una de las bondades de utilizar Python en modo interactivo es la fácilidad de
 ver el valor de regreso de las funciones, nombres y métodos, automáticamente. Solo
 escribimos el nombre de la variable y listo:
 
->>> nombre = 'Ana'
->>> nombre
-'Ana'
->>> nombre.upper()
-'ANA'
+.. code-block:: pycon
+
+    >>> nombre = 'Ana'
+    >>> nombre
+    'Ana'
+    >>> nombre.upper()
+    'ANA'
 
 También es muy práctico
 utilizar el método :python:`print()` para imprimir valores separados por espacios:
@@ -196,7 +215,7 @@ Ana luis AnaAna
 
 .. rubric:: f-strings
 
-Pero en ocasiones queremos darle un formato al texto que vamos a imprimt en la
+Pero en ocasiones queremos darle un formato al texto que vamos a imprimir en la
 terminal o en algún archivo. Al igual que otros lenguajes Python tiene la
 capacidad de construir cadenas de texto a partir de una plantilla. La plantilla
 es una cadena de texto con el prefijo ``f`` o ``F``, que incluye **expresiones
@@ -225,7 +244,7 @@ Traceback (most recent call last):
 NameError: name 'apellido' is not defined
 
 Después de la expresión, podemos agregar dos puntos que antecedan a una
-especificadión de formato.  Por ejemplo, para indicar el número de decimales que
+especificación de formato.  Por ejemplo, para indicar el número de decimales que
 deseamos mostrar para un valor flotante:
 
 >>> pi = 3.141592653589793238
@@ -264,5 +283,31 @@ se puede enviar un diccionario, anteponiendo ``**``:
     `docs.python.org <https://docs.python.org/es/3.13/library/stdtypes.html#string-methods>`_
 
     También es recomendable revisar la librería de expresiones regulares:
-    `Regular Expresions <https://docs.python.org/es/3.13/library/re.html>`_
+    `Regular Expressions <https://docs.python.org/es/3.13/library/re.html>`_
+
+Resumen del capítulo
+--------------------
+
+En esta sección revisamos herramientas esenciales de Python para el
+**procesamiento de texto**, desde operaciones básicas con cadenas hasta
+mecanismos de codificación y formateo.
+
+En particular:
+
+- Analizamos el constructor ``str()`` y la conversión entre **texto** (``str``)
+  y **bytes** (``bytes``) mediante ``encode()`` y ``decode()``, destacando la
+  importancia de especificar correctamente el *encoding* y la política de manejo
+  de errores.
+
+- Utilizamos operaciones frecuentes como ``split()``, ``join()`` y ``replace()``
+  para transformar texto y construir nuevas cadenas, recordando que las cadenas
+  son **inmutables** y que muchas operaciones regresan nuevos objetos.
+
+- Revisamos mecanismos de **formato** para generar texto legible, principalmente
+  con *f-strings* y, como alternativa, el método ``str.format()``.
+
+Estos conceptos son fundamentales para tareas posteriores del libro, como la
+lectura de archivos, el procesamiento de datos, y aplicaciones de análisis de
+texto y lenguaje natural, donde una correcta gestión de Unicode y del formato de
+salida es indispensable.
 

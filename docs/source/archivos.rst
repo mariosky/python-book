@@ -9,15 +9,16 @@ La mayoría de lenguajes de programación utiliza el concepto de "streams" para
 implementar la funcionalidad general de entrada y salida de datos desde y hacia
 los distintos dispositivos disponibles para nuestros programas.  Un **stream**
 es un flujo secuencial de datos que puede venir de: un archivo, un dispositivo
-de la red, la terminal e incluso de un buffer en momoria.  Una característica
-importante de los "streams" es que accede a este flujo de de datos de forma
-secuencial, sin necesidad de cargar todo el contenido en memoria.
+de la red, la terminal e incluso de un buffer en memoria.  Una característica
+importante de los "streams" es que accede a este flujo de datos de manera
+incremental, lo que resulta esencial cuando los archivos son grandes o no caben
+completamente en memoria.
 
-Aunque python no utiliza la matoría de las veces directamente el término "streams",
+Aunque python no utiliza la mayoría de las veces directamente el término "streams",
 utiliza el modelo de streams internamante mediante el módulo :python:`io`. Este
 módulo nos proveé de la funcionalidad básica de entrada/salida (I/O) implementando tres
 subtipos: texto, binario y datos crudos ("raw"). En lugar de streams,
-Python le llama :python:`file` (archivo) a los objetos concretos. Conceptulamente
+Python le llama :python:`file` (archivo) a los objetos concretos. Conceptualamente
 le podemos llamar "streams" u objetos ``file-like``.
 
 Los "streams" de Python incluyen los modos de acceso de ``solo lectura``, ``solo escritura``
@@ -92,7 +93,7 @@ pero ahora incluimos la letra ``b`` en el parámetro de modo:
    >>> f = open("imagen.png","rb")
    >>> imagen = f.read()
    >>> imagen
-   b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x07X\x00\x00\x04\xc4\x08\xfb\xb
+   b\'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x07X\x00\x00\x04\xc4\x08\xfb\xb
 
 Este "stream" trabaja con objetos ``bytes-like`` por lo que no se realiza ningún
 procesamiento adicionale de encoding, salto de línea o decoding. Podemos
@@ -111,6 +112,12 @@ Binario sin buffer
 
 Este "stream" binario no utiliza bloques y nos permite tener
 un acceso a bajo nivel y control total del acceso.
+
+.. note::
+
+   En la práctica, la mayoría de las aplicaciones no requieren acceso binario
+   sin buffer. Este tipo de stream se utiliza principalmente en sistemas de bajo
+   nivel, drivers o implementaciones muy específicas.
 
 Operaciones sobre archivos
 **************************
@@ -153,7 +160,7 @@ Ahora vamos a abrir el archivo para leerlo completo:
 
 
 Como estamos leyendo un "stream" una vez que consumimos todo el
-flujo, estámos en el final del archivo y ya no podemos leer más:
+flujo, estamos en el final del archivo y ya no podemos leer más:
 
 .. code-block:: python
 
@@ -211,3 +218,23 @@ Para probar esto vamos a crear un "buffer" binario:
 El método :python:`seek()` toma como primer argumento el "offset" y como segundo argumento
 enviamos el punto de referencia: un valor de ``0`` indica el inicio del archivo o buffer,
 ``1`` indíca la posición actual y el valor ``2`` hace referencia al final del archivo.
+
+Resumen del capítulo
+--------------------
+
+En este capítulo vimos cómo Python implementa el manejo de archivos y entrada/salida
+mediante el concepto de *streams* u objetos ``file-like``. Aprendimos a:
+
+- Abrir y cerrar archivos de texto y binarios de forma segura utilizando el
+  administrador de contexto ``with``.
+- Leer y escribir datos de manera secuencial sin cargar todo el contenido en memoria.
+- Trabajar correctamente con codificaciones de texto y evitar errores comunes
+  relacionados con Unicode.
+- Utilizar streams en memoria para simular archivos y facilitar pruebas.
+- Entender las diferencias entre streams de texto, binarios y de bajo nivel.
+
+Estas herramientas son fundamentales para el procesamiento de datos, la manipulación
+de archivos de gran tamaño y la integración con sistemas externos. En capítulos
+posteriores las utilizaremos como base para el análisis de datos, el procesamiento
+de texto avanzado y el cómputo distribuido.
+
