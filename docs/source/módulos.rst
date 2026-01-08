@@ -19,8 +19,8 @@ componen el módulo los cuales queremos reutilizar en otros componentes o
 programas.
 
 Un módulo también puede ejecutarse como si fuera un script independiente e
-incluye instrucciones que se ejecutan cuándo el módulo es incluido en otro
-componente o programa o cuando se ejecuta directamente por el intérprete.
+incluye instrucciones que se ejecutan en el momento de la importación o cuando
+el módulo se ejecuta directamente como script. 
 
 Veamos un ejemplo. Vamos a suponer que sumar (y restar) dos números es una
 operación muy complicada que además utilizamos en varias partes de nuestro
@@ -95,6 +95,13 @@ uso privado del módulo. Sin embargo, es la tendencia en Python,
 si sabemos lo que estamos haciendo, podemos modificar y leer estas
 variables desde código externo al módulo.
 
+.. note::
+
+   Recordemos que en Python, por convención, los nombres que comienzan con un
+   guion bajo (por ejemplo ``_pi``) indican que son parte de la implementación
+   interna del módulo y no deberían utilizarse desde código externo.
+
+
 .. code-block:: python
 
    >>> import aritmética
@@ -125,8 +132,10 @@ se incluye al espacio de nombres:
    >>> suma(2,3) # Se agrega la función 'suma()' al espacio de nombres local
    5
 
-Podemos importar todos las definiciones con ``*``. Esto no es recomendable ya que se
-podría ocultar o redefinir cierto nombre del espacio local.
+Podemos importar todos las definiciones con ``*``. Esto no es recomendable ya
+que se podría ocultar o redefinir cierto nombre del espacio local y esta forma
+ignora explícitamente los límites del espacio de nombres y dificulta el
+análisis estático del código.
 
 .. code-block:: python
 
@@ -163,9 +172,9 @@ Encontrando al Módulo importado
 *******************************
 
 Como hemos visto, un módulo no es más que un archivo con extensión ``.py``.
-Cuando ejecutamos la instrucción :python:`import` el intérprete de Python incia
+Cuando ejecutamos la instrucción :python:`import` el intérprete de Python inicia
 una búsqueda para encontrar el archivo o módulo que especificamos.  El primer
-lugar dónde se busca en el los módulos ``built-in``, estos nombres se encuentran
+lugar dónde se busca es en los módulos ``built-in``, estos nombres se encuentran
 en la tupla :python:`sys.builtin_module_names`. Incluye módulos que se utilizan
 bastante como :python:`array, math, sys, time, itertools`.  Al no encontrar el
 nombre del módulo, busca un archivo en los directorios incluidos en la variable
@@ -268,7 +277,7 @@ Los directorios (paquetes para Python) incluyen un archivo llamado ``__init__.py
 cual identifica al directorio como paquete y además puede contener código en
 para incializar el paquete o definir la lista  ``__all__`` que contiene los
 nombres de los módulos que se van incluir cuando los usuarios del paquete lo importen con
-utilizando un ``*``. La definición de esta lista es es opcional.
+utilizando un ``*``. La definición de esta lista es opcional.
 
 En el módulo de audio ``librosa.core.audio`` se tiene el método de :python:`load()`
 que sirve para cargar un archivo de audio. Podríamos cargar el método utilizando
@@ -290,13 +299,12 @@ siguiente manera:
    y, sr = librosa.load(filename)
 
 
-Del ejemplo vemos que solo necesitamos importar la librería y ya.
-La función :python:`load()` se incluye mágicamente.
-Esto es porque se utiliza la librería ``lazy_loader`` para cargar
-subomodelos y funciones de manera ``lazy``, solo se incluyen
-hasta el momento en el que se utilizan y solo se cargan la primera vez.
-Esta librería se utiliza al nivel de los archivos ``__intit__.py`` que
-vimos anteriormente.
+Del ejemplo vemos que solo necesitamos importar la librería y ya. La función
+:python:`load()` parece estar disponible de manera mágica, pero en realidad se
+utiliza internamente la librería ``lazy_loader`` para cargar subomodelos y
+funciones de manera ``lazy``, solo se incluyen hasta el momento en el que se
+utilizan y solo se cargan la primera vez. Esta librería se utiliza al nivel de
+los archivos ``__intit__.py`` que vimos anteriormente.
 
 .. note::
    Esta funcionalidad es posible porque en Python los especios de nombres
@@ -311,3 +319,30 @@ desde el módulo de ``librosa.core.audio`` nos podemos referir a
 
    from .fft import get_fftlib # Módulo en el mismo directorio
    from ..util.exceptions import ParameterError
+
+Resumen del capítulo
+--------------------
+
+En este capítulo estudiamos cómo Python organiza programas complejos mediante
+módulos y paquetes, que constituyen la unidad fundamental de reutilización,
+encapsulamiento y distribución del código.
+
+Vimos que un **módulo** es simplemente un archivo ``.py`` que define funciones,
+clases y variables, y que puede utilizarse tanto como biblioteca reutilizable
+como script ejecutable. Analizamos el papel de la variable especial
+``__name__`` para distinguir entre ambos usos, así como las distintas variantes
+de la instrucción ``import`` y su impacto en el espacio de nombres.
+
+También revisamos el proceso mediante el cual Python localiza los módulos
+importados, destacando el papel de ``sys.path`` y la diferencia entre módulos
+integrados, paquetes instalados y código local.
+
+Posteriormente introdujimos el concepto de **paquete**, mostrando cómo la
+estructura de directorios del sistema de archivos define jerarquías lógicas de
+composición. A través de un ejemplo real (``librosa``), observamos cómo los
+paquetes permiten organizar proyectos grandes, facilitar la colaboración y
+optimizar el tiempo de carga mediante técnicas como *lazy loading*.
+
+Finalmente, conectamos estos mecanismos con conceptos vistos en capítulos
+anteriores, como espacios de nombres, encapsulamiento y evaluación diferida.
+

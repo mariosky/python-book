@@ -5,10 +5,10 @@ Ambientes Virtuales
 ===================
 
 Python es un proyecto de código libre muy popular, lo que significa que muchos
-desarroladores talentosos contribuyen a la comunidad de Python desarrollando
+desarrolladores talentosos contribuyen a la comunidad de Python desarrollando
 librerías y software también con licencias de código abierto. En caso de
-necesitar una librería que no se incluya en la distribución actual de Python, es
-muy probable que algún desarrollador en algún lugar del mundo ya haya
+necesitar una librería que no se incluya en la distribución actual de Python,
+es muy probable que algún desarrollador en algún lugar del mundo ya haya
 implementado una buena solución y que otros desarrolladores que utilizan dicha
 herramienta colaboren para mantenerla al día. El desarrollo de librerías en
 Python también puede tener el apoyo de empresas que invierten recursos para
@@ -23,14 +23,14 @@ Los lenguajes modernos incluyen herramientas que permiten a los programadores
 compartir fácilmente su código, e incluyen comandos para instalar cierta versión
 anterior de una librería, o actualizar la versión actual a una versión más
 reciente.  En el caso de Python, el programa preferido de instalación de módulos
-es ``pip`` (`pip intalls packages`) ya partir de Python 3.4 se incluye dentro de
+es ``pip`` (`pip installs packages`) ya partir de Python 3.4 se incluye dentro de
 la distribución binaria del lenguaje.
 
 Antes de empezar con el uso de ``pip``, vamos conocer otros componentes importantes
 del ecosistema:
 
 PyPI es el índice oficial de paquetes de la comunidad de programadores de
-Python.  Funciona como un repositorio de acceso abierto que perimte a los
+Python.  Funciona como un repositorio de acceso abierto que permite a los
 desarrolladores publicar, compartir y reutilizar sus contribuciones de software.
 
 El sitio web principal es https://pypi.org, y es el punto de entrada
@@ -40,6 +40,7 @@ El software que da vida a PyPI está construido sobre una plataforma llamada
 Warehouse, que es el sistema backend desarrollado por la Python Packaging
 Authority (PyPA) el grupo encargado de mantener herramientas como ``pip`` y
 ``wharehouse``. La plataforma es confiable y se considera en producción.
+PyPI es hoy el estándar de facto para la distribución de paquetes en Python.
 
 Como programador puedes iniciar tu búsqueda en el repositorio y ver los
 detalles del módulo:
@@ -75,7 +76,7 @@ Un ambiente virtual nos permite crear proyectos a largo plazo utilizando
 versiones de los paquetes posiblemente distintas a las instaladas en otros
 proyectos o en la instalación global. Si yo hago un proyecto utilizando
 el framework de "django" version 5.1, pero tengo un proyecto viejo con la
-versión 4.1 que no he tenido tiempo de acutalizar. Si utilizo un ambiente
+versión 4.1 que no he tenido tiempo de actualizar. Si utilizo un ambiente
 virtual para cada uno, no tengo problema. Además, dependiendo de las necesidades,
 en un proyecto podría tener algunos paquetes que en el otro no necesito.
 
@@ -110,14 +111,14 @@ Una vez activado el ambiente el prompt nos muestra un indicador, en mi
 caso muestra el ambiente entre paréntesis: ``(ejemplo_venv)``, esto
 varía dependiendo del formato actual de tu intérprete de comandos.
 
-.. note:
+.. note::
 
    Este directorio puede crearse en la raíz de un proyecto
-   y normalmente se llama ``venv`` o ``.venv``. Esto es importante, por que
+   y normalmente se llama ``venv`` o ``.venv``. Esto es importante, porque
    algunas herramientas como `Visual Studio Code` buscan algún directorio
    que incluya un ambiente para activarlo de manera automática.
 
-.. note:
+.. note::
 
    Para desactivar un ambiente utilizamos el comando ``deactivate``.
    Cada que iniciemos una nueva sesión en la línea de comandos debemos
@@ -136,11 +137,11 @@ En mi computadora actual:
    pip     24.3.1
 
 Esto es muy distinto a la cantidad de paquetes en la instalación global de
-Python o de otros ambientes que tengo en la máquina. Digamos que este es
-un ambiente nuevo y vacio. Aunque tenemos muchos módulos como parte
-de la instalación estándar. Vamos instalando algún nuevo módulo.
+Python o de otros ambientes que tengo en la máquina. Aunque el ambiente parece
+vacío, incluye todos los módulos de la biblioteca estándar. Vamos instalando
+algún nuevo módulo.
 
-La instalación de la ultima versión de un nuevo paquete (o módulo) y sus dependencias en PyPI
+La instalación de la última versión de un nuevo paquete (o módulo) y sus dependencias en PyPI
 se hace con el parámetro ``install`` aquí te muestro algunas variantes:
 
 .. code-block:: bash
@@ -162,7 +163,7 @@ Y para desinstalar:
 
    python -m pip uninstall algúnPaquete
 
-Vamos a instalar la úlima versión de la librería `numpy`
+Vamos a instalar la última versión de la librería `numpy`
 que nos va a permitir trabajar con matrices y arreglos multidimensionales:
 
 .. code-block:: bash
@@ -205,10 +206,10 @@ se considera como un recurso efímero que solo sirve para la instalación
 local:
 
    - Si queremos ejecutar nuestro proyecto en otra máquina, **no copiamos**
-     el ambiente, lo reconstruímos.
+     el ambiente, lo reconstruimos.
 
    - Tampoco debemos mantener el directorio
-     de ambiente en sistemas de control de vesiones como ``git``, ya que es
+     de ambiente en sistemas de control de versiones como ``git``, ya que es
      un recurso independiente de nuestro código.
 
 Una manera básica de reconstruir un ambiente es utilizando el comando
@@ -246,17 +247,37 @@ Este nombre es común dentro de los proyectos de Python.
 
    > py -m pip freeze > requirements.txt
 
-El archivo de requirements.txt si es muy importante y debemos manternerlo
+El archivo de requirements.txt si es muy importante y debemos mantenerlo
 como parte de nuestro proyecto. Si otro programador desea instalar nuestro
-proyecto, deba bajar el código fuente y el archivo de ``requirements-txt``
+proyecto, deba bajar el código fuente y el archivo de ``requirements.txt``
 para instalar las dependencias. Esto se hace con el comando ``pip``:
 
 .. code-block:: bash
 
    > py -m pip install -r .\requirements.txt
 
-Utilizamos el parámetro ``-r`` para indicar que instale la lista
-de paquetes que se encuentra en el archivo ``requirements.txt``.
-Si ejecutamos el comando en el ambiente actual, el comando nos
-dira que ya están instalados los paquetes.
+Utilizamos el parámetro ``-r`` para indicar que instale la lista de paquetes
+que se encuentra en el archivo ``requirements.txt``. Si ejecutamos el comando
+en el ambiente actual, el comando nos dirá que ya están instalados los
+paquetes. Este mecanismo garantiza la reproducibilidad del entorno de
+ejecución.
+
+Resumen del capítulo
+--------------------
+
+En este capítulo estudiamos cómo Python gestiona librerías externas y
+dependencias mediante herramientas del ecosistema oficial como ``pip`` y
+``venv``.
+
+Analizamos el papel de PyPI como repositorio central de paquetes, así como el
+funcionamiento básico de ``pip`` para instalar, actualizar y eliminar librerías.
+Posteriormente introdujimos el concepto de **ambientes virtuales**, destacando su
+importancia para aislar dependencias, evitar conflictos de versiones y facilitar
+el mantenimiento de proyectos a largo plazo.
+
+Vimos cómo crear y activar ambientes virtuales utilizando el módulo estándar
+``venv``, así como la forma correcta de instalar paquetes dentro de estos
+entornos. Finalmente, explicamos cómo capturar las dependencias de un proyecto
+mediante ``pip freeze`` y el archivo ``requirements.txt``, permitiendo
+reconstruir el ambiente de manera reproducible en otras máquinas o sistemas.
 

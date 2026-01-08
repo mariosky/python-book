@@ -5,31 +5,39 @@ Programación Orientada a Objetos en Python
 ==========================================
 
 Como ya hemos visto, Python *no* es un lenguaje orientado a objetos (OO) puro.
-Podemos programar scripts en los cuales  no es necesario utilizar el paradigma
+Podemos programar scripts en los cuales no es necesario utilizar el paradigma
 explicitamente.  Aunque los tipos de datos, estructuras e incluso las funciones
-son objetos, no es necesario implementar una clase principal o métodos miembro
-para poder escribir un programa. Incluso parecería que la implementación del
-paradigma es un agregado de último momento. Un parche. Esta impresión radica (en
-mi opinión) en la sintáxis para expresar algunos elementos,
-como los constructores, el páso de una referencia (:python:`self`) en la
-definición métodos miembro, entre otras.
+son objetos, no es necesario implementar una clase principal o métodos miembro para
+resolver muchos problemas de manera efectiva. 
 
-Un aspecto crucial de la Programción Orientada a Objetos es el tipado estrícto.
-Esto ocasiona que tengamos que utilizar mecanismos elaborados para hacer
-cosas que en un lenguaje dinámico se hacen muy fácilmente. Por ejemplo,
-el polimorfismo, plantillas o el uso de interfaces. Un programador
-experimentado sabe que todas estas 'libertades' pueden traer problemas, pero al
-mismo tiempo nos permiten el desarrollo de programas *sin tanto verbo* (del inglés verbose).
+Esta flexibilidad puede dar la impresión de que la orientación a objetos fue
+incorporada como un agregado tardío al lenguaje. En parte, esta percepción surge
+de algunas decisiones sintácticas y conceptuales, como la definición explícita
+de constructores, el paso manual de la referencia :python:`self` en los métodos de
+instancia, o la ausencia de mecanismos formales como interfaces obligatorias.
+Sin embargo, más que un parche, estas características reflejan una decisión de
+diseño deliberada: priorizar la simplicidad, la legibilidad y la expresividad del
+lenguaje por encima de la rigidez paradigmática.
+
+Un aspecto importante de algunos lenguajes de Programción Orientada a Objetos
+como Java o C** es el tipado estrícto y jerarquías formales. Esto ocasiona que
+tengamos que utilizar mecanismos elaborados para resolver problemas comunes,
+como el polimorfismo, el uso de interfaces o plantillas (genéricos). Estos
+mecanismos aportan seguridad y claridad en software a gran escala, pero también
+incrementan la verbosidad del código. Python como lenguaje dinámico, nos
+permite resolver muchos de estos problemas de forma más directa y concisa.
 
 Por esta razón, creo que Python puede no ser el mejor lenguaje para aprender
-Programación Orientada a Objetos (POO), ya que muchos de los temas o elementos de
-programación no tienen una aplicación directa.  Por otro lado, el hecho de que
-el paradigma sea *opcional* evita que se establezcan reglas de acción para
-solucionar problemas de una manera más o menos estándar, ya que hay varias
-formas de hacer todo. Entonces, creo que esta sección no debería ser
-tan extensa como en los libros de otros lenguajes ya que los elementos de POO
-en Python no son tan extensos. El enfoque estará en ver y enteder las
-diferencias entre paradigmas en términos de programación.
+Programación Orientada a Objetos (POO) en su forma más clásica o académica, ya
+que muchos de los conceptos o elementos de programación del paradigma no son
+obligatorios ni se manifiestas de manera explicita. Por otro lado, el hecho de
+que el paradigma sea *opcional* convierte a Python en un excelente
+lenguaje para comparar paradigmas y entender cuándo resulta apropiado
+utilizar programación procedural, funcional u orientada a objetos.
+
+Entonces, creo que esta sección no debería ser tan extensa como en los
+capítulos de libros dedicados a lenguajes puramente OO.  El enfoque estará en
+ver y enteder las diferencias entre paradigmas en términos de programación.
 
 .. note::
     A lo largo del libro veremos que si hay un estilo de programación en Python,
@@ -37,18 +45,21 @@ diferencias entre paradigmas en términos de programación.
 
 Ámbitos y espacios de nombres en Python
 ***************************************
-La documentación oficial de Python aborda este importante tema en la sección
-de definición de  `clases <https://docs.python.org/es/3.13/tutorial/classes.html#python-scopes-and-namespaces>`_.
-En este libro vamos a seguir la misma estructura ya que es una manera interesante
-de abordar las diferencias entre los paradigmas procedural/funcional y el orientado a objetos.
-Entender muy bien estos conceptos nos hará mejores programadores independientemente
-del paradigma que utilicemos. Primero es importante definir que es un espacio de nombres y
+
+La documentación oficial de Python aborda este importante tema en la sección de
+definición de  `clases
+<https://docs.python.org/es/3.13/tutorial/classes.html#python-scopes-and-namespaces>`_.
+En este libro vamos a seguir la misma estructura ya que es una manera
+interesante de abordar las diferencias entre los paradigmas
+procedural/funcional y el orientado a objetos. Entender muy bien estos
+conceptos nos hará mejores programadores independientemente del paradigma que
+utilicemos. Primero es importante definir que es un espacio de nombres y
 después el ámbito de visibilidad que hay entre ellos.
 
 Iniciemos una nueva sesión del interprete y como primera instrucción vamos a
-ejecutar el método incluido de fábrica :python:`dir()`.
-Cuando invocamos esta función sin argumentos, nos regresa una lista
-de cadenas que representan los nombres definidos en el ámbito actual:
+ejecutar el método incluido de fábrica :python:`dir()`. Cuando invocamos esta
+función sin argumentos, nos regresa una lista de cadenas que representan los
+nombres definidos en el ámbito actual:
 
    >>> dir()
    ['__annotations__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__']
@@ -102,9 +113,9 @@ a objetos:
 Ocultación de la información (information hiding)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-   Es un principio por el cual se separan los detalles de implementación de los
-   detalles de uso, de modo que los componentes de un programa solo acceden a lo
-   que necesitan saber, y no a los mecanismos internos de otros componentes
+Es un principio por el cual se separan los detalles de implementación de los
+detalles de uso, de modo que los componentes de un programa solo acceden a lo
+que necesitan saber, y no a los mecanismos internos de otros componentes
 
 En este ejemplo, si necesitamos crear un correo electrónico, solo podemos ver
 el nombre de la función y su parámetro. Pero no tenemos control sobre lo que sucede
@@ -117,9 +128,9 @@ vamos a mejorar un poco la implementación:
    ...
 
 Ahora podemos enviar como segundo parámetro el dominio del correo y por defecto
-se pasa :python:`'gmail.com'` de esta manera, algunas
-partes del programa seguiran llamando a la función de la manera anterior sin
-que les afecte el nuevo cambio. Y en otras partes se puede utilizar de la nueva manera.
+se pasa :python:`'gmail.com'` de esta manera, algunas partes del programa
+seguiran llamando a la función de la manera anterior sin que les afecte el
+nuevo cambio. Y en otras partes se puede utilizar de la nueva manera.
 
 
    >>> genera_correo('juan')
@@ -127,48 +138,53 @@ que les afecte el nuevo cambio. Y en otras partes se puede utilizar de la nueva 
    >>> genera_correo('juan','hotmail.com')
    'juan@hotmail.com'
 
-Al ocultar los detalles de implementación evitamos que los usuarios de nuestras funciones
-dependan de las decisiones que tomemos internamente y que no les afecten los cambios.
+Al ocultar los detalles de implementación evitamos que los usuarios de nuestras
+funciones dependan de las decisiones que tomemos internamente y que no les
+afecten los cambios.
 
-En el caso de variables locales como las de la función anterior. Se crean al momento de
-llamar a la función y se eliminan cuando la función regresa o se lanza alguna excepción.
-También hay ambitos de nombres que tienen una vida más duradera, por ejemplo, los
-nombres de fabrica (``builtins``), se crean al iniciar el intérprete y nunca se destruyen.
+En el caso de variables locales como las de la función anterior. Se crean al
+momento de llamar a la función y se eliminan cuando la función regresa o se
+lanza alguna excepción. También hay ambitos de nombres que tienen una vida más
+duradera, por ejemplo, los nombres de fabrica (``builtins``), se crean al
+iniciar el intérprete y nunca se destruyen.
 
 Visibilidad y Encapsulamiento en un Módulo
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Este concepto de ocultar o encapsular la información es importante en la programación
-estructurada al momento de descomponer la funcionalidad de nuestros programas. Podemos seguir un
-diseño descendente (top-down) dividiendo el problema que atacamos en diversos subproblemas y estos
-a su vez en otros más pequeños. En Python podemos organizar nuestro código en módulos (ver sección de modulos)
-en los cuales pueden contener funciones las cuales a su vez pueden definir funciones internas.
-El punto clave es que las funciones internas **no son accesibles** desde fuera de su función contenedora.
-Sin embargo, las funciones anidadas tienen acceso al contexto de las funciones que las contienen.
-Esta estructura se muestra en la siguiente figura:
+Este concepto de ocultar o encapsular la información es importante en la
+programación estructurada al momento de descomponer la funcionalidad de
+nuestros programas. Podemos seguir un diseño descendente (top-down) dividiendo
+el problema que atacamos en diversos subproblemas y estos a su vez en otros más
+pequeños. En Python podemos organizar nuestro código en módulos (ver sección de
+modulos) en los cuales pueden contener funciones las cuales a su vez pueden
+definir funciones internas. El punto clave es que las funciones internas **no
+son accesibles** desde fuera de su función contenedora. Sin embargo, las
+funciones anidadas tienen acceso al contexto de las funciones que las
+contienen. Esta estructura se muestra en la siguiente figura:
 
 .. figure:: ./images/visibilidad.png
    :align: center
    :alt: Visibilidad y Encapsulamiento.
 
-En el lado izquierdo podemos observar la estructura jerárquica dentro de un módulo (azul claro)
-en Python esto puede ser un archivo ``.py``. Dentro del módulo hay funciones principales:
-en este caso la Función A y Función B (rosadas). A su vez cada función principal puede contener internamente otras
+En el lado izquierdo podemos observar la estructura jerárquica dentro de un
+módulo (azul claro) en Python esto puede ser un archivo ``.py``. Dentro del
+módulo hay funciones principales: en este caso la Función A y Función B
+(rosadas). A su vez cada función principal puede contener internamente otras
 funciones (lavanda):
 
 - La ``Función A`` contiene las funciones ``a`` y ``a2``
 - La ``Función B`` contiene a la ``función b``
 
-Este es un modelo anidado de funciones, donde las funciones internas solo son visibles
-desde las funciones que las contienen. Del lado derecho se ve en detalle este concepto de
-visibilidad:
+Este es un modelo anidado de funciones, donde las funciones internas solo son
+visibles desde las funciones que las contienen. Del lado derecho se ve en
+detalle este concepto de visibilidad:
 
-El flujo está hacia abajo lo vemos como una "caja negra": los niveles superiores
-no conocen los detalles internos de los niveles inferiores (encapsulamiento).
-Ahora, las flechas discontínuas nos muestran la visibilidad permitida: las
-funciones internas (a, a2, b) pueden "ver" o acceder a los nombres locales de
-las funciones que las contienen (A, B), y estas a su vez a los nombres de los
-módulos.
+El flujo está hacia abajo lo vemos como una "caja negra": los niveles
+superiores no conocen los detalles internos de los niveles inferiores
+(encapsulamiento). Ahora, las flechas discontínuas nos muestran la visibilidad
+permitida: las funciones internas (a, a2, b) pueden "ver" o acceder a los
+nombres locales de las funciones que las contienen (A, B), y estas a su vez a
+los nombres de los módulos.
 
 Veamos un ejemplo. Al iniciar en intérprete estamos al nível de un módulo.
 Vamos a definir un nombre a este nivel:
@@ -236,33 +252,37 @@ podemos hacerlo utilizando la palabra clave ``global``:
    333
 
    >>> x
-   123
+   1
 
-ar un nombre que esta definido en un ámbito externo
+Para cambiar un nombre que esta definido en un ámbito externo
 (más arriba en la jerarquía), podemos utilizar la palabra reservada ``nonlocal``
 de manera similar a ``global``.
 
 En resúmen, son importantes estos tres conceptos:
 
-- **Encapsulamiento**: Las funciones internas no son accesibles desde fuera de su función contenedora.
-- **Alcance léxico**: Las funciones anidadas tienen acceso al contexto de las funciones que las contienen.
-- **Diseño modular**: El módulo oculta los detalles internos a quien lo usa; solo expone una interfaz (las funciones principales).
+- **Encapsulamiento**: Las funciones internas no son accesibles desde
+  fuera de su función contenedora.
+- **Alcance léxico**: Las funciones anidadas tienen acceso al 
+  contexto de las funciones que las contienen.
+- **Diseño modular**: El módulo oculta los detalles internos a quien lo 
+  usa; solo expone una interfaz (las funciones principales).
 
 Estos conceptos se utilizan de nuevo en la programación orientada a objetos.
 
 Clases
 ******
 
-Tomando como base el concepto de encapsulamiento, para hacer un cambio de paradigma.
-En un módulo podemos tener un ambito que incluye datos (nombres) y funciones para
-encapsular cierta funcionalidad. En orientación a objetos, un clase encapsula los
-atributos (en lugar de datos) y métodos (en lugar de funciones) que definen
-a un nuevo tipo de objeto. Cada objeto lo podríamos ver como un módulo independiente,
-con sus propios datos y funcionalidad interna. Aunque conceptualmente el
-encapsulamiento lo hemos visto como ocultar información y funciones, en realidad
-esto se hace de manera selectiva, cuándo definimos un módulo podemos especificar
-que datos y funciones serán visibles a otros módulos. Lo mismo sucede en la programación
-orientada a objetos. Veamos un ejemplo:
+Tomando como base el concepto de encapsulamiento, para hacer un cambio de
+paradigma. En un módulo podemos tener un ambito que incluye datos (nombres) y
+funciones para encapsular cierta funcionalidad. En orientación a objetos, un
+clase encapsula los atributos (en lugar de datos) y métodos (en lugar de
+funciones) que definen a un nuevo tipo de objeto. Cada objeto lo podríamos ver
+como un módulo independiente, con sus propios datos y funcionalidad interna.
+Aunque conceptualmente el encapsulamiento lo hemos visto como ocultar
+información y funciones, en realidad esto se hace de manera selectiva, cuándo
+definimos un módulo podemos especificar que datos y funciones serán visibles a
+otros módulos. Lo mismo sucede en la programación orientada a objetos. Veamos
+un ejemplo:
 
 >>> class Persona:
 ...     clase = 'Persona'
@@ -276,10 +296,10 @@ orientada a objetos. Veamos un ejemplo:
 ...
 
 Vemos como la definición es básicamente un bloque dónde definimos métodos y
-atributos. Como cada instancia (objeto) de esta clase tendrá sus propios atributos y
-todas las instancias van a compartir los métodos definidos en su clase.
-Debemos utilizar la referencia ``self`` para identificar al objeto particular
-que estamos utilizando.
+atributos. Como cada instancia (objeto) de esta clase tendrá sus propios
+atributos y todas las instancias van a compartir los métodos definidos en su
+clase. Debemos utilizar la referencia ``self`` para identificar al objeto
+particular que estamos utilizando.
 
 .. code-block:: python
 
@@ -292,14 +312,14 @@ que estamos utilizando.
    >>> Persona.clase
    'Persona'
 
-En este código creamos dos instancias de la clase Persona, cada objeto se
+En este código creamos dos instancias de la clase ``Persona``, cada objeto se
 crea en una localidad independiente de memoria y la podemos referenciar
 utilizando :python:`self`. Esto lo debemos de especificar explicitamente al
-definir la clase para decir que estos son atributos y métodos de instancias.
-En el caso del atributo :python:`Persona.clase` este no tiene :python:`self` porque se
-trata de un atributo de la clase. Cuando ejecutamos el método de instancia
-:python:`saluda`, por ejemplo :python:`ana.saluda()` no es necesario enviar
-la referencia :python:`self`, esto se hace implicitamente.
+definir la clase para decir que estos son atributos y métodos de instancias. En
+el caso del atributo :python:`Persona.clase` este no tiene :python:`self`
+porque se trata de un atributo de la clase. Cuando ejecutamos el método de
+instancia :python:`saluda`, por ejemplo :python:`ana.saluda()` no es necesario
+enviar la referencia :python:`self`, esto se hace implicitamente.
 
 .. figure:: ./images/self.png
    :align: center
@@ -308,25 +328,28 @@ la referencia :python:`self`, esto se hace implicitamente.
 .. note::
 
    Es importante agregar la referencia :python:`self` en todos lados. Por
-   ejemplo, :python:`self.get_nombre_completo()`, aunque esto no es necesario en otros
-   lenguajes, uno de los principios básicos de Python es "Explicito es
-   preferible a implícito".
+   ejemplo, :python:`self.get_nombre_completo()`, aunque esto no es necesario
+   en otros lenguajes, uno de los principios básicos de Python es "Explicito es
+   preferible a implícito". Aunque no solo es filosofía, además de hacer
+   explícito que nombres son atributos, evita que caigamos en ambigüedad con
+   las varibles locales.
 
 
 Métodos Especiales
 ^^^^^^^^^^^^^^^^^^
 
-El método :python:`__init__` es un "método especial", a estos métodos comúnmente
-les llamamos "métodos mágicos" ya que están encerrados entre doble guiones bajos
-:python:`__mágico__()`. Si vienes de un lenguaje orientado a objetos puro como
-C# o Java, sabes que todos los objetos heredan cierta funcionalidad común desde
-una clase base universal como ``Object``.  Como todos los objetos hereda de
-``Object``, todos los objetos incluyen métodos como ``ToString()`` o
-``Equals()`` entre otros. Estos métodos se ejecutan de manera automática cuando
-realizamos ciertas operaciones sobre los objetos, por ejemplo, cuándo imprimimos
-un objeto automáticamente se ejecuta ``ToString()`` y se imprime el texto que
-regresa. Normalmente redefinimos estos métodos utilizando algo como
-``override``, para cambiar el comportamiento incluido "por defecto".
+El método :python:`__init__` es un "método especial", a estos métodos
+comúnmente les llamamos "métodos mágicos" ya que están encerrados entre dobles
+guiones bajos (**underscores**) :python:`__mágico__()`. Si vienes de un
+lenguaje orientado a objetos puro como C# o Java, sabes que todos los objetos
+heredan cierta funcionalidad común desde una clase base universal como
+``Object``.  Como todos los objetos hereda de ``Object``, todos los objetos
+incluyen métodos como ``ToString()`` o ``Equals()`` entre otros. Estos métodos
+se ejecutan de manera automática cuando realizamos ciertas operaciones sobre
+los objetos, por ejemplo, cuándo imprimimos un objeto automáticamente se
+ejecuta ``ToString()`` y se imprime el texto que regresa. Normalmente
+redefinimos estos métodos utilizando algo como ``override``, para cambiar el
+comportamiento incluido "por defecto".
 
 .. note:: Explicito es mejor que implícito
 
@@ -413,17 +436,18 @@ utilizamos como sinónimos, en Python hay una diferencia importante:
 
 **Objeto**
 
-Todos las entidades en Python son objetos, incluyendo las listas, cadenas de texto, funciones, números, e
-incluso las clases. El término "objeto" se utiliza porque se enfatiza que es una
-unidad de datos con tipo, identidad, y estado. Estas también son propiedades de las instancias.
+Todos las entidades en Python son objetos, incluyendo las listas, cadenas de
+texto, funciones, números, e incluso las clases. El término "objeto" se utiliza
+porque se enfatiza que es una unidad de datos con tipo, identidad, y estado.
+Estas también son propiedades de las instancias.
 
 **Instancia**
 
 Es un **objeto** que creamos a partir de una clase. Las instancias tienen una
 relación con la clase que las originó.
 
-Veamos esto en código. Vamos a crear dos objetos, una cadena, una lista y una instancia
-de la clase :python:`Persona` que definimos anteriormente:
+Veamos esto en código. Vamos a crear dos objetos, una cadena, una lista y una
+instancia de la clase :python:`Persona` que definimos anteriormente:
 
 >>> x = 10
 >>> nombre = 'ana'
@@ -502,7 +526,7 @@ el intérprete cuando "instanciamos" un objeto:
 Objetos dinámicos
 ^^^^^^^^^^^^^^^^^
 
-Aunque esto lo debemos hacer con cuidad y no es recomendable ya que
+Aunque esto lo debemos hacer con cuidado y no es recomendable ya que
 viola el principio de uniformidad. Los objetos son dinámicos, así que
 les podemos agregar individualmente nuevos atributos y métodos una vez creados:
 
@@ -521,8 +545,13 @@ Hola soy Ana Lee
 Hola soy Tom Pit tengo 27
 
 También podríamos modificar una clase ya que se haya creado, o tener un método
-que genere clases. Estos temas los dejamos para después. Lo importante en este momento, es darnos cuenta de la
-flexibilidad de Python.
+que genere clases. Estos temas los dejamos para después. Lo importante en este
+momento, es darnos cuenta de la flexibilidad de Python.
+
+.. warning:: 
+
+   Aunque los objetos dinámicos nos ofrecen ventajas y libertades, esto 
+   rompe expectativas y dificulta las pruebas y el mantenimiento.
 
 **:python:`hasattr(object, attr)`**
 
@@ -563,7 +592,7 @@ definiendo utilizamos :python:`self`:
       def __str__(self):
          return f'{self.nombre} {self.apellido}'
       def saluda(self):
-         print(f'Hola soy {self}, soy una instancia de: {self.__class__.clase})
+         print(f'Hola soy {self}, soy una instancia de: {self.__class__.clase}')
 
 
 En este ejemplo, utilizamos un atributo :python:`clase` como ejemplo. Pero como
@@ -589,14 +618,18 @@ aviso.
 
 .. note::
 
- El diseño del lenguaje Python considera más importante la transparencia y la flexibilidad
- (introspección, reflexión) que el encapsulamiento estricto.
+ El diseño del lenguaje Python considera más importante la transparencia y la
+ flexibilidad (introspección, reflexión) que el encapsulamiento estricto.
 
- Se dice que el creador de Python Guido van Rossum, dijo la frase: “We
- are all consenting adults here.” ("Aquí todos somos adultos responsables.")
+ Se dice que el creador de Python Guido van Rossum, dijo la frase: “We are all
+ consenting adults here.” ("Aquí todos somos adultos responsables.")
  defendiendo sus decisiones de diseño.
 
+.. Nota Editorial 
 
+   Falta agregar aquí el concepto de @dataclass y NamedTuple
+
+ 
 Herencia
 ^^^^^^^^
 
@@ -617,11 +650,13 @@ es la siguiente:
    Hola, estudio Arquitectura y me llamo Ana Lee
 
 En este ejemplo la clase :python:`Estudiante` hereda de la clase Persona y
-redefine el método :python:`saluda()` definido en la clase base. El método :python:`super()`
-utilizado aquí sin parámetros y en una herencia simple, buscaría el método subiendo la jerarquía de clasees.
-Si enviamos como parámetro un tipo, la busqueda en la jerarquía de clases empezaría a partir de esa clase.
-Por ejemplo, para la jerarquía: ``Estudiante_Temporal -> Estudiante -> Persona -> object ``, una
-llamada :python:`super(Persona)` empezaría la búsqueda del método a partir de ``Persona -> object``.
+redefine el método :python:`saluda()` definido en la clase base. El método
+:python:`super()` utilizado aquí sin parámetros y en una herencia simple,
+buscaría el método subiendo la jerarquía de clasees. Si enviamos como parámetro
+un tipo, la busqueda en la jerarquía de clases empezaría a partir de esa clase.
+Por ejemplo, para la jerarquía: ``Estudiante_Temporal -> Estudiante -> Persona
+-> object ``, una llamada :python:`super(Persona)` empezaría la búsqueda del
+método a partir de ``Persona -> object``.
 
 Herencia Múltiple
 ^^^^^^^^^^^^^^^^^
@@ -678,11 +713,12 @@ Lo haremos en un script que llamaremos ``herencia.py``:
 
 Este tipo de herencia en "diamante" suele ser complicado de utilizar, ya que
 puede existir ambigüedad en el órden de ejecución y los parámetros que se
-envían a los constructores por ejemplo. Anteriormente al utilizar :python:`super().__init__()`
-ya sabíamos que parámetros enviar al nivel más arriba. Pero en este caso el
-constructor lo enviamos con los parámetros de ambos padres. ¿Como saben los constructores
-que parámetro tomar?. Para esto se hace uso del envío de parametros por *keywords*. Por
-ejemplo. Para el constructor de :python:`Empleado`:
+envían a los constructores por ejemplo. Anteriormente al utilizar
+:python:`super().__init__()` ya sabíamos que parámetros enviar al nivel más
+arriba. Pero en este caso el constructor lo enviamos con los parámetros de
+ambos padres. ¿Como saben los constructores que parámetro tomar?. Para esto se
+hace uso del envío de parametros por *keywords*. Por ejemplo. Para el
+constructor de :python:`Empleado`:
 
 .. code-block:: python
 
@@ -700,9 +736,10 @@ clase :python:`Estudiante`, esta clase toma el argumento con la ``especialidad``
 y pasa el resto ``nombre`` y ``apellido`` a la clase ``Persona``.
 
 .. note::
+
    El método :python:`super()` no siempre se refiere a la clase *padre* de la clase.
    En el caso de herencia múltiple búsca también en las clases *hermanas*.
-   Esta sintáxis de  :python:`super()` sin parámetros es para versiones
+   Esta sintáxis de :python:`super()` sin parámetros es para versiones
    recientes del lenguaje.
 
 El mismo flujo sucede cuando ejecutamos el método de imprimir un saludo.
@@ -714,4 +751,45 @@ Si ejecutamos el programa el resultado debería de ser:
    Hola, soy Ana Lee
    Trabajo como Asistente
    Estudio Arquitectura
+
+Llamamos MRO (Method Resolution Order) a la secuencia en la que Python busca a
+los métodos y atributos en una jerarquía de clases. Podemos ver la secuencia
+MRO de cualquier clase utilizando ya sea el atributo :python:`__mro__` o el
+método ``.mro()``. Por ejemplo:
+
+.. code-block:: python
+
+   Estudiante_Empleado.mro()
+
+
+Resumen del capítulo
+--------------------
+
+En este capítulo revisamos el modelo de **programación orientada a objetos** en
+Python desde una perspectiva práctica: un lenguaje donde el paradigma OO es muy
+utilizado, pero no es obligatorio para escribir programas funcionales.
+
+En particular, estudiamos:
+
+- La relación entre **ámbitos**, **espacios de nombres** y **visibilidad**, como
+  base conceptual para entender encapsulamiento en módulos, funciones anidadas y
+  posteriormente en clases.
+
+- La definición de **clases** e **instancias**, así como el papel de ``self`` al
+  referirnos explícitamente a atributos y métodos de una instancia.
+
+- El uso de **métodos especiales** (por ejemplo ``__init__``, ``__str__`` y
+  ``__repr__``) y cómo el intérprete los invoca automáticamente al realizar
+  operaciones comunes como imprimir objetos o crear instancias.
+
+- La distinción entre *objeto* e *instancia* en Python y la noción de identidad,
+  tipo, estado y comportamiento.
+
+- La flexibilidad del lenguaje mediante **introspección** y la posibilidad de
+  agregar atributos o métodos dinámicamente, destacando que esta capacidad debe
+  usarse con cuidado en proyectos mantenibles.
+
+- La **herencia** simple y múltiple, así como la importancia de construir
+  constructores cooperativos utilizando ``super()`` y argumentos por *keywords*
+  para evitar ambigüedades.
 

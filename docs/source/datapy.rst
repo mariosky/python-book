@@ -1475,8 +1475,8 @@ ya están cargados en memoria. Aprendimos a inspeccionar, ordenar, seleccionar,
 filtrar, transformar y agrupar datos, operaciones que constituyen el núcleo del
 análisis de datos con pandas.
 
-Resumen
--------
+Resumen del capítulo
+--------------------
 
 En este capítulo estudiamos las dos estructuras fundamentales para el análisis
 de datos en Python: los arreglos ``ndarray`` de NumPy y los ``DataFrame`` de
@@ -1484,7 +1484,7 @@ pandas. NumPy nos permite realizar cómputo numérico eficiente mediante
 operaciones vectorizadas, mientras que pandas extiende estas capacidades para
 trabajar con datos tabulares heterogéneos.
 
-Estas herramientas son parte fundamental de la mayoría de los flujos
-modernos de minería de datos y aprendizaje automático. En el siguiente
-capítulo utilizaremos estas estructuras como base para construir, entrenar y
-evaluar modelos utilizando la biblioteca **scikit-learn**.
+Estas herramientas son parte fundamental de la mayoría de los flujos modernos
+de minería de datos y aprendizaje automático. En el siguiente capítulo
+utilizaremos estas estructuras como base para construir, entrenar y evaluar
+modelos utilizando la biblioteca **scikit-learn**.

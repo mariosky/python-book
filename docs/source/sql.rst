@@ -4,22 +4,41 @@
 Bases de Datos
 ==============
 
-En esta sección nos centraremos en el amacenamiento de
-datos utilizando sistemas de bases de datos relacionales :cite:`codd1990relational` y
-no relacionales :cite:`strauch2011nosql`. Estos sistemas son de vital importancia para
-el desarrollo de aplicaciones, ya que la mayoría de ellas requiere una gestión
-de datos escalable, eficiente y segura.
+En esta sección nos centraremos en el almacenamiento de datos utilizando
+sistemas de bases de datos relacionales :cite:`codd1990relational` y no
+relacionales :cite:`strauch2011nosql`. Estos sistemas son de vital importancia
+para el desarrollo de aplicaciones, ya que la mayoría de ellas requiere una
+gestión de datos escalable, eficiente y segura.
 
 Elegir entre una base de datos relacional o no relacional depende del tipo de
 aplicación que estemos desarrollando: Los sistemas relacionales como
-*PostgreSQL* :cite:`stonebraker1991postgres`, *MySQL* :cite:`grippa2021learning`
-o *Oracle* :cite:`greenwald2013oracle`, ofrecen un esquema estructurado y formal
-que ofrece integridad y consistencia de los datos, además de contar con un
-lenguaje estándar como SQL que nos permite hacer consultas complejas de manera
-eficiente. Por otro lado, los sistemas no relacionaes como *MongoDB* :cite:`banker2016mongodb` o *Redis* :cite:`eddelbuettel2022brief`,
-aportan flexibilidad en el manejo de estructuras de datos heterogéneas y una
-escalabilidad superior, lo que los hace especialmente adecuados para
-aplicaciones distribuidas con una gran demanda.
+*PostgreSQL* :cite:`stonebraker1991postgres`, *MySQL*
+:cite:`grippa2021learning` o *Oracle* :cite:`greenwald2013oracle`, ofrecen un
+esquema estructurado y formal que ofrece integridad y consistencia de los
+datos, además de contar con un lenguaje estándar como SQL que nos permite hacer
+consultas complejas de manera eficiente. Por otro lado, los sistemas no
+relacionales como *MongoDB* :cite:`banker2016mongodb` o *Redis*
+
+Bases de Datos
+==============
+
+En esta sección nos centraremos en el amacenamiento de datos utilizando
+sistemas de bases de datos relacionales :cite:`codd1990relational` y no
+relacionales :cite:`strauch2011nosql`. Estos sistemas son de vital importancia
+para el desarrollo de aplicaciones, ya que la mayoría de ellas requiere una
+gestión de datos escalable, eficiente y segura.
+
+Elegir entre una base de datos relacional o no relacional depende del tipo de
+aplicación que estemos desarrollando: Los sistemas relacionales como
+*PostgreSQL* :cite:`stonebraker1991postgres`, *MySQL*
+:cite:`grippa2021learning` o *Oracle* :cite:`greenwald2013oracle`, ofrecen un
+esquema estructurado y formal que ofrece integridad y consistencia de los
+datos, además de contar con un lenguaje estándar como SQL que nos permite hacer
+consultas complejas de manera eficiente. Por otro lado, los sistemas no
+relacionaes como *MongoDB* :cite:`banker2016mongodb` o *Redis*
+:cite:`eddelbuettel2022brief`, aportan flexibilidad en el manejo de estructuras
+de datos heterogéneas y una escalabilidad superior, lo que los hace
+especialmente adecuados para aplicaciones distribuidas con una gran demanda.
 
 .. list-table:: Comparación entre bases de datos relacionales y no relacionales
    :widths: 25 35 40
@@ -61,13 +80,13 @@ Bases de Datos relacionales
 Al igual que otros lenguajes, Python cuenta con una especificación estándar que
 deben seguir los desarrolladores de APIs para que los desarrolladores puedan
 interactuar con bases de datos sin preocuparse de los detalles específicos del
-sistema de base de datos.  Si ya haz desarrollado aplicaciones de datos en otros
-lenguajes probablemente haz utilizado librerías que siguen un estándar como ODBC
-(Open Database Connectivity), JDBC (Java Database Connectivity) o ADO.NET.
-Python por su parte cuenta con el Python Database API Specification v2.0 (PEP
-249), dónde se especifica una interfaz estándar para conectar aplicaciones
-Python con sistemas de bases de datos relacionales.  Antes de ver detalles
-especificos veamos los componentes principales del estándar:
+sistema de base de datos.  Si ya haz desarrollado aplicaciones de datos en
+otros lenguajes probablemente haz utilizado librerías que siguen un estándar
+como ODBC (Open Database Connectivity), JDBC (Java Database Connectivity) o
+ADO.NET. Python por su parte cuenta con el Python Database API Specification
+v2.0 (PEP 249), dónde se especifica una interfaz estándar para conectar
+aplicaciones Python con sistemas de bases de datos relacionales.  Antes de
+entrar a los detalles veamos los componentes principales del estándar:
 
 **1. Constructores**
 
@@ -147,7 +166,7 @@ Base de Datos de Películas
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Como ejemplo de base de datos, utilizaremos un esquema relacional para
-almacenar información sobre peículas. Podríamos basarnos en este ejemplo para
+almacenar información sobre películas. Podríamos basarnos en este ejemplo para
 programar alguna aplicación del tema, pero por ahora, el objetivo principal es
 ejemplificar el uso del lenguaje.
 
@@ -159,7 +178,7 @@ El modelo índica que una persona (``Persona``) puede tener varios roles
 (``Rol``) en una película (``Película``) . Por ejemplo, el director de una
 película, también puede ser el productor o e incluso uno de los actores, para
 establecer esta relación tripartita se crea la entidad ``Credito``.  Además, una
-película puede pertenecer a varios géneros.  La información de las peliculas se
+película puede pertenecer a varios géneros.  La información de las películas se
 pueden extraer de la plataforma "TMDB"
 
 Veamos ejemplos para SQLite y PostgreSQL:
@@ -168,17 +187,18 @@ SQLite
 ^^^^^^
 
 SQLite es un sistema relacional de bases de datos extremadamente ligero,
-implementado como una librería en C que puede ser embedida en un
+implementado como una librería en C que puede ser embebida en un
 proceso, como por ejemplo, un programa escrito en Python.
 
-No requiere configuración, ni opera como un servidor independiente. Sin embargo,
-a pesar de su simplicidad, ofrece un alto rendimiento y soporte completo de
-transacciones **ACID** :cite:`vossen2009acid`. La base de datos se puede almacenar en un solo archivo y su
-licencia de dominio público, la hacen ideal para ambiéntes académicos, pero
-también profesionales. Como se ejecuta en móviles y navegadores web, se estima
-que es el sistema de bases de datos más instalado en el mundo.
+No requiere configuración, ni opera como un servidor independiente. Sin
+embargo, a pesar de su simplicidad, ofrece un alto rendimiento y soporte
+completo de transacciones **ACID** :cite:`vossen2009acid`. La base de datos se
+puede almacenar en un solo archivo y su licencia de dominio público la hace
+ideal para ambiéntes académicos, pero también profesionales. Como se ejecuta en
+móviles y navegadores web, se considera ampleamente como el sistema de bases de
+datos más instalado en el mundo.
 
-La librería estándar de Python incluye el módulo :python:`sqlite` que implementa
+La librería estándar de Python incluye el módulo :python:`sqlite3` que implementa
 el DB API 2.0 visto anteriormente. Como no tiene un proceso independiente
 utilizado como servidor y la base de datos es solemante un archivo, no requerimos
 instalar nada y solamente nos "conectamos" pasando como argumento el nombre del
@@ -188,11 +208,12 @@ archivo con el que vamos a trabajar:
 >>> con = sql.connect("movies.sqlite")
 
 Antes de crear nuestra primera tabla, es importante conocer los tipos de datos
-de SQLite. SQLite es muy flexible en cuanto a los tipos de dato que utiliza e incluso
-es opcional indicar el tipo de dato. Es parecida a Python en el sentido de que el
-tipo de dato no se estipula a nivel de la columna, es más bien flexible y se almacena junto con
-cada valor. Sin embargo para la versión 3.37 es posible indicar tipos de datos estríctos.
-Los tipos de datos de almacenamiento de SQLite son los siguientes:
+de SQLite. SQLite es muy flexible en cuanto a los tipos de dato que utiliza e
+incluso es opcional indicar el tipo de dato. Es parecida a Python en el sentido
+de que el tipo de dato no se estipula a nivel de la columna, es más bien
+flexible y se almacena junto con cada valor. Sin embargo para la versión 3.37
+es posible indicar tipos de datos estríctos. Los tipos de datos de
+almacenamiento de SQLite son los siguientes:
 
   - **NULL**. El valor nulo.
   - **INTEGER**. Entero con signo; el tamaño en bytes varía según el valor.
@@ -202,12 +223,14 @@ Los tipos de datos de almacenamiento de SQLite son los siguientes:
 
 Las fechas y hora se almacenan como:
 - **TEXT** como cadenas en ISO8601 ("YYYY-MM-DD HH:MM:SS.SSS").
-- **REAL** usando el número Juliano, el número de días desde el medio díiade del 24 de Noviembre del 4714 B.C.
+- **REAL** usando el número Juliano, el número de días desde el mediodía del 24 de Noviembre del 4714 B.C.
 - **INTEGER** como tiempo de Unix, (segundos desde 1970-01-01 00:00:00 UTC).
 
-Las aplicaciones pueden almacenar las fechas utilizando el formato que puedan manipular. Al crear una tabla
-podemos indicar los tipos de datos en SQL estándar o utilizando algunas restricciones, por ejemplo: ``VARCHAR(255)``,
-SQLite ignorará la restricción de longitud ``(255)`` y lo tratará como el tipo de dato ``TEXT``.
+En SQLite, las fechas no tienen un tipo nativo; su interpretación depende de la
+aplicación. Al crear una tabla podemos indicar los tipos de datos en SQL
+estándar o utilizando algunas restricciones, por ejemplo: ``VARCHAR(255)``,
+SQLite ignorará la restricción de longitud ``(255)`` y lo tratará como el tipo
+de dato ``TEXT``.
 
 .. literalinclude:: movies.sql
   :language: sql
@@ -229,21 +252,25 @@ Vamos a cargar el script utilizando python:
   >>> con.commit()
   >>> con.close()
 
-Para cargar el archivo utilizamos el método :python:`open()` para abrir el script.
-Ajusta la ruta si estás en otro sistema operativo o estructura de carpetas.
-En el ejemplo ejecutamos el script con el método :python:`cursor.executescript(script)`.
+Para cargar el archivo utilizamos el método :python:`open()` para abrir el
+script. Ajusta la ruta si estás en otro sistema operativo o estructura de
+carpetas. En el ejemplo ejecutamos el script con el método
+:python:`cursor.executescript(script)`.
 
 El script agrega la información de dos películas:
 
   - https://www.themoviedb.org/movie/429-il-buono-il-brutto-il-cattivo
   - https://www.themoviedb.org/movie/496243
 
-Si utilizas un editor de texto como Visual Studio Code, puedes instalar un **``plug-in`** para
-visualizar la base de datos que hemos creado. Por ejemplo, el SQLite Viwer de Forian Klampfer.
+Si utilizas un editor de texto como Visual Studio Code, puedes instalar un
+**``plug-in`** para visualizar la base de datos que hemos creado. Por ejemplo,
+el SQLite Viwer de Forian Klampfer.
 
-Una vez creada la base de datos, podemos conectarnos y hacer consultas utilizanod el :python:`cursor.execute()`.
-El **cursor** ahora si contiene elementos ya que el comando es una consulta ``SELECT`` y puede regresar ciertos datos.
-Podemos iterar el cursor recuperando un registro a la vez con el método :python:`fetchone()`.
+Una vez creada la base de datos, podemos conectarnos y hacer consultas
+utilizando el :python:`cursor.execute()`. El **cursor** ahora si contiene
+elementos ya que el comando es una consulta ``SELECT`` y puede regresar ciertos
+datos. Podemos iterar el cursor recuperando un registro a la vez con el método
+:python:`fetchone()`.
 
 >>> res = cursor.execute("SELECT * FROM PERSONA");
 >>> res.fetchone()
@@ -251,7 +278,8 @@ Podemos iterar el cursor recuperando un registro a la vez con el método :python
 >>> res.fetchone()
 (3265, 'Eli Wallach')
 
-También podemos leer el resultado de la consulta en su totalidad, consumiendo todo el iterador:
+También podemos leer el resultado de la consulta en su totalidad, consumiendo
+todo el iterador:
 
 >>> import sqlite3 as sql
 >>> con = sql.connect("movies.sqlite")
@@ -276,7 +304,7 @@ Veamos un ejemplo de inserción utilizando una consulta parametrizada:
 <sqlite3.Cursor object at 0x00000248C990C840>
 >>> con.commit()
 
-Notamos que Se usan signos de interrogación (?) como marcadores de posición, y
+Notamos que se usan signos de interrogación (?) como marcadores de posición, y
 los valores se pasan como una tupla.
 
 Si tenemos varios registros se puede utilizar ``executemany()``:
@@ -301,7 +329,7 @@ nuestro programa:
 >>> insertar_persona(con, 138, "Quentin Tarantino")
 >>> con.close()
 
-En este caso la conección se establece solo una vez al principio del programa
+En este caso la conexión se establece solo una vez al principio del programa
 y se reutiliza enviando la referencia a los distintos métodos que
 operan sobre nuestros datos.
 
@@ -314,13 +342,13 @@ contrario, deben deshacerse como si nunca hubieran ocurrido.
 En caso de que se produzca un error durante la ejecución de alguna operación,
 podemos revertir los cambios explícitamente utilizando el comando ROLLBACK. Si
 todas las operaciones se ejecutan correctamente, debemos confirmar los cambios
-con el comando COMMIT.
+con el comando ``COMMIT``.
 
-En Python, podemos utilizar el objeto Connection como un gestor de contexto
+En Python, podemos utilizar el objeto :python:`Connection` como un gestor de contexto
 (with) para manejar transacciones de forma automática.  En este modo, si el
-bloque with finaliza sin excepciones, se envía automáticamente un COMMIT.  En
+bloque with finaliza sin excepciones, se envía automáticamente un ``COMMIT``.  En
 caso de que ocurra una excepción o el commit falle, la transacción se revierte
-automáticamente mediante un ROLLBACK.
+automáticamente mediante un ``ROLLBACK``.
 
 .. code-block:: python
   :linenos:
@@ -335,17 +363,36 @@ automáticamente mediante un ROLLBACK.
   with con:
       con.execute("INSERT INTO Persona(nombre) VALUES(?)", ("Leonardo DiCaprio",))
 
-  # Se ejecuta con.rollback() en si el bloque termina debido a una excepción,
-  # debemos atrapar la exepción
+  # Se ejecuta con.rollback() si el bloque termina debido a una excepción,
+  # debemos atrapar la excepción
   try:
       with con:
-          con.execute("INSERT INTO Persona(name) VALUES(?)", ("Leonardo DiCaprio",))
+          con.execute("INSERT INTO Persona(nombre) VALUES(?)", ("Leonardo DiCaprio",))
   except sqlite3.IntegrityError:
       print("couldn't add Python twice")
 
   # El objecto ``Connection`` utilizado solo compromete o deshace transacciones, no
   # cierra la conexión
   con.close()
+
+Resumen de capítulo
+-------------------
+
+En este capítulo revisamos el papel de los sistemas de bases de datos en el
+desarrollo de aplicaciones modernas, comparando enfoques **relacionales (SQL)**
+y **no relacionales (NoSQL)**, así como los criterios prácticos para elegir
+entre ambos.
+
+Posteriormente introdujimos el estándar **Python DB-API 2.0 (PEP 249)**,
+explicando sus componentes principales: conexiones, cursores, transacciones,
+tipos de datos y jerarquía de excepciones. Con esta base, trabajamos un ejemplo
+con **SQLite**, un motor relacional ligero integrado en la biblioteca estándar,
+con el que construimos y consultamos una base de datos de películas.
+
+Finalmente, mostramos buenas prácticas esenciales al interactuar con bases de
+datos desde Python: uso de consultas parametrizadas para prevenir inyección SQL,
+y manejo correcto de transacciones mediante ``commit()``, ``rollback()`` y el uso
+de ``Connection`` como gestor de contexto con ``with``.
 
 .. 
     PostgreSQL
@@ -359,3 +406,4 @@ automáticamente mediante un ROLLBACK.
 
     MongoDB
     ^^^^^^^
+
