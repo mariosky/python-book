@@ -677,7 +677,7 @@ corresponde a obtener el promedio de cada actividad considerando a todos los
 alumnos.
 
 Ejemplo: Cuantización Vectorial de Colores RGB
----------------------------------------------
+-----------------------------------------------
 
 En la documentación oficial de NumPy se describe un ejemplo del uso de arreglos 
 para un caso del mundo real de *Cuantización Vectorial*. Vamos a adaptar esta
@@ -1274,7 +1274,7 @@ análisis que constituyen el uso principal de pandas.
 
 
 Operaciones básicas con ``DataFrame``
-------------------------------------
+-------------------------------------
 
 Ya tenemos los datos en un ``DataFrame``, ¿y ahora?  
 En esta sección veremos cómo realizar operaciones básicas de inspección,
