@@ -4,24 +4,6 @@
 Bases de Datos
 ==============
 
-En esta sección nos centraremos en el almacenamiento de datos utilizando
-sistemas de bases de datos relacionales :cite:`codd1990relational` y no
-relacionales :cite:`strauch2011nosql`. Estos sistemas son de vital importancia
-para el desarrollo de aplicaciones, ya que la mayoría de ellas requiere una
-gestión de datos escalable, eficiente y segura.
-
-Elegir entre una base de datos relacional o no relacional depende del tipo de
-aplicación que estemos desarrollando: Los sistemas relacionales como
-*PostgreSQL* :cite:`stonebraker1991postgres`, *MySQL*
-:cite:`grippa2021learning` o *Oracle* :cite:`greenwald2013oracle`, ofrecen un
-esquema estructurado y formal que ofrece integridad y consistencia de los
-datos, además de contar con un lenguaje estándar como SQL que nos permite hacer
-consultas complejas de manera eficiente. Por otro lado, los sistemas no
-relacionales como *MongoDB* :cite:`banker2016mongodb` o *Redis*
-
-Bases de Datos
-==============
-
 En esta sección nos centraremos en el amacenamiento de datos utilizando
 sistemas de bases de datos relacionales :cite:`codd1990relational` y no
 relacionales :cite:`strauch2011nosql`. Estos sistemas son de vital importancia
