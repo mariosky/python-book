@@ -1,114 +1,114 @@
 Metaheurísticas basadas en poblaciones
 ======================================
 
-como se discutió en la sección anterior, el control difuso propone una
-alternativa heurística a los enfoques clásicos de control. los controladores
-difusos tienen como ventaja su flexibilidad y facilidad de interpretación. sin
+Como se discutió en la sección anterior, el control difuso propone una
+alternativa heurística a los enfoques clásicos de control. Los controladores
+difusos tienen como ventaja su flexibilidad y facilidad de interpretación. Sin
 embargo, también observamos que el desempeño de un controlador difuso depende
 de sus parámetros: los rangos de las variables, las funciones de membresía y la
-base de reglas. el ajuste manual de estos parámetros puede ser un proceso muy
-costoso, subjetivo y es dificil de realizar a gran escala.
+base de reglas. El ajuste manual de estos parámetros puede ser un proceso muy
+costoso, subjetivo y es difícil de realizar a gran escala.
 
-en este capítulo proponemos el uso de **algoritmos genéticos** y de
+En este capítulo proponemos el uso de **algoritmos genéticos** y de
 **optimización por enjambre de partículas**, para abordar este tipo de
-problemas. estos algoritmos son métodos de optimización inspirados en procesos
+problemas. Estos algoritmos son métodos de optimización inspirados en procesos
 naturales, como la selección natural y la inteligencia colectiva, que permiten
 ajustar automáticamente los parámetros de un sistema a partir de su desempeño.
 
 Metaheurísticas
 ---------------
 
-antes de entrar en detalle, conviene definir estas técnicas a partir del
+Antes de entrar en detalle, conviene definir estas técnicas a partir del
 concepto de **metaheurística**.
 
-una `**metaheurística** <https://en.wikipedia.org/wiki/metaheuristic>`_
-es una estrategia de alto nivel diseñada para guiar
-procesos de búsqueda y optimización en problemas complejos, donde los métodos
-exactos o deterministas son inprácticos o resultan demasiado costosos desde el
-punto de vista computacional. decimos que es de *alto nivel* porque la
-estrategia no considera aspectos particulares del problema que ataca y, por lo
-tanto, puede aplicarse a una amplia variedad de problemas distintos.
+Una `metaheurística <https://en.wikipedia.org/wiki/metaheuristic>`_ es una
+estrategia de alto nivel diseñada para guiar procesos de búsqueda y
+optimización en problemas complejos, donde los métodos exactos o deterministas
+son imprácticos o resultan demasiado costosos desde el punto de vista
+computacional. Decimos que es de *alto nivel* porque la estrategia solo depende
+de la representación y la función de aptitud, sin requerir aspectos analíticos
+del problema que ataca (derivadas, convexidad, etc.) y, por lo tanto, puede
+aplicarse a una gran variedad de problemas.
 
-a diferencia de los algoritmos clásicos de optimización, las metaheurísticas no
+A diferencia de los algoritmos clásicos de optimización, las metaheurísticas no
 requieren un modelo matemático explícito del problema (por ejemplo, derivadas,
-convexidad o continuidad). en su lugar, tratan al sistema como una *caja negra*,
+convexidad o continuidad). En su lugar, tratan al sistema como una *caja negra*,
 evaluando únicamente la calidad de una solución candidata mediante una función
-objetivo.
+de aptitud.
 
-en general, las metaheurísticas presentan las siguientes características:
+En general, las metaheurísticas presentan las siguientes características:
 
-- exploran el espacio de soluciones de forma **estocástica** o parcialmente
+- Exploran el espacio de soluciones de forma **estocástica** o parcialmente
   aleatoria.
-- balancean la **exploración** (búsqueda global) y la **explotación** (mejora
+- Balancean la **exploración** (búsqueda global) y la **explotación** (mejora
   local).
-- son **robustas** frente a funciones objetivo ruidosas, no diferenciables o
+- Son **robustas** frente a funciones de aptitud ruidosas, no diferenciables o
   multimodales.
-- pueden adaptarse a una amplia variedad de problemas sin cambios estructurales
+- Pueden adaptarse a una amplia variedad de problemas sin cambios estructurales
   profundos.
 
-como ejemplos representativos de metaheurísticas se encuentran los
-**algoritmos genéticos**, la **optimización por enjambre de partículas (pso)**,
+Como ejemplos representativos de metaheurísticas se encuentran los
+**algoritmos genéticos**, la **optimización por enjambre de partículas (PSO)**,
 el **recocido simulado**, la **búsqueda tabú** y las **estrategias evolutivas**.
 
 .. note::
 
-   algunos conceptos introducidos en esta sección pueden no resultar familiares
-   en una primera lectura, como *espacio de búsqueda* o *función objetivo*. no es
+   Algunos conceptos introducidos en esta sección pueden no resultar familiares
+   en una primera lectura, como *espacio de búsqueda* o *función de aptitud*. No es
    necesario dominarlos de inmediato: su significado se irá aclarando de forma
    natural a medida que avancemos en los ejemplos y aplicaciones prácticas.
 
 .. note::
 
-   en la literatura, el término *computación evolutiva* se utiliza a menudo como
+   En la literatura, el término *computación evolutiva* se utiliza a menudo como
    un paraguas para agrupar técnicas inspiradas en procesos de evolución natural,
    como los algoritmos genéticos, las estrategias evolutivas y la programación
-   genética. en este libro adoptamos una clasificación más general basada en el
+   genética. En este libro adoptamos una clasificación más general basada en el
    concepto de **metaheurísticas basadas en poblaciones**, la cual permite incluir
    de manera natural tanto a los algoritmos genéticos como a técnicas
-   relacionadas como pso.
+   relacionadas como PSO.
 
 Metaheurísticas basadas en poblaciones
 --------------------------------------
 
-la característica principal de las metaheurísticas basadas en poblaciones es que
+La característica principal de las metaheurísticas basadas en poblaciones es que
 trabajan simultáneamente con **múltiples soluciones candidatas** y utilizan
 mecanismos inspirados en procesos naturales o colectivos para explorar el
 espacio de búsqueda.
 
-veamos un ejemplo concreto para que esta idea quede más clara.
+Veamos un ejemplo concreto para que esta idea quede más clara.
 
-supongamos que debemos configurar un robot que cuenta con **20 parámetros
-binarios**, es decir, cada uno puede estar encendido o apagado. una
-configuración particular puede representarse como una lista de ceros y unos en
-python:
+Supongamos que debemos configurar un robot que cuenta con **20 parámetros
+binarios**, es decir, cada uno puede estar encendido o apagado. Una
+configuración particular puede representarse como una lista de unos y ceros:
 
 .. code-block:: python
 
    r1 = [0, 1, 0, 1, 1, 1, 0, 1, 0, 1,
          0, 0, 1, 1, 1, 0, 1, 1, 0, 1]
 
-esta lista representa una **solución candidata**.
+Esta lista representa una **solución candidata**.
 
-para determinar si esta configuración es adecuada, necesitamos definir un
-**objetivo**. por ejemplo, podríamos buscar minimizar los errores del robot o
-reducir el tiempo necesario para completar una tarea. esta evaluación puede
+Para determinar si esta configuración es adecuada, necesitamos definir un
+**objetivo**. Por ejemplo, podríamos buscar minimizar los errores del robot o
+reducir el tiempo necesario para completar una tarea. Esta evaluación puede
 realizarse mediante experimentos físicos o, más comúnmente, a través de una
 simulación.
 
-en este punto no es necesario conocer los detalles internos de la simulación;
+En este punto no es necesario conocer los detalles internos de la simulación;
 basta con obtener una medida de desempeño que nos indique **qué tan buena es una
-solución**. a esta medida la llamaremos *fitness* o función objetivo.
+solución**. A esta medida la llamaremos función de aptitud (*fitness*).
 
-supongamos que el valor de *fitness* puede ir de 0 a 20:
+Supongamos que el valor de *fitness* puede ir de 0 a 20:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> fitness(r1)
    12
 
-ahora proponemos una segunda solución candidata modificando algunos parámetros:
+Ahora proponemos una segunda solución candidata modificando algunos parámetros:
 
-.. code-block:: python
+.. code-block:: pycon
 
    r2 = [0, 0, 0, 1, 1, 0, 1, 1, 0, 1,
          0, 0, 1, 1, 1, 0, 1, 0, 0, 1]
@@ -116,73 +116,73 @@ ahora proponemos una segunda solución candidata modificando algunos parámetros
    >>> fitness(r2)
    10
 
-esta es la esencia del problema: podemos generar soluciones candidatas y
-evaluar su desempeño. sin embargo, incluso en este caso aparentemente sencillo,
-el **espacio de búsqueda** es considerable. el número total de configuraciones
+Esta es la esencia del problema: podemos generar soluciones candidatas y
+evaluar su desempeño. Sin embargo, incluso en este caso aparentemente sencillo,
+el **espacio de búsqueda** es considerable. El número total de configuraciones
 posibles es:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> 2 ** 20
    1048576
 
-es decir, poco más de un millón de soluciones candidatas. en principio, podríamos
-evaluar todas y encontrar la solución óptima. no obstante, si cada evaluación de
+Es decir, poco más de un millón de soluciones candidatas. En principio, podríamos
+evaluar todas y encontrar la solución óptima. No obstante, si cada evaluación de
 ``fitness()`` toma un minuto, este enfoque resultaría computacionalmente
 inviable.
 
-en una metaheurística basada en poblaciones, el proceso es distinto. en lugar de
+En una metaheurística basada en poblaciones, el proceso es distinto. En lugar de
 evaluar todas las soluciones posibles, se comienza con un **conjunto inicial de
 soluciones candidatas** y se inicia un proceso de búsqueda guiado por una
 heurística específica, manteniendo un balance entre **exploración** y
 **explotación**.
 
-en este contexto:
+En este contexto:
 
-- **exploración** implica probar configuraciones muy distintas entre sí, con el
+- **Exploración** implica probar configuraciones muy distintas entre sí, con el
   objetivo de cubrir diferentes regiones del espacio de búsqueda.
-- **explotación** consiste en refinar las mejores soluciones encontradas hasta el
+- **Explotación** consiste en refinar las mejores soluciones encontradas hasta el
   momento, realizando cambios pequeños en su vecindad.
 
-por ejemplo, si una solución alcanza un valor de ``fitness()`` cercano a 18, una
+Por ejemplo, si una solución alcanza un valor de ``fitness()`` cercano a 18, una
 estrategia de explotación buscaría mejorarla modificando solo algunos parámetros,
 con la esperanza de encontrar una solución aún mejor en su entorno cercano.
 
-otro concepto importante en este tipo de metaheurísticas es el **componente
-estocástico**. normalmente, el conjunto inicial de soluciones candidatas se
+Otro concepto importante en este tipo de metaheurísticas es el **componente
+estocástico**. Normalmente, el conjunto inicial de soluciones candidatas se
 genera de manera aleatoria, y el balance entre **exploración** y
 **explotación** también se logra introduciendo decisiones probabilísticas en
 las distintas etapas del algoritmo.
 
-este uso controlado del azar permite evitar búsquedas demasiado rígidas y
+Este uso controlado del azar permite evitar búsquedas demasiado rígidas y
 favorece la exploración de nuevas regiones del espacio de búsqueda, sin perder
 de vista las mejores soluciones encontradas hasta el momento.
 
-con estas ideas fundamentales ya contamos con los elementos necesarios para
-construir un algoritmo concreto. como siguiente paso, vamos a dar solución a
+Con estas ideas fundamentales ya contamos con los elementos necesarios para
+construir un algoritmo concreto. Como siguiente paso, vamos a dar solución a
 este problema implementando un **algoritmo genético básico**.
 
 Algoritmo genético básico
 -------------------------
 
-como primer paso, vamos a definir la función ``fitness()``. en las
+Como primer paso, vamos a definir la función ``fitness()``. En las
 metaheurísticas basadas en poblaciones, esta función es uno de los componentes
 clave y debe adaptarse específicamente al problema de optimización que se desea
 resolver.
 
-el otro elemento fundamental es la **representación de las soluciones
-candidatas**. en este ejemplo, dicha representación se define desde un inicio:
-utilizaremos una lista de valores binarios (enteros en python). esta elección
-simplifica la explicación y nos permite centrarnos en el funcionamiento general
-del algoritmo.
+El otro elemento fundamental es la **representación de las soluciones
+candidatas**. En este ejemplo, dicha representación se define desde un inicio:
+utilizaremos una lista de valores binarios (lo representamos como enteros).
+Esta elección simplifica la explicación y nos permite centrarnos en el
+funcionamiento general del algoritmo.
 
-para ilustrar la idea, utilizaremos un problema clásico de los algoritmos
-genéticos conocido como **onemax**. en este problema, la función objetivo
+Para ilustrar la idea, utilizaremos un problema clásico de los algoritmos
+genéticos conocido como **onemax**. En este problema, la función de aptitud
 consiste simplemente en maximizar la cantidad de unos presentes en la solución
-candidata. en términos prácticos, la solución óptima es aquella en la que todos
+candidata. En términos prácticos, la solución óptima es aquella en la que todos
 los parámetros binarios están activados.
 
-una implementación básica de esta función de aptitud es la siguiente:
+Una implementación básica de esta función de aptitud es la siguiente:
 
 .. code-block:: python
 
@@ -192,14 +192,14 @@ una implementación básica de esta función de aptitud es la siguiente:
    r = [1, 0, 0, 0, 1, 1]
    one_max(r)
 
-el algoritmo genético inicia con una **población inicial**, compuesta por un
-conjunto de *individuos*. cada individuo se representa mediante un
+El algoritmo genético inicia con una **población inicial**, compuesta por un
+conjunto de *individuos*. Cada individuo se representa mediante un
 *cromosoma*, el cual codifica una posible solución al problema.
 
-en la práctica, esta población suele generarse de manera aleatoria. para ello,
+En la práctica, esta población suele generarse de manera aleatoria. Para ello,
 definimos funciones auxiliares que crean individuos y poblaciones completas.
-este es también un buen momento para reforzar el uso de **listas por
-comprensión** en python.
+Este es también un buen momento para reforzar el uso de **listas por
+comprensión**.
 
 .. code-block:: python
 
@@ -211,94 +211,100 @@ comprensión** en python.
    def get_population(n, size):
        return [create_individual(size) for _ in range(n)]
 
-con estas funciones podemos generar una población inicial de ``n`` individuos,
+Con estas funciones podemos generar una población inicial de ``n`` individuos,
 cada uno con un cromosoma de longitud ``size``.
 
-en implementaciones más completas, las bibliotecas especializadas incluyen
+En implementaciones más completas, las bibliotecas especializadas incluyen
 mecanismos más elaborados para la creación de poblaciones, así como operadores
 aleatorios adaptados a distintos tipos de representación. 
 
-inicializamos la población, en este caso vamos a crear la población con 10 individuos de 
+Inicializamos la población, en este caso vamos a crear la población con 10 individuos de 
 tamaño 20.
 
->>> population = get_population(10, 20)
->>> population
-[[0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1],
- [1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0],
- [0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1],
- [1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0],
- [0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0],
- [1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1],
- [0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
- [0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1],
- [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1],
- [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0]]
+.. code-block:: pycon
+   
+    >>> population = get_population(10, 20)
+    >>> population
+    [[0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1],
+     [1, 0, 1, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1, 0],
+     [0, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1],
+     [1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0],
+     [0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0],
+     [1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 0, 1],
+     [0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+     [0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1],
+     [0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1],
+     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0]]
 
-los algoritmos genéticos se basan en la selección natural, en dónde los
+Los algoritmos genéticos se basan en la selección natural, en dónde los
 individuos de la población más aptos, tienen mayor probabilidad de
-reproducirse. para esto debemos primero evaluar el desempeño de cada individuo.
+reproducirse. Para esto debemos primero evaluar el desempeño de cada individuo.
 
-ya que tenemos listas (con un órden establecido), podemos generar una lista que
-incluya el fitness de cada individuo. una opción más elaborada puede 
-incluir definir una clase ``individuo`` que incluya su fitness y 
-otros elementos. aquí buscamos una solución más básica:
+Ya que tenemos listas (con un orden establecido), podemos generar una lista que
+incluya el *fitness* de cada individuo. Una opción más elaborada puede 
+incluir definir una clase ``individuo`` que incluya el *fitness* y 
+otros atributos. Aquí buscamos una solución más básica:
 
->>> fitness = [one_max(i) for i in population]
->>> fitness
-[11, 10, 11, 8, 11, 10, 7, 13, 11, 7]
->>>
+.. code-block:: pycon
 
-vamos a unir ambas listas utilizando ``zip``, 
+    >>> fitness = [one_max(i) for i in population]
+    >>> fitness
+    [11, 10, 11, 8, 11, 10, 7, 13, 11, 7]
+    >>>
+
+Vamos a unir ambas listas utilizando ``zip``, 
 por ejemplo podemos listar a cada individuo con su aptitud:
 
->>> for i in zip(population, fitness):
-...     print(i)
-...
-([1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1], 11)
-([1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0], 10)
-([1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1], 11)
-([1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0], 8)
-([1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1], 11)
-([1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0], 10)
-([0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0], 7)
-([0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0], 13)
-([0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1], 11)
-([1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], 7)
+.. code-block:: pycon
+
+    >>> for i in zip(population, fitness):
+    ...     print(i)
+    ...
+    ([1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1], 11)
+    ([1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0], 10)
+    ([1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1], 11)
+    ([1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0], 8)
+    ([1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1], 11)
+    ([1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 0], 10)
+    ([0, 1, 1, 0, 0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0], 7)
+    ([0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0], 13)
+    ([0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1], 11)
+    ([1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], 7)
 
 Evaluación de la población
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-los algoritmos genéticos se inspiran en el principio de **selección natural**:
+Los algoritmos genéticos se inspiran en el principio de **selección natural**:
 los individuos más aptos dentro de una población tienen mayor probabilidad de
 reproducirse y transmitir sus características a la siguiente generación.
 
-para poder aplicar este principio, el primer paso consiste en **evaluar el
+Para poder aplicar este principio, el primer paso consiste en **evaluar el
 desempeño de cada individuo** de la población mediante la función de aptitud
 (*fitness*).
 
-dado que ya contamos con una población representada como una lista de
+Dado que ya contamos con una población representada como una lista de
 individuos, podemos generar fácilmente una lista que contenga el valor de
-``fitness`` correspondiente a cada uno. existen implementaciones más elaboradas
+*fitness* correspondiente a cada uno. Existen implementaciones más elaboradas
 que definen una clase ``individuo`` para almacenar tanto el cromosoma como su
 aptitud y otros atributos, pero por ahora utilizaremos una solución más simple
 y explícita.
 
-por ejemplo, utilizando listas por comprensión:
+Por ejemplo, utilizando listas por comprensión:
 
 .. code-block:: python
 
    fitness = [one_max(i) for i in population]
    fitness
 
-el resultado es una lista de valores que representa la aptitud de cada
+El resultado es una lista de valores que representa la aptitud de cada
 individuo:
 
 .. code-block:: python
 
    [11, 10, 11, 8, 11, 10, 7, 13, 11, 7]
 
-en este punto resulta útil **asociar cada individuo con su valor de fitness**.
-una forma práctica de hacerlo es utilizando la función ``zip`` de python, que
+En este punto resulta útil **asociar cada individuo con su valor de fitness**.
+Una forma práctica de hacerlo es utilizando la función ``zip``, que
 permite recorrer ambas listas de manera simultánea:
 
 .. code-block:: python
@@ -306,7 +312,7 @@ permite recorrer ambas listas de manera simultánea:
    for individual, fit in zip(population, fitness):
        print(individual, fit)
 
-la salida muestra claramente cada cromosoma junto con su aptitud:
+La salida muestra claramente cada cromosoma junto con su aptitud:
 
 .. code-block:: text
 
@@ -321,43 +327,43 @@ la salida muestra claramente cada cromosoma junto con su aptitud:
    [0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1] 11
    [1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0] 7
 
-esta información será fundamental en los siguientes pasos del algoritmo
+Esta información será fundamental en los siguientes pasos del algoritmo
 genético, donde utilizaremos la aptitud de los individuos para **seleccionar**
 aquellos que participarán en los procesos de cruce y mutación.
 
 Selección por torneo
 ~~~~~~~~~~~~~~~~~~~~
 
-una de las técnicas más sencillas y utilizadas para seleccionar a los mejores
+Una de las técnicas más sencillas y utilizadas para seleccionar a los mejores
 individuos de una población es la **selección por torneo**.
 
-la idea es la siguiente: se eligen aleatoriamente ``k`` individuos de la
-población y se comparan sus valores de *fitness*. el individuo con mejor
-desempeño gana el torneo y es seleccionado para formar parte de la siguiente
-generación. este procedimiento se repite tantas veces como individuos se
+En cada torneo se eligen aleatoriamente ``k`` individuos sin reemplazo y gana el de
+mayor *fitness*. Al repetir torneos para llenar la nueva población, un mismo
+individuo puede ganar varias veces, por lo que el proceso global equivale a una
+selección con reemplazo. Este procedimiento se repite tantas veces como individuos se
 necesiten.
 
-en este capítulo utilizaremos torneos de tamaño ``k = 2``; es decir, en cada
+En este capítulo utilizaremos torneos de tamaño ``k = 2``; es decir, en cada
 torneo compiten únicamente dos individuos y se selecciona el mejor de ellos.
-este esquema es simple, eficiente y suele ofrecer buenos resultados en la
+Este esquema es simple, eficiente y suele ofrecer buenos resultados en la
 práctica.
 
-el parámetro ``k`` juega un papel importante en el comportamiento del algoritmo:
+El parámetro ``k`` juega un papel importante en el comportamiento del algoritmo:
 
-- si ``k`` es pequeño, la selección es **menos elitista**, lo que favorece la
+- Si ``k`` es pequeño, la selección es **menos elitista**, lo que favorece la
   diversidad de la población y la exploración del espacio de búsqueda.
-- si ``k`` es grande, la selección se vuelve **más elitista**, ya que los
+- Si ``k`` es grande, la selección se vuelve **más elitista**, ya que los
   individuos con mejor *fitness* tienen una probabilidad mucho mayor de ser
   seleccionados.
 
-un valor de ``k`` demasiado alto puede provocar que la población pierda
+Un valor de ``k`` demasiado alto puede provocar que la población pierda
 diversidad rápidamente y se **estanque en óptimos locales**, mientras que un
-valor muy bajo puede hacer más lenta la convergencia del algoritmo. por esta razón,
+valor muy bajo puede hacer más lenta la convergencia del algoritmo. Por esta razón,
 el tamaño del torneo se considera un **parámetro de diseño** del algoritmo
 genético.
 
-a continuación se muestra una implementación sencilla de selección por torneo
-en python:
+A continuación se muestra una implementación sencilla de selección por torneo
+en:
 
 .. code-block:: python
 
@@ -375,31 +381,31 @@ en python:
            tamaño del torneo.
        """
        candidates = random.sample(list(zip(population, fitness)), k)
-       candidates.sort(key=lambda x: x[1], reverse=true)
+       candidates.sort(key=lambda x: x[1], reverse=True)
        return candidates[0][0]
 
-esta función devuelve un individuo seleccionado mediante torneo. para construir
+Esta función devuelve un individuo seleccionado mediante torneo. Para construir
 una nueva población basta con repetir este proceso hasta obtener el número de
 individuos deseado.
 
-en el código anterior se utiliza una función ``lambda`` para ordenar a los
+En el código anterior se utiliza una función ``lambda`` para ordenar a los
 candidatos por el segundo elemento de la tupla, es decir, por el valor de
 *fitness*.
 
 Generación de la población seleccionada
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-los ganadores de los torneos son los **seleccionados para reproducirse** y
+Los ganadores de los torneos son los **seleccionados para reproducirse** y
 transmitir su material genético a la siguiente generación.
 
-es normal que algunos individuos ganen varios torneos; por lo tanto, pueden
+Es normal que algunos individuos ganen varios torneos; por lo tanto, pueden
 aparecer más de una vez en la población seleccionada (se reproducen varias
-veces). en términos de programación, es importante crear **copias** de los
+veces). En términos de programación, es importante crear **copias** de los
 individuos seleccionados, ya que si dejamos referencias, una modificación
 posterior (por ejemplo, durante cruza o mutación) podría afectar a múltiples
 entradas de la lista.
 
-el código para crear la nueva población queda muy compacto utilizando listas
+El código para crear la nueva población queda muy compacto utilizando listas
 por comprensión. el *slicing* ``[:]`` crea una copia superficial de la lista:
 
 .. code-block:: python
@@ -440,7 +446,7 @@ Esta estrategia asume que el tamaño de la población es par. Si es impar, una
 opción sencilla es descartar al último individuo, o bien copiarlo directamente
 a la siguiente generación (de manera *elitista*).
 
-Una manera muy compacta de formar parejas consecutivas en Python es utilizar
+Una manera muy compacta de formar parejas consecutivas es utilizar
 *slicing* junto con ``zip``:
 
 .. code-block:: python
@@ -523,22 +529,22 @@ Una implementación básica de mutación *bit-flip* es la siguiente:
 
    import random
 
-   def bit_flip_mutation(individual, p=0.01):
+   def bit_flip_mutation(individual, pb_flip=0.01):
        """
        Mutación bit-flip sobre un individuo binario.
 
        individual : list
            Individuo a mutar.
-       p : float
+       pb_flip : float
            Probabilidad de mutación por gen.
        """
        for i in range(len(individual)):
-           if random.random() < p:
+           if random.random() < pb_flip:
                individual[i] = 1 - individual[i]
        return individual
 
-En esta función, cada bit del individuo tiene una probabilidad ``p`` de ser
-invertido. Valores pequeños de ``p`` (por ejemplo, entre ``0.001`` y ``0.05``)
+En esta función, cada bit del individuo tiene una probabilidad ``pb_flip`` de ser
+invertido. Valores pequeños de ``pb_flip`` (por ejemplo, entre ``0.001`` y ``0.05``)
 son comunes en la práctica, ya que una tasa de mutación demasiado alta puede
 convertir el algoritmo en una búsqueda casi aleatoria.
 
@@ -563,11 +569,11 @@ El número de generaciones es otro parámetro de diseño importante ``NGEN``.
 El proceso general es el siguiente:
 
 1. Partimos de la selección de los mejores individuos de la población (obtenida, por ejemplo, mediante
-   selección por torneo). Esta selección es conformada por copias de los mejores.
+   selección por torneo). Esta selección está conformada por copias de los mejores individuos.
 2. Barajamos la población para evitar sesgos debidos al orden.
-3. Formamos parejas consecutivas. Estas parejeas son referencias a los individuos seleccionados previamente.
-4. Con cierta probabilidasd ``PROB_CRUCE`` aplicamos el operador de cruce a cada pareja para generar descendientes.
-5. Con cierta probabilidad ``PROB_MUT`` aplicamos el operador de mutación a cada descendiente.
+3. Formamos parejas consecutivas. Estas parejas son referencias a los individuos seleccionados previamente.
+4. Con cierta probabilidad ``PB_CRUCE`` aplicamos el operador de cruce a cada pareja para generar descendientes.
+5. Con cierta probabilidad ``PB_MUT`` aplicamos el operador de mutación a cada descendiente.
 
 A continuación vemos implementación básica de este proceso. El script completo
 lo podemos ver en anexos.
@@ -584,7 +590,6 @@ lo podemos ver en anexos.
 
     # Desempeño de los individuos de la población
     fitness = [one_max(i) for i in population]
-    print(f'Gen:{NGEN} Mejor:{max(fitness)}´')
 
     for n in range(NGEN):
         # 1) Selección (con reemplazo) + copia para evitar referencias compartidas
@@ -600,7 +605,7 @@ lo podemos ver en anexos.
            if random.random() < PB_CRUCE:
                one_point_crossover(child1, child2)
                
-        # 4) Mutación (in place) con probabilidad MUTPB por individuo
+        # 4) Mutación (in place) con probabilidad PB_MUT por individuo
         for individual in selected:
             if random.random() < PB_MUT:
                 # Mutación Bit Flip con probabilidad pb_flip de 0.05   
@@ -610,7 +615,7 @@ lo podemos ver en anexos.
         population[:] = selected
         # Calculamos el fitness de la nueva generación 
         fitness = [one_max(i) for i in population]
-        print(f'Gen:{NGEN} Mejor:{max(fitness)}´')
+        print(f'Gen:{n} Mejor:{max(fitness)}')
 
 DEAP
 ****
@@ -620,7 +625,7 @@ generaciones. Sin embargo, en problemas reales debemos considerar
 otras condiciones, por ejemplo:
 
 - **Solución parcial:** podemos detener el algoritmo si se alcanza un
-  valor de *fitness* mayor a un umbral (o un error menor).
+  valor para la función de aptitud (*fitness*) mayor a un umbral (o un error menor).
 - **Estancamiento:** detener el algoritmo si el *fitness* no mejora durante un
   número fijo de generaciones (criterio de convergencia práctica).
 - **Diversidad de la población:** monitorear si la población se vuelve demasiado
@@ -715,15 +720,16 @@ PSO
 ---
 
 Veamos ahora **PSO (Particle Swarm Optimization)**, un algoritmo bioinspirado
-propuesto por J. Kennedy y R. Eberhart en 1995 :cite:. El algoritmo que ataca
-problemas de **optimización continua** de una manera conceptualmente distinta a
-los algoritmos genéticos.  Mientras que los algoritmos genéticos se inspiran en
-la selección natural y operan mediante operadores discretos como selección,
-cruce y mutación, PSO se basa en el comportamiento colectivo observado en
-sistemas naturales como parvadas de aves o bancos de peces. En lugar de
-recombinar soluciones, PSO ajusta de manera iterativa un conjunto de
-**partículas** que se desplazan en el espacio de búsqueda siguiendo reglas
-simples de movimiento.
+propuesto por J. Kennedy y R. Eberhart en 1995 :cite:`eberhart1995new`.
+
+Este algoritmo ataca problemas de **optimización continua** de una manera
+conceptualmente distinta a los algoritmos genéticos. Mientras que los
+algoritmos genéticos se inspiran en la selección natural y operan mediante
+operadores discretos como selección, cruce y mutación, PSO se basa en el
+comportamiento colectivo observado en sistemas naturales como parvadas de aves
+o bancos de peces. En lugar de recombinar soluciones, PSO ajusta de manera
+iterativa un conjunto de **partículas** que se desplazan en el espacio de
+búsqueda siguiendo reglas simples de movimiento.
 
 Cada partícula representa una solución candidata y mantiene información tanto
 de su **mejor posición individual** como de la **mejor posición encontrada por
@@ -742,7 +748,8 @@ Tenemos:
 - :math:`p_i` la mejor posición encontrada por la partícula (*personal best*),
 - :math:`g` la mejor posición encontrada por el enjambre (*global best*).
 
-La ecuación de actualización de la velocidad se define como:
+En esta versión simplificada (sin término de inercia), la ecuación de
+actualización de la velocidad se define como:
 
 .. math::
 
@@ -770,16 +777,16 @@ Estas ecuaciones reflejan el comportamiento colectivo del enjambre: cada
 partícula es atraída tanto por su experiencia individual como por el
 conocimiento compartido del grupo. 
 
-..note ::
+.. note::
 
     Una de las mejoras a este algoritmo básico es agregar un término de inercia
     que permite regular mejor el balance entre **exploración** y
     **explotación** del espacio de búsqueda.
 
 Vamos a utilizar el ejemplo básico de la documentación de la librería ``DEAP``
-para discutir su implementación en Python. De la descripción del algoritmo
+para discutir su implementación. De la descripción del algoritmo
 vemos que ahora necesitamos almacenar información adicional para cada
-partícula. Su posición, velocidad y mejor fitness hasta el momento. También
+partícula. Su posición, velocidad y mejor *fitness* hasta el momento. También
 debemos almacenar información de la mejor partícula hasta el momento. 
 Para esto ``DEAP`` utiliza una nueva estructura ``Particle``:
 
@@ -839,12 +846,12 @@ anteriormente:
                 part.speed[i] = math.copysign(part.smax, speed)
         part[:] = list(map(operator.add, part, part.speed))
 
-El método de acutalización recibe los parámetros ``phi1`` y ``phi2`` que
+El método de actualización recibe los parámetros ``phi1`` y ``phi2`` que
 corresponden a los coeficientes *cognitivo* y *social* de PSO. Los vectores
 ``u1`` y ``u2`` son los factores estocásticos. Por último se restringe la
-particula al espacio de búsqueda.
+partícula al espacio de búsqueda.
 
-Se registran los elemento en el ``toolbox``:
+Se registran los elementos en el ``toolbox``:
 
 .. code-block:: python
     :linenos:
@@ -955,6 +962,7 @@ El archivo ``tunable_fuzzy.py`` implementa esta idea, permitiendo construir un
 FIS a partir de un vector de parámetros.
 
 .. note::
+
    En esta implementación, el controlador difuso sigue utilizando únicamente
    las variables de error geométrico ``e`` y ``e_{th}``. No se introduce
    conocimiento adicional del modelo ni de la velocidad del robot.
@@ -980,12 +988,12 @@ Esto tiene varias ventajas:
 La normalización se realiza fuera del FIS, manteniendo el controlador como una
 *caja negra* desde el punto de vista del optimizador.
 
-Definición de la función objetivo
----------------------------------
+Definición de la función de aptitud 
+-----------------------------------
 
 Para evaluar la calidad de un controlador difuso necesitamos definir una
-**función objetivo** (*fitness*). En este trabajo utilizamos como métrica
-principal el **error cuadrático medio (RMSE)** del error lateral a lo largo de
+**función de aptitud**. En este trabajo utilizamos como métrica
+el **error cuadrático medio (RMSE)** del error lateral a lo largo de
 una o varias rutas de referencia.
 
 La función de evaluación sigue el siguiente esquema:
@@ -1006,6 +1014,7 @@ El archivo ``evaluate_controller.py`` implementa esta lógica y actúa como
 interfaz entre el simulador y el algoritmo PSO.
 
 .. note::
+
    El simulador puede terminar anticipadamente si el error crece demasiado o si
    el robot no alcanza la meta. Esto reduce el costo computacional durante la
    optimización.
@@ -1013,7 +1022,7 @@ interfaz entre el simulador y el algoritmo PSO.
 Optimización mediante PSO
 -------------------------
 
-Una vez definida la función objetivo, el problema se reduce a minimizarla en un
+Una vez definida la función de aptitud, el problema se reduce a minimizarla en un
 espacio continuo de parámetros. Para ello utilizamos **PSO**, una
 metaheurística inspirada en el movimiento colectivo de enjambres.
 
@@ -1096,13 +1105,13 @@ forma controlada. Este enfoque permite reducir el tiempo total de optimización 
 al mismo tiempo, mejorar la exploración del espacio de búsqueda.
 
 Resumen del capítulo
-~~~~~~~~~~~~~~~~~~~
+--------------------
 
 En este capítulo se introdujeron las **metaheurísticas basadas en poblaciones**
 como una estrategia práctica para resolver problemas de optimización donde los
 métodos exactos resultan inviables. A diferencia de enfoques deterministas, las
 metaheurísticas tratan al sistema como una *caja negra* y evalúan soluciones
-candidatas únicamente mediante una **función objetivo** (*fitness*), incorporando
+candidatas únicamente mediante una **función de aptitud** (*fitness*), incorporando
 componentes estocásticos para balancear **exploración** y **explotación** del
 espacio de búsqueda.
 
