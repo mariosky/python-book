@@ -19,13 +19,7 @@ considerarse *muy buenos*.
 
 Estas son algunas de las frases que podemos escuchar y entender perfectamente
 en algún contexto dado. La pregunta es: ¿podemos representar esto
-numéricamente?. 
-
-Por ejemplo, ¿qué porcentaje de la cuenta podría considerarse una propina *muy
-buena*? Un 5\% claramente no lo es; un 10\% suele considerarse “normal” (sin
-considerar ciudades como Nueva York en la actualidad o países como Japón),
-mientras que en algunas ciudades un 15\% o incluso un 18\% podrían ya
-considerarse *muy buenos*.
+numéricamente? 
 
 No existe un límite exacto y universal: la interpretación depende del contexto,
 la cultura y la experiencia previa. De manera similar, términos como frío, muy
@@ -83,7 +77,7 @@ adecuado de acuerdo con el problema que se desea modelar.
 La función de membresía mapea entonces el dominio de los porcentajes de propina
 al intervalo de grados de pertenencia comprendido entre 0 y 1.
 
-Veamos la definición formal de conjunto difuso propuesta por zadeh :cite:`zadeh1965fuzzy`:
+Veamos la definición formal de conjunto difuso propuesta por Zadeh :cite:`zadeh1965fuzzy`:
 
 Conjunto Difuso
 ---------------
@@ -92,11 +86,11 @@ Un **conjunto difuso** se define como un par :math:`(U, m)`
 donde:
 
 - :math:`U` es un conjunto (usualmente no vacío), llamado **universo de
-  discurso**, (en nuestro ejemplo es el conjuntp de porcentajes de propine que
+  discurso**, (en nuestro ejemplo es el conjunto de porcentajes de propina que
   podemos dar).
 
 - :math:`m` es una función de membresía :math:`m : U \rightarrow [0,1]` que asigna a cada elemento 
-  :math:`x \in U`,un grado de membresía.
+  :math:`x \in U`, un grado de membresía.
 
 Así decimos que la función :math:`m = \mu_A` se denomina **función de membresía** del conjunto
 difuso :math:`A = (U, m)`.
@@ -121,7 +115,7 @@ la interpretación de un término lingüístico (por ejemplo, *muy buena*) coinc
 lo que esperamos en el problema.
 
 En el ejemplo siguiente modelamos el término *propina muy buena* sobre el dominio
-de 0\% a 100\% utilizando una función trapezoidal.
+de 0\% a 40\% utilizando una función trapezoidal.
 
 .. code-block:: python
 
@@ -167,13 +161,12 @@ El código anterior nos genera la siguiente gráfica:
    Función de membresía para el término lingüístico *Muy buena* (propina).
 
 La función define un incremento en el grado de membresía a partir del 10\%,
-hasta alcanzar el valor máximo de 1.0 en el intervalo comprendido entre 15\%
-y 20\%. A partir de ese punto, el grado de membresía comienza a decrecer.
-
-La razón de esta disminución es que también consideraremos el término
-lingüístico *Excelente* (propina). En este esquema, porcentajes mayores al
-20\% y más cercanos a 40\% tendrían un grado de pertenencia más alto al
-término *Excelente* que al término *Muy buena*.
+hasta alcanzar el valor máximo de 1.0 en el intervalo comprendido entre 15\% y
+20\%. Modelamos *Muy buena* con una meseta y un descenso porque queremos reservar
+porcentajes altos para un término como excelente (aunque ambos pueden
+traslaparse). En este esquema, porcentajes mayores al 20\% y más cercanos a
+40\% tendrían un grado de pertenencia más alto al término *Excelente* que al
+término *Muy buena*.
 
 Variables lingüísticas
 ----------------------
@@ -226,20 +219,21 @@ Estas reglas no producen una decisión *binaria*. En su lugar, cada regla puede
 tener cierto **grado** de activación, dependiendo de qué tan bien se cumplan sus
 condiciones.
 
-Sistemas de Inferencia Difusos
+Sistemas de Inferencia Difusa
 ******************************
 
-Los sistemas de inferencia difusos (FISs) se basan en las reglas de inferencia
+Los sistemas de inferencia difusa (FISs) se basan en las reglas de inferencia
 difusas que vimos anteriormente. Los FIS definen relaciones entre variables de
 entrada y de salida. Las variables de entrada se incluyen en los antecedentes
 de la reglas y las variables de salida en los consecuentes. Dependiendo del
 tipo de consecuente, se pueden distinguir dos tipos de sistemas de inferencia
-difusos:
+difusa:
 
 - Modelo difuso lingüístico: donde ambos el antecedente y consecuentes son proposiciones difusas.
-- Modelo difuso Takagi-Sugeno* el antecedente es una preposición difusa; el consecuente es una función nítida (crisp).
 
-Los sistemas de inferencia difusos típicamente tienen estos cuatro comonentes:
+- Modelo difuso Takagi-Sugeno el antecedente es una proposición difusa; el consecuente es una función nítida (crisp).
+
+Los sistemas de inferencia difusa típicamente tienen estos cuatro componentes:
 
 - Base de Reglas. El conjunto de reglas difusas.
 - Máquina de Inferencia Difusa. Este modulo ejecuta las operaciones de inferencia difusa.
@@ -254,7 +248,7 @@ La diferencia entre ellos es principalmente la forma en
 que producen la salida.
 
 **Tsukamoto**
-   En el método de inferenca Tsukamoto, la salida de cada regla es un valor nítido
+   En el método de inferencia Tsukamoto, la salida de cada regla es un valor nítido
    obtenido a partir del grado de activación de la regla. La salida global del
    sistema se calcula como un promedio ponderado de las salidas individuales
    de las reglas.
@@ -263,12 +257,12 @@ que producen la salida.
    En el método de Mamdani, cada regla produce una **salida difusa**.
 
    Para obtener una salida nítida a partir del conjunto difuso resultante, se
-   utilizan distintos métodos de **defuzzificación**, entre los más comunes se
+   utilizan distintos métodos de defusificación  (**defuzzificación**), entre los más comunes se
    encuentran:
-   - el método del **centroide**,
-   - la **bisección del área**,
-   - el **promedio de los máximos**,
-   - el **criterio del máximo**.
+   - El método del **centroide**.
+   - La **bisección del área**.
+   - El **promedio de los máximos**.
+   - El **criterio del máximo**.
 
    Este es uno de los métodos más utilizados debido a su interpretación
    intuitiva y a su cercanía con el razonamiento humano.
@@ -308,8 +302,9 @@ y el servicio, estas irán de cero a diez. Como ya lo decidimos la propina va de
    # Variable de salida (consecuente)
    propina = ctrl.Consequent(np.arange(0, 41, 1), 'propina')   # 0..40 (%)
 
-Una vez definidas las variables agregamos las funciones de membresía de para los términos difusos de cada una.
-Utilizamos funciones triangulares y trapezoidales:
+Una vez definidas las variables agregamos las funciones de membresía para los
+términos difusos de cada una. Utilizamos funciones triangulares y
+trapezoidales:
 
 .. code-block:: python
 
@@ -329,7 +324,7 @@ Utilizamos funciones triangulares y trapezoidales:
    propina['muy_buena'] = fuzz.trapmf(propina.universe, [14, 18, 22, 26])
    propina['excelente'] = fuzz.trapmf(propina.universe, [22, 28, 40, 40])
 
-Podemos ver las variables gráficamente utilizando el metodo ``view()``:
+Podemos ver las variables gráficamente utilizando el método ``view()``:
 
 .. code-block:: python
 
@@ -365,9 +360,10 @@ según la variable lingüística y función de membresía:
 Construcción y simulación del sistema
 -------------------------------------
 
-Vamos a construir un FIS tipo Mamdani y probaremos el caso de una *comida* de 7.0 
-con un buen servicio 9.0. Recordemos que en el caso de Mamdani las entradas y salidas
-son datos nítidos.
+Vamos a construir un FIS tipo Mamdani y probaremos el caso de una *comida* de
+7.0 con un buen servicio 9.0. Las entradas son nítidas; la inferencia produce
+una salida difusa agregada y luego se obtiene una salida nítida mediante
+defusificación.
 
 .. code-block:: python
 
@@ -389,13 +385,16 @@ son datos nítidos.
    plt.tight_layout()
    plt.show()
 
-Podemos ver gráficamente el resultado de la inferencia con una defuzzificación por centroide:
+Podemos ver gráficamente el resultado de la inferencia con una defusificación por centroide:
 
 .. figure:: ./images/salida.png
    :align: center
    :alt: Salida de nuestro FIS para ``propina`` en scikit fuzzy.
 
    Gráfica de las funciones de membresía para la variable lingüística *propina*.
+
+Hasta aquí vimos lógica difusa como herramienta de representación e inferencia.
+Ahora la aplicaremos en un caso clásico: control de un sistema dinámico.
 
 
 Control Difuso
@@ -586,9 +585,9 @@ consiste en los siguientes archivos:
    ├── path.py
    └── rear_wheel_sim.py
 
-En este capítulo solo editaremos los archivos ``my_fis.py`` y ``fuzzy_control``. Los otros
-scripts implementan la simulaciòn del robot tipo bicicleta que
-descrita anteriormente. Los archivos incluyen:
+En este capítulo solo editaremos los archivos ``my_fis.py`` y
+``fuzzy_control``. Los otros scripts implementan la simulación del robot tipo
+bicicleta descrito anteriormente. Los archivos incluyen:
 
 .. rubric:: ``my_fis.py``
 
@@ -602,7 +601,7 @@ descrita anteriormente. Los archivos incluyen:
 
   Esta función regresa un *callable* que implementa el controlador difuso. La
   función interna (por ejemplo ``controller``) toma como entradas ``e`` y
-  ``e_th`` y regresa el valor defuzzificado de ``omega``.
+  ``e_th`` y regresa el valor defusificado de ``omega``.
 
 - ``plot_mfs``
 
@@ -620,7 +619,7 @@ El sistema de inferencia difuso
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 El primer paso para construir el controlador difuso es definir el sistema de inferencia 
-en ``sci-kit fuzzy``. Esto lo hacemos en  el archivo ``my_fis.py``. En 
+en ``scikit-fuzzy``. Esto lo hacemos en  el archivo ``my_fis.py``. En 
 particular, se debe definir la función ``build_fis`` que regresa el FIS
 que será utilizado por el controlador.
 
@@ -722,7 +721,7 @@ elección no es única y puede ajustarse. Justamente, la posibilidad de ajustar
 estos parámetros (manual o automáticamente) es parte central del siguiente 
 capítulo.
 
-Aquí está el código que expresa las desciciones de diseño que tomamos:
+Aquí está el código que expresa las desiciones de diseño que tomamos:
 
 .. code-block:: python
    :linenos:
@@ -804,9 +803,9 @@ Se pueden generar las gráficas ejecutando el script directamente:
 
 .. figure:: ./images/mf_eth.png
    :align: center
-   :alt: Funciones de membresía de la variable ``e_th`` dede scikit fuzzy.
+   :alt: Funciones de membresía de la variable ``e_th`` desde scikit fuzzy.
 
-   Funciones de membresía de la variable ``e_th`` dede scikit fuzzy.
+   Funciones de membresía de la variable ``e_th`` desde scikit fuzzy.
 
 .. code-block:: bash
 
@@ -840,6 +839,7 @@ implementado internamente el FIS.
        def controller(e_th, e):
            # scikit-fuzzy acumula estado interno; para simulación en lazo cerrado
            # suele ser más robusto reiniciar en cada evaluación.
+           
            sim.reset()
            sim.input['e_th'] = float(e_th)
            sim.input['e'] = float(e)
@@ -1039,6 +1039,7 @@ Esta es su implementación:
         )
 
         return omega
+.. Nota posible división entre cero.
 
 Comparación entre control difuso y control clásico
 ---------------------------------------------------
@@ -1094,4 +1095,38 @@ rutas. Esta observación motiva naturalmente el uso de métodos automáticos de
 optimización, los cuales abordaremos en el siguiente capítulo mediante técnicas
 de **cómputo evolutivo**.
 
+Resumen del capítulo
+--------------------
+
+En este capítulo se introdujo la **lógica difusa** como una extensión de la
+lógica clásica para representar y procesar conocimiento **impreciso** expresado
+mediante términos lingüísticos como *frío*, *lento* o *muy bueno*. A diferencia
+de los conjuntos clásicos, los **conjuntos difusos** permiten grados de
+pertenencia continuos entre 0 y 1, definidos mediante **funciones de membresía**,
+lo que hace posible modelar computacionalmente conceptos dependientes del
+contexto.
+
+Se estudiaron las **variables lingüísticas** y sus valores difusos, así como
+las funciones de membresía más comunes (triangulares y trapezoidales). A partir
+de ellas, se mostró cómo capturar el razonamiento humano mediante **reglas
+difusas IF–THEN**, las cuales constituyen la base de conocimiento de un
+**Sistema de Inferencia Difusa (FIS)**. También se revisaron los componentes
+principales de un FIS  y se compararon los enfoques más utilizados:
+**Mamdani**, **Sugeno** y **Tsukamoto**.
+
+El capítulo enfatizó la implementación práctica de sistemas difusos en Python
+utilizando la librería ``scikit-fuzzy``. Como ejemplo introductorio, se construyó
+un sistema difuso para sugerir una propina a partir de la calidad del servicio y
+la comida, ilustrando el proceso completo desde la definición de variables
+lingüísticas hasta la defusificación de la salida.
+
+Finalmente, los conceptos se aplicaron a un problema de **control difuso** más
+complejo: el seguimiento de trayectoria de un robot tipo bicicleta con rueda
+trasera. Se diseñó un controlador difuso basado en errores de orientación y
+posición lateral, se integró en una simulación dinámica y se evaluó su
+desempeño mediante métricas simples como el RMSE.
+
+Se concluye mostrando las limitaciones del controlador base y se considera  el
+uso de técnicas de **optimización automática**, en particular métodos de
+cómputo evolutivo, como el siguiente paso para el ajuste de sistemas difusos.
 

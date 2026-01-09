@@ -166,7 +166,7 @@ pueden extraer de la plataforma "TMDB"
 Veamos ejemplos para SQLite y PostgreSQL:
 
 SQLite
-^^^^^^
+******
 
 SQLite es un sistema relacional de bases de datos extremadamente ligero,
 implementado como una librería en C que puede ser embebida en un

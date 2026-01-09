@@ -10,21 +10,23 @@ En los capítulos anteriores hemos trabajado con distintos enfoques para manejar
 datos en Python. Vimos cómo representar datos mediante **estructuras nativas de Python**
 (listas, diccionarios y tuplas), y cómo aplicar **programación funcional** para
 expresar transformaciones de manera concisa y declarativa. Además, consideramos
-el uso de bases de datos relacionales transaccionales y así como las denominadas NoSQL. 
+el uso de bases de datos relacionales transaccionales así como las denominadas NoSQL. 
 
 Aunque estas herramientas son fundamentales, para la gestión de datos de
 propósito general, en áreas de ingeniería y ciencias computacionales también
 requerimos herramientas para realizar operaciones numéricas y estadísticas de
 forma eficiente. Para esto, necesitamos representaciones que permitan trabajar
 con datos de manera vectorizada, minimizar el uso de ciclos explícitos y servir
-como base para algoritmos de aprendizaje automático.
+como base para algoritmos de aprendizaje automático. 
 
 En Python, estas necesidades están cubiertas principalmente por las bibliotecas
 **NumPy** y **pandas**. NumPy introduce arreglos numéricos homogéneos diseñados
 para el cómputo científico eficiente, mientras que pandas amplía estas
 capacidades para trabajar con datos tabulares heterogéneos, incorporando
-etiquetas, soporte para valores faltantes y operaciones de alto nivel orientadas
-al análisis de datos.
+etiquetas, soporte para valores faltantes y operaciones de alto nivel
+orientadas al análisis de datos. En NumPy y pandas, el rendimiento viene de
+delegar operaciones a rutinas vectorizadas (C/Fortran) en lugar de iterar en
+Python.
 
 Este capítulo funciona como un puente natural hacia el aprendizaje
 automático. Las estructuras y operaciones que aquí se presentan constituyen
@@ -48,16 +50,16 @@ operaciones vectoriales y matriciales. Incluso, herramientas comerciales como
 `MATLAB <https://en.wikipedia.org/wiki/MATLAB>`_, se basan en estas librerías
 pero ofreciendo una interfaz de programación más amigable. La desventaja es
 que crean una dependencia del proveedor y van en contra de las prácticas de 
-**ciencia abierta** que nos interesa promoveer.
+**ciencia abierta** que nos interesa promover.
 
-La tendencia actual de la comunidad científica es migrar hacia alternativas de sofware libres como 
+La tendencia actual de la comunidad científica es migrar hacia alternativas de software libre como 
 `GNU Octave <https://octave.org/>`_ o `SageMath <https://www.sagemath.org/>`_, 
 y hacia lenguajes de programación abiertos, diseñados para el análisis 
 numérico (`Julia <https://julialang.org/>`_) o estadístico (`R <https://www.r-project.org/>`_).
 En este panorama, *Python* se ha 
 consolidado como uno de los lenguajes más utilizados gracias a su sencillez, 
 su comunidad y su creciente ecosistema científico. Este éxito se debe en gran medida al esfuerzo inicial  
-de los autores de proyectos de código abierto
+de los autores de participacións de código abierto
 `SciPy <https://scipy.org/>`_, `Matplotlib <https://matplotlib.org/>`_, y `NumPy <https://numpy.org/>`_ .
 
 NumPy, en particular, introdujo un tipo de dato fundamental: el arreglo
@@ -111,16 +113,16 @@ Tenemos dos problemas importantes:
 
        ['Hola', 11]
 
-   Esto hace imposible sumar todos los elementos de la primera posición, ya 
+   Esto hace imposible sumar todos los elementos de la primera posición, ya que 
    Python no puede sumar enteros con cadenas de texto.
 
 Estas limitaciones hacen que las listas de Python no sean una buena
 representación para datos numéricos estructurados. Para análisis científico,
 necesitamos estructuras que:
 
-- tengan forma regular (todas las filas con el mismo número de columnas),  
-- contengan datos homogéneos,  
-- permitan operaciones vectorizadas eficientes.
+- Tengan forma regular (todas las filas con el mismo número de columnas).
+- Contengan datos homogéneos. 
+- Permitan operaciones vectorizadas eficientes.
 
 Aquí es donde entra **NumPy** y su tipo de dato fundamental: el arreglo
 multidimensional ``ndarray``.
@@ -181,8 +183,8 @@ de Python, pero ahora aplicada a las dimensiones del arreglo bidimensional.
 Esta manera de indexar es muy poderosa y la utilizaremos continuamente cuando
 trabajemos con datos numéricos y operaciones matriciales en NumPy.
 
-Copias y vistas
-----------------
+Copias y vistas (*views*)
+-------------------------
 Algo muy importante al trabajar con arreglos ``ndarray`` es que, en la mayoría
 de los casos, los cortes (*slices*) no generan una copia del arreglo, sino una
 *vista* (*view*). Una vista comparte la misma memoria con el arreglo original,
@@ -286,7 +288,7 @@ con el atributo ``dtype``:
 >>> arreglo_np.dtype
 dtype('int64')
 
-Tambien podemos especificar explícitamente el tipo de dato en el contructor:
+También podemos especificar explícitamente el tipo de dato en el constructor:
 
 >>> arreglo_8 = np.array(listas, dtype=np.int8)
 >>> arreglo_8
@@ -294,10 +296,9 @@ array([[2, 3, 4],
        [3, 6, 8],
        [2, 3, 4]], dtype=int8)
 
-En este caso utilizamos enteros con signo de 8 bits, lo que 
-nos permite representar enteros de ``-120`` a ``127``. Si 
-se intentara incluir un entero fuera de este rango, el 
-constructor lanzaría una excepción.
+En este caso utilizamos enteros con signo de 8 bits, lo que nos permite
+representar enteros de ``-128`` a ``127``. Si se incluye un entero fuera del
+rango, el valor puede desbordarse (wrap-around).
 
 Rank y Shape
 ------------
@@ -359,17 +360,17 @@ Para esta sección consideremos la siguiente lista de calificaciones, donde cada
 tres evaluaciones: examen, tarea y participación. Todas las calificaciones están en el
 rango de 0 a 10.
 
-+----+----------------+--------+--------+----------+
-| id | nombre         | tarea  | examen | proyecto |
-+====+================+========+========+==========+
-| 1  | Joe            | 8.5    | 9.0    |  5.0     |
-+----+----------------+--------+--------+----------+
-| 2  | Ana            | 10.0   | 5.0    | 9.0      |
-+----+----------------+--------+--------+----------+
-| 3  | Tom            | 6.5    | 10.0   | 8.0      |
-+----+----------------+--------+--------+----------+
-| 4  | Zoe            | 8.0    | 4.0    | 9.0      |
-+----+----------------+--------+--------+----------+
++----+----------------+--------+--------+---------------+
+| id | nombre         | tarea  | examen | participación |
++====+================+========+========+===============+
+| 1  | Joe            | 8.5    | 9.0    |  5.0          |
++----+----------------+--------+--------+---------------+
+| 2  | Ana            | 10.0   | 5.0    | 9.0           |
++----+----------------+--------+--------+---------------+
+| 3  | Tom            | 6.5    | 10.0   | 8.0           |
++----+----------------+--------+--------+---------------+
+| 4  | Zoe            | 8.0    | 4.0    | 9.0           |
++----+----------------+--------+--------+---------------+
 
 Vamos a almacenar las evaluaciones en un arreglo de NumPy, en este punto 
 vamos a dejar fuera tanto el ``id`` como el ``nombre`` del alumno. Dejamos fuera 
@@ -386,7 +387,7 @@ vectorizadas.
 
 Creamos ahora el arreglo ``evaluaciones`` utilizando únicamente los datos
 numéricos. Cada renglón corresponde a un alumno y cada columna a una de las
-tres evaluaciones (tarea, examen y proyecto):
+tres evaluaciones (tarea, examen y participación):
 
 .. code-block:: python
 
@@ -506,7 +507,7 @@ elemento de ``evaluaciones``, gráficamente la extensión virtual se vería así
 
 Siguiendo con el ejemplo, ahora vamos a suponer que deseamos aplicar una ponderación distinta a cada
 actividad. Por ejemplo, podríamos asignar un 40% a la tarea, 40% al examen y
-20% al proyecto:
+20% a la participación:
 
 .. code-block:: python
 
@@ -536,7 +537,8 @@ actividades para todos los alumnos. Este tipo de operación es muy eficiente,
 porque NumPy no hace copias adicionales; simplemente extiende de manera
 conceptual el arreglo ``ponderacion`` para que sea compatible con ``evaluaciones``.
 
-Como ejemplo, vamos a suponer que no agregamos una ponderación para la evaluación del proyecto:
+Como ejemplo, vamos a suponer que no agregamos una ponderación para la
+evaluación de la participación:
 
 >>> ponderacion = np.array([0.40, 0.40])
 >>> ponderacion.shape
@@ -657,7 +659,7 @@ Nótese que no necesitamos escribir ciclos; NumPy realiza la operación de maner
 eficiente mediante operaciones vectorizadas y *broadcasting*.
 
 De manera análoga, si deseamos calcular el promedio de calificación por
-actividad (tarea, examen y proyecto), debemos sumar a lo largo del eje ``0``,
+actividad (tarea, examen y participación), debemos sumar a lo largo del eje ``0``,
 es decir, por columnas. Después dividimos entre el número de alumnos o, de
 forma más conveniente, utilizamos directamente la función ``mean``:
 
@@ -670,7 +672,7 @@ Esto nos da:
 
 - promedio de **tarea**: 8.25  
 - promedio de **examen**: 7.0  
-- promedio de **proyecto**: 7.75  
+- promedio de **participación**: 7.75  
 
 Aquí ``axis=0`` indica que la operación se aplica columna por columna, lo que
 corresponde a obtener el promedio de cada actividad considerando a todos los
@@ -807,20 +809,20 @@ fundamentales:
 - ``Series``: una secuencia unidimensional para procesar series de tiempo.
 - ``DataFrame``: una tabla con renglones y columnas etiquetadas, donde cada
   columna puede tener un tipo de dato diferente (numérico, categórico, texto, fechas). 
-  Parecido a utlizar hojas de Excel o tablas relaciones.
+  Parecido a utilizar hojas de Excel o tablas relaciones.
 
 El ``DataFrame`` 
 ----------------
 
 En esta sección nos concentraremos en la estructura ``DataFrame`` y veremos cómo:
 
-- cargar datos a un ``DataFrame`` desde archivos de texto (como CSV),
-- utilizar el constructor pasándole estructuras de Python ( como listas, diccionarios, arreglos de
-  NumPy),
-- consultar datos por renglón o columna,
-- realizar operaciones básicas de limpieza de datos y análisis estadístico.
+- Cargar datos a un ``DataFrame`` desde archivos de texto (como CSV).
+- Utilizar el constructor pasándole estructuras de Python ( como listas, diccionarios, arreglos de
+  NumPy).
+- Consultar datos por renglón o columna.
+- Realizar operaciones básicas de limpieza de datos y análisis estadístico.
 
-Como inicio pensemos que un ``DataFrame``  es como un arreglo de NumPy bidimensioal, 
+Como inicio pensemos que un ``DataFrame``  es como un arreglo de NumPy bidimensional, 
 pero con capacidades adicionales:
 
 - Las columnas y renglones pueden tener nombre (etiqueta).
@@ -897,11 +899,11 @@ archivo que nos interesa se llama ``auto-mpg.data``.
 
 Si abrimos el archivo en un editor de texto, vemos que:
 
-- los campos están separados por espacios en blanco, no por comas como es habitual en archivos CSV,
-- el número de espacios entre columnas no es siempre el mismo,
-- los valores faltantes están marcados con el símbolo ``?``.
+- Los campos están separados por espacios en blanco, no por comas como es habitual en archivos CSV.
+- El número de espacios entre columnas no es siempre el mismo.
+- Los valores faltantes están marcados con el símbolo ``?``.
 
-Aquí esta un fragmento del archivo:
+Aquí está un fragmento del archivo:
 
 .. code-block:: text
 
@@ -989,7 +991,7 @@ el parámetro ``header=None``:
 Ahora pandas simplemente asigna un índice (0, 1, 2, …) a las columnas. De
 hecho, pandas siempre conserva un índice entero interno que nos permite acceder
 a columnas y renglones por su posición. Estos índices los vemos a la izquierda
-y en la parte superior de la de la impresión en pantalla. Con estos índices,
+y en la parte superior de la impresión en pantalla. Con estos índices,
 podemos seleccionar columnas y renglones utilizando su posición con mecanismos
 como ``iloc`` que veremos más adelante.
 
@@ -1178,22 +1180,17 @@ corresponden a:
 
 - ``1`` → ``USA``
 - ``2`` → ``Japan``
-- ``3`` → ``Germany``
+- ``3`` → ``Europe``
 
 Vamos a mapear estos valores enteros a etiquetas descriptivas y asegurarnos de
 que la columna sea de tipo ``category``:
 
 .. code-block:: python
 
-Vamos a mapear estos valores enteros a etiquetas descriptivas y asegurarnos de
-que la columna sea de tipo ``category``:
-
-.. code-block:: python
-
-    >>> origin_map = {1: 'USA', 2: 'Japan', 3: 'Germany'}
+    >>> origin_map = {1: 'USA', 2: 'Japan', 3: 'Europe'}
     >>> df['origin'] = df['origin'].map(origin_map)
     >>> df['origin'] = df['origin'].astype('category')
-    >>> df['origin'] = df['origin'].cat.set_categories(['USA', 'Japan', 'Germany'])
+    >>> df['origin'] = df['origin'].cat.set_categories(['USA', 'Japan', 'Europe'])
     >>> df['origin']
 
 De esta forma, la columna ``origin`` deja de ser un simple código numérico y se
@@ -1263,9 +1260,9 @@ resolver problemas comunes al trabajar con datos reales.
 Sin embargo, pandas ofrece múltiples mecanismos adicionales para crear
 ``DataFrames``, entre ellos:
 
-- a partir de estructuras de Python (listas, diccionarios, arreglos de NumPy),
-- desde archivos JSON, Excel o bases de datos,
-- mediante datos obtenidos de servicios web o APIs.
+- A partir de estructuras de Python (listas, diccionarios, arreglos de NumPy).
+- Desde archivos JSON, Excel o bases de datos.
+- Mediante datos obtenidos de servicios web o APIs.
 
 En la documentación oficial se pueden encontrar estos y otros métodos de
 entrada. En lo que sigue, asumiremos que los datos ya están disponibles en un
@@ -1300,7 +1297,7 @@ Trabajaremos con el conjunto de datos *Auto MPG*, ya cargado en un
     ...            'model_year':'i4','origin':'category','car_name':'category'}
     ... )
 
-    >>> auto_mpg['origin'].cat.categories = ['USA', 'Japan', 'Germany']
+    >>> auto_mpg['origin'] = auto_mpg['origin'].cat.set_categories(['USA', 'Japan', 'Europe'])
 
 Inspección rápida
 -----------------
@@ -1392,11 +1389,11 @@ distinguir entre obtener una **Serie** y conservar un **DataFrame**.
 
 Por ejemplo:
 
->>> df.iloc[0]
+>>> auto_mpg.iloc[0]
 
 devuelve una ``Series`` (estructura unidimensional), mientras que:
 
->>> df.iloc[[0]]
+>>> auto_mpg.iloc[[0]]
 
 devuelve un ``DataFrame`` con una sola fila, conservando su estructura
 bidimensional.
@@ -1456,9 +1453,9 @@ extraemos los autos de Japón y Alemania:
 .. code-block:: python
 
     >>> japon = auto_mpg[auto_mpg.origin == 'Japan']
-    >>> alemania = auto_mpg[auto_mpg.origin == 'Germany']
+    >>> europa = auto_mpg[auto_mpg.origin == 'Europe']
 
-    >>> non_usa = pd.concat([japon, alemania])
+    >>> non_usa = pd.concat([japon, europa])
 
 Agrupación
 ----------

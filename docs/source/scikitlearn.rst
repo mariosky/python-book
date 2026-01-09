@@ -291,8 +291,8 @@ de dato correcto, cargaremos de nuevo los datos con el `dtype` correspondiente:
 Eliminamos registros con valores nulos
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Más adelante veremos las herramientas de `sci-kit learn` para tratar los casos
-de valores nulos. En estre primer ejercicio simplemente vamos a eliminar estos
+Más adelante veremos las herramientas de `scikit-learn` para tratar los casos
+de valores nulos. En este primer ejercicio simplemente vamos a eliminar estos
 registros. Primero vemos cuales renglones *incluyen* valores nulos en alguna de
 sus columnas:
 
@@ -310,12 +310,12 @@ sus columnas:
 343    False
 Length: 344, dtype: bool
 
-Podemos utilizar este vector de boleanos (mascara boleane) pare filtrar aquellos que 
-*no tienen valores nulos*   y 
-copiarlos en un nuevo `DataFrame`. Como esta es la idea, mejor vamos a utilizar 
-directamente `notnull()` para quedarnos con los que cumplen con la condición (`True`). Es
-importante observar que ahora tenemos que utilizar el cuantificador `all(axis=1)` porque 
-queremos *no nulo* en todas las columnas.
+Podemos utilizar este vector de booleanos (máscara booleana) para filtrar
+aquellos que *no tienen valores nulos* y copiarlos en un nuevo `DataFrame`.
+Como esta es la idea, mejor vamos a utilizar directamente `notnull()` para
+quedarnos con los que cumplen con la condición (`True`). Es importante observar
+que ahora tenemos que utilizar el cuantificador `all(axis=1)` porque queremos
+*no nulo* en todas las columnas.
 
 >>> df = df[df.notnull().all(axis=1)]
 >>> df.isnull().all(axis=1).sum()
@@ -655,6 +655,12 @@ Un ejemplo breve con redes neuronales
 útiles con fines educativos y para problemas de tamaño pequeño. En particular,
 podemos utilizar ``MLPClassifier`` (Perceptrón Multicapa) como clasificador.
 
+.. note::
+
+   Algunos modelos, como las redes neuronales, son sensibles a la escala de las
+   variables numéricas. En estos casos suele ser necesario aplicar técnicas de
+   normalización o estandarización, como ``StandardScaler``.
+
 La idea es exactamente la misma que en el ejemplo anterior: reutilizamos el
 mismo preprocesamiento (imputación + codificación) y sustituimos el modelo
 final por una red neuronal.
@@ -683,15 +689,15 @@ Y evaluamos su desempeño en el conjunto de prueba usando exactitud
 
 Este resultado nos puede sorprender por ser tan bajo, pero muestra una realidad
 del aprendizaje automático: no todo se resuelve utilizando el mejor algoritmo.
-De hecho, según el principio *No free lunch* no hay un algoritmo que sea el
+De hecho, según el principio *No Free Lunch Theorem* no hay un algoritmo que sea el
 mejor en todos los casos. En este caso, el resultado se puede explicar por 
 varias razones:
 
 - El *dataset* tiene muy pocos registros y las clases están bien separadas. 
-  La red no alcanza a ajustarse a los datos,en el caso de los árboles de 
+  La red no alcanza a ajustarse a los datos, en el caso de los árboles de 
   decisión que hacen "cortes" rectos aquí es más fácil.
 - El preprocesamiento no fue adecuado (este normalmente es el caso)
-- Los parámetros (hiperparámtros) de la red no son los adecuados.
+- Los parámetros (hiperparámetros) de la red no son los adecuados.
   
 Veamos el caso del preprocesamiento.
 

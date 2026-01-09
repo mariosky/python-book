@@ -1094,3 +1094,38 @@ Con esta motivación, implementaremos una variante de **PSO multi-enjambre**, en
 la cual varios enjambres evolucionan en paralelo e intercambian información de
 forma controlada. Este enfoque permite reducir el tiempo total de optimización y,
 al mismo tiempo, mejorar la exploración del espacio de búsqueda.
+
+Resumen del capítulo
+~~~~~~~~~~~~~~~~~~~
+
+En este capítulo se introdujeron las **metaheurísticas basadas en poblaciones**
+como una estrategia práctica para resolver problemas de optimización donde los
+métodos exactos resultan inviables. A diferencia de enfoques deterministas, las
+metaheurísticas tratan al sistema como una *caja negra* y evalúan soluciones
+candidatas únicamente mediante una **función objetivo** (*fitness*), incorporando
+componentes estocásticos para balancear **exploración** y **explotación** del
+espacio de búsqueda.
+
+A partir de un ejemplo con parámetros binarios, se explicó el concepto de
+**espacio de búsqueda** y por qué evaluar todas las configuraciones puede ser
+computacionalmente prohibitivo. Con esta motivación se construyó un
+**algoritmo genético básico**, describiendo sus componentes esenciales:
+representación de individuos, evaluación de la población, **selección por
+torneo**, **cruce de un punto** y **mutación bit-flip**, así como un ciclo
+generacional que produce nuevas poblaciones de manera iterativa.
+
+Posteriormente se presentó la librería **DEAP** como una alternativa para
+implementar algoritmos evolutivos de forma más estructurada y reutilizable,
+mostrando cómo registrar operadores en un ``toolbox`` y cómo expresar el proceso
+evolutivo con funciones de alto nivel. Finalmente, se introdujo **PSO (Particle
+Swarm Optimization)** como un método bioinspirado orientado a optimización
+continua, explicando su intuición (mejor posición personal y global), sus
+ecuaciones de actualización de velocidad y posición, y un ejemplo de
+implementación con DEAP.
+
+El capítulo cierra conectando estas técnicas con la **optimización de
+controladores difusos**, motivando la parametrización del controlador y el uso
+de PSO para ajustar automáticamente funciones de membresía y otros parámetros a
+partir de métricas de desempeño, y preparando el terreno para abordar el costo
+computacional y la paralelización en capítulos posteriores.
+
