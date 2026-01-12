@@ -153,7 +153,7 @@ dentro del lenguaje. Utilizaremos muchas de ellas más adelante.
 Tipos de datos básicos
 -----------------------
 
-**Enteros**
+.. rubric:: Enteros
 
 A diferencia de otros lenguajes que incluyen distintos tipos de datos para
 representar enteros de distintos tamaños, por ejemplo en C# el tipo de dato
@@ -167,14 +167,14 @@ Este costo computacional adicional hace que Python sea apropiado para el cómput
 científico, sacrificando las ventajas en desempeño que supone el tener enteros de
 longitud fija.
 
-**Números con punto flotante**
+.. rubric:: Números con punto flotante
 
 Los números con punto flotante, comúnmente llamados *flotantes* o *floats*,
 incluyen un punto decimal y también son de tamaño arbitrario. Se pueden
 representar utilizando la notación exponencial (*E*) indicando la décima
 potencia. Por ejemplo, :python:`21.3E-4` es equivalente a :python:`21.3 * 10^-4`.
 
-**Cadenas o Strings**
+.. rubric:: Cadenas o Strings
 
 En Python, una cadena o string es una *secuencia* de caracteres. Una *secuencia*
 es una abstracción que veremos más adelante, cuando nos enfoquemos en estructuras
@@ -202,7 +202,7 @@ utilizamos comillas triples, ya sean dobles o simples:
 En otra sección nos vamos a concentrar en la funcionalidad de los objetos tipo *string*;
 Python incluye muchos métodos para realizar operaciones sobre este tipo de datos.
 
-**Booleanos**
+.. rubric:: Booleanos
 
 Los valores de verdad en Python son representados explícitamente con los valores
 literales :python:`True` o :python:`False`, verdadero y falso respectivamente, ambos deben
@@ -261,7 +261,7 @@ valor nulo.  Tiene su propio tipo :python:`NoneType`. De manera similar al valor
 booleanas. Se puede utilizar para definir un nombre que no hace referencia a un
 objeto todavía. Por ejemplo:
 
-.. code-block:: python
+.. code-block:: pycon
 
    x = None
    print(x)
@@ -281,11 +281,11 @@ los lenguajes orientados a objetos puros. Podemos definirlas de manera
 independiente e incluso programar en Python siguiendo un paradigma funcional.
 
 Definición de una función
-^^^^^^^^^^^^^^^^^^^^^^^^^
+*************************
 
 Veamos una definición básica de una función que suma dos números:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> def suma(a, b):
    ...    """ Esta función suma dos números"""
@@ -332,13 +332,12 @@ indentado utilizando cuatro espacios. El bloque termina con la única instrucci�
 operación :python:`a + b`, la suma de los dos números ``a`` y ``b``.
 
 Ejecución de funciones
-^^^^^^^^^^^^^^^^^^^^^^
-
+**********************
 
 Una vez definida la función, podemos ejecutarla de esta manera, utilizando
 valores literales como parámetros:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> suma(2, 4)
    6
@@ -352,7 +351,7 @@ nada, pues no se ejecuta de manera interactiva.
 
 Para ver el resultado si ejecutamos el script, podríamos escribir algo como:
 
-.. code-block:: python
+.. code-block:: pycon
 
    # Esto está en un archivo llamado programa.py
    # Lo puedes ejecutar con el intérprete así: python2 programa.py
@@ -366,7 +365,7 @@ Hay un detalle importante en nuestro código. Por alguna razón estamos aseguran
 que ``a`` y ``b`` son valores numéricos. ¿Pero qué hay del caso que se muestra a
 continuación?
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> suma('hola', ' mundo')
    'hola mundo'
@@ -375,15 +374,15 @@ El resultado sería :python:`'hola mundo'`, la concatenación de las dos cadenas
 de entrada. Esto resalta el punto que habíamos considerado anteriormente: no
 debemos asumir que los nombres estarán atados a objetos de cierto tipo.
 
-Las funciones siempre regresan un valor
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Las funciones siempre regresan un valor
+
 
 En el caso de que no especifiquemos una instrucción de :python:`return`, la
 función regresará el valor de :python:`None` de manera automática.
 
 Ejemplo de una versión interactiva de esta sección:
 
-.. code-block:: python
+.. code-block:: pycon
 
    Python 2.11.5 (main, Sep 11 2023, 08:31:25) [Clang 14.0.6 ] on darwin
    Type "help", "copyright", "credits" or "license" for more information.
@@ -396,8 +395,7 @@ Ejemplo de una versión interactiva de esta sección:
    'hola mundo'
    >>> exit()
 
-Las funciones son ciudadanos de primera clase
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Las funciones son ciudadanos de primera clase
 
 Cuando decimos que en un lenguaje de programación las funciones son ciudadanos
 de primera clase (*first-class citizens*), significa que las funciones tienen el
@@ -413,7 +411,7 @@ Esto significa que las funciones:
 Este es un concepto fundamental en la programación funcional que veremos más adelante.
 Veamos un ejemplo:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> def por_tres(a):
            return a * 2
@@ -456,7 +454,7 @@ objetivo es servir como apoyo para:
 
 Veamos un ejemplo sencillo:
 
-.. code-block:: python
+.. code-block:: pycon
 
    def suma(a: int, b: int) -> int:
        return a + b
@@ -469,7 +467,7 @@ En este caso:
 Sin embargo, Python no impide que se invoque la función con argumentos de otro
 tipo:
 
-.. code-block:: python
+.. code-block:: pycon
 
    suma("hola", " mundo")
 
@@ -481,14 +479,13 @@ Las anotaciones son aprovechadas principalmente por herramientas externas como
 analizadores estáticos y *linters*, que pueden advertirnos antes de ejecutar el
 programa sobre posibles inconsistencias de tipos.
 
-Inspección de tipos en tiempo de ejecución
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. rubric:: Inspección de tipos en tiempo de ejecución
 
 Si necesitamos verificar el tipo de dato en tiempo de ejecución, Python incluye
 de fábrica la función ``type()``, que nos permite inspeccionar el tipo de un
 objeto:
 
-.. code-block:: python
+.. code-block:: pycon
 
    def suma(a: int, b: int) -> int:
        if type(a) is not int or type(b) is not int:
@@ -535,7 +532,7 @@ que vamos a utlizar en nuestros programas ya que esto puede simplificar o
 complicar mucho el diseno del programa.
 
 Secuencias
-^^^^^^^^^^
+**********
 
 .. figure:: ./images/secuencia.png
    :alt: Un arreglo dinámico clásico con nodos ligados.
@@ -575,13 +572,13 @@ todas las colecciones tipo secuencia.
 Las tuplas se definien como una lista de elementos separados por comas, y se
 encierran entre paréntesis:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> tu = (32, 'abc', 3.26, (20,30), 'xyz')
 
 Las listas se definen igual solo que se encierran entre corchetes:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li = [32, 'abc', 3.26, (20,30), 'xyz',]
 
@@ -592,7 +589,7 @@ la coma al final.
 Como ya vimos anteriormente las cadenas de caracteres se pueden definir
 de varias formas:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> st = 'Hola Mundo'
    >>> st = "Hola Mundo"
@@ -603,7 +600,7 @@ Podemos acceder a los elementos individuales de una tupla, lista o cadenas
 utilizando la notación de corchetes con índices. Como los arreglos clásicos de
 C#, Java, C.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> tu = (33, 'def', 4.56, (2,3), 'def')
    >>> tu[1]     # Segundo elemento de la tupla.
@@ -621,13 +618,13 @@ También podemos utilizar índices negativos, estos nos permiten indicar
 fácilmente la posición de los últimos elementos aunque no conozcamos el tamaño
 del arreglo.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> t = (23, 'abc', 4.56, (2,3), 'def')
 
 Índice positivo: se cuenta de izquierda a derecha empezando en 0.
 
-.. code-block:: python
+.. code-block:: pycon
 
       >>> t[1]
       'abc'
@@ -635,13 +632,13 @@ del arreglo.
 Índice negativo: se cuenta de derecha a izquierda, iniciando en ``-1``.
 
 Listas vs Tuplas
-^^^^^^^^^^^^^^^^
+****************
 
 La principal diferencia entre ambas secuencias es que las listas
 pueden ser modificadas **in place**. Por ejemplo, utilizando el índice,
 podemos modificar el valor al que hace referencia:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li = ['abc', 23, 4.34, 23]
    >>> li[1] = 45
@@ -650,7 +647,7 @@ podemos modificar el valor al que hace referencia:
 
 Si intentamos esto con una tupla, no es posible ya que es inmutable:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> t = (23, 'abc', 4.56, (2,3), 'def')
    >>> t[2] = 3.14
@@ -667,7 +664,7 @@ una nueva estructura con la modificación y reasignandola al nombre nuevamente.
    Regresaremos a este tema en la sección de programación funcional ya que la
    inmutabilidad es celebrada en la programación funcional.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> t = (23, 'abc', 3.14, (2,3), 'def')
 
@@ -676,14 +673,14 @@ una nueva estructura con la modificación y reasignandola al nombre nuevamente.
    rápidas y eficientes.
 
 Cortes (*slicing*)
-^^^^^^^^^^^^^^^^^^^
+*******************
 
 Una funcionalidad muy importante que nos brindad las secuencias son los cortes.
 Un corte, regresa una copia del contenedor incluyendo un subconjunto de los
 miembros originales. Un corte se puede especificar con dos índices. Se empieza
 a copiar desde el primer índice y se detiene antes del segundo.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> t = (23, 'abc', 4.56, (2,3), 'def')
    >>> t[1:4]
@@ -693,7 +690,7 @@ También podemos utilizar índices negativos. Esto es de mucha ayuda para
 referirnos a los últimos elementos aún cuando ignoremos el número de elementos
 que tiene la secuencia.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> t[1:-1]
    ('abc', 4.56, (2,3))
@@ -709,7 +706,7 @@ que tiene la secuencia.
 
 
 Cómo copiar una secuencia
-^^^^^^^^^^^^^^^^^^^^^^^^^
+*************************
 
 Para indicar que el corte inicial es desde el punto inicial o cero, simplemente
 se omite el valor, por ejemplo: :python:`lista[:21]`. Igual si queremos indicar
@@ -719,8 +716,7 @@ superior :python:`lista[12:]`.
 Para regresar una copia de toda la secuencia simplemente omitimos ambos límites
 :python:`[:]`. Por ejemplo, para regresar una copia de la siguiente tupla:
 
-
-.. code-block:: python
+.. code-block:: pycon
 
    >>> t = (23, 'abc', 4.56, (2,3), 'def')
    >>> t[:]
@@ -732,7 +728,7 @@ un objeto mutable como una lista, si hacemos un cambio utilizando una referencia
 este cambio se reflejará en todas las referencias, lo cual es normalmente un
 error. Veamos un ejemplo, para que quede clara esta idea:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> lista1 = [23, 'abc', 4.56, (2,3), 'def']
    >>> lista2 = lista1
@@ -751,12 +747,12 @@ la :python:`lista2` será igual a :python:`lista1` aunque aparentemente no la
 modificamos.
 
 El operador `in`
-^^^^^^^^^^^^^^^^
+****************
 
 El operador `in` establece una condición booleana para ver si un elemento está
 en un estructura tipo secuencia. También se puede utilizar junto con `not`:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> t = (1, 2, 4, 5)
    >>> 3 in t
@@ -768,7 +764,7 @@ en un estructura tipo secuencia. También se puede utilizar junto con `not`:
 
 En las cadenas de caracteres, comprueba si una subcadena está en la secuencia:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> a = 'abcde'
    >>> 'c' in a
@@ -780,11 +776,11 @@ En las cadenas de caracteres, comprueba si una subcadena está en la secuencia:
 
 
 Los operadorer `+` y `*`
-^^^^^^^^^^^^^^^^^^^^^^^^
+************************
 
 El operador `+` produce una nueva secuencia cuyos valores son la concatenación de los operandos.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> (1, 2, 3) + (4, 5, 6)
    (1, 2, 3, 4, 5, 6)
@@ -799,7 +795,7 @@ En el caso del operador de producto `*` se produce una nueva secuencia a partir
 de la original repetida `n` veces.  El valor de `n` es un entero, entonces la
 sintaxis es `<secuencia> * int`.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> (1, 2, 3) * 3
    (1, 2, 3, 1, 2, 3, 1, 2, 3)
@@ -811,7 +807,7 @@ sintaxis es `<secuencia> * int`.
    "HolaHolaHola"
 
 Operaciones en listas
----------------------
+*********************
 
 En esta sección vamos a ver algunas operaciones que solo se incluyen en los
 objetos tipo lista ya que modifican de alguna manera la estructura o los
@@ -824,7 +820,7 @@ de la lista, insertar un elemento en alguna posición o borrarlo:
 
 .. rubric::  :python:`list.append(elemento)`
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li = [1, 11, 3, 4, 5]
    >>> li.append("a")	# Es obligatorio pasar como parámetro un elemento.
@@ -833,7 +829,7 @@ de la lista, insertar un elemento en alguna posición o borrarlo:
 
 .. rubric::  :python:`insert(índice, elemento)`
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li.insert(2, "i")
    >>> li
@@ -843,7 +839,7 @@ de la lista, insertar un elemento en alguna posición o borrarlo:
 
 Hay varias formas de borrar un elemento:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> del li[1] # Se elimina el 11
    >>> li
@@ -861,7 +857,7 @@ posición indicada por el índice, en caso de no recibir un parámetro elimina e
 
 .. rubric::  :python:`pop(índice)`
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li = [1, 2, 3, 4]
    >>> elemento_eliminado = li.pop(1)  # Elimina el elemento en el índice 1 ('2')
@@ -872,7 +868,7 @@ posición indicada por el índice, en caso de no recibir un parámetro elimina e
 
 En el caso de no enviar el índice como parámetro:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> elemento_eliminado = li.pop()  # Elimina el último elemento ('4')
    >>> li
@@ -888,7 +884,7 @@ Otra manera de eliminar uno o varios elementos es mediante el método
 elemento en la lista. Se lanza la excepción `ValueError` en caso de que el
 elemento no se encuentre en la lista.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li = [1, 2, 3, 2, 4]
    >>> li.remove(2)  # Elimina el primer '2'
@@ -905,20 +901,20 @@ Este método elimina todos los elementos de la lista.
 
 Otras funciónes útiles para estas tareas son:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li = ['a', 'b', 'c', 'b']
 
 .. rubric::  :python:`list.index()`
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li.index('b')     # indice de primera ocurrencia*
    1
 
 .. rubric::  :python:`list.count()`
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li.count('b')     # número de ocurrencias
    2
@@ -930,7 +926,7 @@ concatenar dos listas existentes. Con esto se crea un nuevo objeto y una nueva
 referencia.  Por otro lado :python:`list.extend()` modifica la estructura de la
 lista *in-place*, sin modificar la referencia y que es el mismo objeto.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li = [1, 2, 3, 2, 4]
    >>> li.extend([9, 8, 7])
@@ -943,7 +939,7 @@ lista *in-place*, sin modificar la referencia y que es el mismo objeto.
 No podemos lograr lo mismo con el método :python:`list.append(elemento)` ya que
 este agregaría a la lista como el último elemento de esta. Veamos un ejemplo:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li = [1, 2, 3, 2, 4]
    >>> li.append([10, 11, 12])
@@ -953,13 +949,13 @@ este agregaría a la lista como el último elemento de esta. Veamos un ejemplo:
 Otros métodos que alteran el órden de los elementos en la lista son los
 siguientes:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li = [5, 2, 6, 8]
 
 .. rubric::  :python:`list.reverse()`
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li.reverse()    # ordena en reversa la lista *in place*
    >>> li
@@ -967,7 +963,7 @@ siguientes:
 
 .. rubric::  :python:`list.sort()`
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li.sort()       # ordena la lista *in place*
    >>> li
@@ -978,14 +974,16 @@ que se comparan los elementos para establecer el órden, podemos enviar una
 función que se encarge de hacer esta tarea.  Veremos ejemplos de esto en la
 sección de programación funcional.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> li.sort(alguna_funcion) # se ordena utilizando la función recibida
 
 Para convertir entre ellas utiliza las funciones :python:`list()` y :python:`tuple()`:
 
-- :python:`li = list(tu)`
-- :python:`tu = tuple(li)`
+.. code-block:: pycon
+
+   >>>li = list(tu)
+   >>>tu = tuple(li)
 
 Diccionarios
 ------------
@@ -1018,7 +1016,7 @@ como clave.
    :alt: Ejemplo de una `función hash <https://es.wikipedia.org/wiki/Funci%C3%B3n_hash>`__ .
 
 Funciones *Hash*
-^^^^^^^^^^^^^^^^
+****************
 
 Vamos a suponer que tenemos un espacio de memoria muy limitada, y solo tenemos
 ocho espacios de memoria. Ahora, queremos almacenar a cuatro estudiantes
@@ -1129,7 +1127,8 @@ permiten regresar todos los elementos del diccionario.
    de una estructura tipo lista o tupla.
 
 Listas vs Diccionarios
-^^^^^^^^^^^^^^^^^^^^^^
+**********************
+
 Es importante conocer que tan eficente es una estructura de datos para
 relizar ciertas tareas y así poder decidir si la utilizamos o no.
 
@@ -1234,7 +1233,8 @@ Estructuras de control
 En esta sección repasaremos la sintáxis básica de los elementos del programa que
 nos sirven para controlar el flujo de nuestros algoritmos.
 
-.. rubric::  Condiciones
+Condiciones
+***********
 
 En el siguiente ejemplo vemos un ejemplo del uso de condicionales en Python.
 Algunos puntos importantes son la falta de paréntesis para indicar la condición
@@ -1278,7 +1278,8 @@ utilizamos :python:`continue`, se termina la iteración actual y se evalúa
 inmediatamente la condición para ir a la siguiente iteración.
 
 
-.. rubric::  Ciclos :python:`for`
+Ciclos :python:`for`
+********************
 
 Un ciclo :python:`for` recorre cada uno de los elementos de una colección, o
 cualquier objeto `iterable` pasando el objeto al bloque sobre el cual se está
@@ -1360,8 +1361,8 @@ nombre.  En este caso tenemos que hacer referencia a los elementos individuales
    5
    7
 
-
-.. rubric::  El uso de :python:`range()`
+El uso de :python:`range()`
+***************************
 
 La manera clásica de hacer un ciclo `for` en otros lenguajes de programación
 imperativa sería algo como
@@ -1454,7 +1455,7 @@ incluso podemos generar índices a la inversa:
 
 
 Paso de parámetros utilizando estructuras
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------------------
 
 Python no tiene sobrecargado de funciones (que haya dos o más funciones con el
 mismo nombre).  De hecho, si declaras dos funciones Python simplemente reemplaza
@@ -1599,6 +1600,7 @@ se elimina, recuperando espacio de memoria.  Veamos un ejemplo:
    NameError: name 'x' is not defined
 
 .. caution::
+
    La técnica de conteo no puede detectar casos en los que dos objetos se referencían
    mutuamente, pero nadie hace referencia a ninguno de los dos. Para esto Python utiliza
    un módulo especial que los detecta y recupera la memoria.

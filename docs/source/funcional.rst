@@ -20,7 +20,7 @@ que utilizaríamos en proyectos empresariales dónde necesitamos descomponer la
 complejidad de un sistema. En este caso podemos utilizar variables globales ya
 que no es mucho problema buscar en el código y ver qué modifica a qué.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> x = 0 # variable local
    >>> for i in range(5):
@@ -35,7 +35,8 @@ que no es mucho problema buscar en el código y ver qué modifica a qué.
    veces durante el transcurso del programa. Esta es una característica que trata de evitar la
    programación funcional.
 
-.. rubric::  Programación procedural
+Programación procedural
+-----------------------
 
 Con la introducción de funciones y bloques, el paradigma de a programación sube
 su nivel de abstracción. Ahora seguimos un paradigma **procedural**. Las
@@ -47,7 +48,7 @@ visibles desde bloques externos.  Podemos hacer una descomposición jerárquica 
 nuestro programa y dividirlo en módulos (este tema lo veremos en otra sección).
 En este paradigma se reduce bastante el uso de variables globales.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> def suma_enteros(n):
    ...     x = 0
@@ -82,7 +83,7 @@ Python entonces, podemos definir nuestros propios tipos de objetos utilizando
 clases y herencia.  El lenguaje también perimite de manera naturar utilizar
 polimorfismo.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> class Persona:
    ...     def __init__(self, nombre):
@@ -100,14 +101,15 @@ polimorfismo.
    objetos (esto lo haremos en la sección correspondiente) este es un paradigma que
    Python implementa ampleamente.
 
-.. rubric::  Programación funcional
+Programación funcional
+----------------------
 
 Python nos permite utilizar algunas carácteristicas del paradigma funcional
 aunque no lo podemos catalogar como un lenguaje funcional puro. Uno de las
 principales características es tratar a las funciones como a cualquier objeto,
 recordando lo de "las funciones son ciudadanos de primera clase":
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> def triplíca(x):
    ...     return x*x*x
@@ -122,8 +124,8 @@ recordando lo de "las funciones son ciudadanos de primera clase":
 En esta sección nos vamos a enfocar en las principales características de la
 programación funcional y como se implementan en Python.
 
-Programación Funcional
------------------------
+Paradigma Funcional
+-------------------
 
 El paradigma no tiene una definición estandarizada, las funciones siguen siendo
 un mecanismo de modularidad y reutilización de código, pero desincentivando el
@@ -140,7 +142,8 @@ promueve las siguientes carácteristicas.
 Las funciones se pueden asignar a variables, pasar como argumentos y devolver
 como resultado de otras funciones. Ya hemos visto varios ejemplos de esta funcionalidad.
 
-.. rubric::  Funciones puras
+Funciones puras
+***************
 
 Si seguimos la definición de una función matemática estas tienen algunas
 propiedades importantes que nos permiten generalizar y establecer reglas para
@@ -160,14 +163,16 @@ deseables también en las funciones que escribimos en nuestros programas (sean f
   referencial.
 
 
-.. rubric::  Inmutabilidad como principio
+Inmutabilidad como principio
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 La mutabilidad aunque es natural en los paradigmas imperativos y orientados a
 objetos (de manera controlada en estos últimos) en los lenguajes funcionales se
 trata de eliminar ya que se argumenta que es esta es la causa de muchos errores
 o bichos (bugs) en estos otros paradigmas.
 
-.. rubric::  Funciones de alto nivel
+Funciones de alto nivel
+^^^^^^^^^^^^^^^^^^^^^^^
 
 El la programación funcional es común que escribamos funciones generadoras cuyo
 propósito sea precisamente generar nuevas funciones. Las funciones generadas
@@ -177,7 +182,8 @@ llama clausura (clousure). También se utilizan **funciones anónimas** cuyo pro
 es generar una función al mismo tiempo que se envía como argumento o se regresa
 como resultado.
 
-.. rubric::  Evita ciclos con recursividad
+Evita ciclos con recursividad
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 En lugar de promover los ciclos con estructuras como ``for`` o ``while``, en la
 programación funcional se promuebe el uso de distintas variantes de
@@ -186,7 +192,8 @@ recursividad.
 .. Nota editorial 
    Falta agregar un ejemplo de recursividad.
 
-.. rubric::  Evaluación `Lazy`
+Evaluación `Lazy`
+^^^^^^^^^^^^^^^^^
 
 Los lenguajes pueden realizar evaluación estricta (en inglés se les conoce com eager) o evaluación
 no estricta (lazy). En la evaluación estricta, todos los componentes y subcomponentes
@@ -195,7 +202,7 @@ hasta que sea absolutamente necesario. Por ejemplo, la siguiente instrucción
 en Python falla, debido que hay una división entre cero en el tercer elemento
 de la lista:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> print(len([1,2,3/0]))
    Traceback (most recent call last):
@@ -212,7 +219,7 @@ Python utiliza evaluación no estricta en el uso de operadores lógicos,
 por ejemplo aquí no hay problema aunque también se incluye la división
 entre cero en la instrucción:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> if True or 3/0: print('True')
    ...
@@ -249,7 +256,7 @@ Veámoslo con un ejemplo. Vamos a suponer que tenemos una lista
 de películas y los datos de cada película los guardamos simplmente en
 una tupla:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> peliculas = [
    ...    ('1', 'How to Train Your Dragon', 2025, ('Action', 'Family', 'Fantasy'), '2h 5m', 80),
@@ -261,7 +268,7 @@ Si ordenamos la lista *in place* y luego la imprimimos, vemos que el orden se
 establece ordenando por el primer elemento de la tupla y en este caso como son
 cadenas de caracteres se ordenan lexicográficamente por el identificador.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> peliculas.sort()
    >>> for p in peliculas:
@@ -277,7 +284,7 @@ que tome como parámetro una lista y nos regrese el elemento sobre el cual quere
 
 Esta función puede ser la siguiente:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> def select_año(pelicula):
    ...    return pelicula[2]
@@ -285,7 +292,7 @@ Esta función puede ser la siguiente:
 
 La función toma como argumento la tupla con la información de la película y nos regresa el tercer elemento.
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> peliculas.sort(key=select_año)
    >>> for p in peliculas:
@@ -299,7 +306,7 @@ En lugar de tener que definir la función `select_año`, podemos enviar una func
 escrita de una manera mucho más compacta. Por ejemplo, para ordenar por
 título, podriamos llamar a `peliculas.sort()` utilizando la palabra `lambda` de esta manera:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> peliculas.sort(key=lambda peliculas: peliculas[1])
    >>> for p in peliculas:
@@ -333,7 +340,7 @@ se recomienda utilizar una función convencional.
    como valor de retorno de otra función o incluso ejecutarlas al mismo tiempo que las
    definimos:
 
-   .. code-block:: python
+.. code-block:: pycon
 
       >>> def crea_suma():
       ...    return lambda a, b: a + b
@@ -347,7 +354,7 @@ Funciones de orden superior incluidas en Python
 -----------------------------------------------
 
 :python:`map()`
-^^^^^^^^^^^^^^^
+***************
 
 El método :python:`map()` incluido de fábrica incorpora un estilo
 funcional que es muy utilizado en Python. Veamos un ejemplo donde comparamos
@@ -357,7 +364,7 @@ Tenemos la tarea de producir una nueva lista que contenga solo los títulos de l
 películas extraídos de la lista `peliculas` creada anteriormente. Una manera
 imperativa para ralizar esta tarea sería la siguiente:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> peliculas
    [('1', 'How to Train Your Dragon', 2025, ('Action', 'Family', 'Fantasy'), '2h 5m', 80), ('3', 'Prisoners', 2013, ('Drama', 'Thriller', 'Crime'), '2h 33m', 81), ('10', 'The Substance', 2024, ('Drama', 'Horror', 'Science Fiction'), '2h 21m', 71)]
@@ -395,7 +402,7 @@ mencionado.
 
 Por ejemplo:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> map(int, ['1', '2', '3', '4'])
    <map object at 0x0000022FCEE461A0>
@@ -409,7 +416,7 @@ Para visualizarlo podemos construir una lista a partir del objeto :python:`map`.
 
 Utilicemos map para resolver el problema anterior:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> list(map(lambda p: p[1], peliculas))
    ['How to Train Your Dragon', 'Prisoners', 'The Substance']
@@ -422,7 +429,7 @@ Veamos las características funcionales de este código:
    - Se sigue además un estilo declarativo muy compacto.
 
 :python:`filter()`
-^^^^^^^^^^^^^^^^^^^
+*******************
 
 De manera similar a :python:`map()`, la función toma como primer parámetro una
 función de prueba que sirver para filtrar elementos del iterable que se recibe
@@ -430,7 +437,7 @@ como segundo argumento. La función de prueba debe regresar verdadero para que
 el elemento se incluya en el resultado. Por ejemplo, para regresar las
 películas más recientes que el año 2023. Podemos hacer lo siguiente:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> list(filter(lambda p: p[2]>2023, peliculas))
    [('1', 'How to Train Your Dragon', 2025, ('Action', 'Family', 'Fantasy'), '2h 5m', 80), ('10', 'The Substance', 2024, ('Drama', 'Horror', 'Science Fiction'), '2h 21m', 71)]
@@ -438,21 +445,21 @@ películas más recientes que el año 2023. Podemos hacer lo siguiente:
 
 Podemos anidar las funciones:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> list(map(lambda p: p[1], filter(lambda p: p[2]>2023, peliculas)))
    ['How to Train Your Dragon', 'The Substance']
 
 
 :python:`reduce()`
-^^^^^^^^^^^^^^^^^^^
+******************
 
 Otra función de incluida en el módulo ``functools`` es función
 :python:`reduce()`. Esta función es muy útil ya que **reduce** a un solo valor,
 una secuencia dada, aplicando una función acumuladora que toma como argumentos
 dos argumentos sucesivos. Esto se explica mejor con un ejemplo:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> from functools import reduce
    >>> parámetros = (0, 1, 2, 3, 4)
@@ -473,7 +480,7 @@ y así sucesivamente. Por ejemplo:
 Esta función no está incluida de fábrica, por esta razón
 debemos de importar el módulo (librería) que la incluye:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> from functools import reduce
 
@@ -481,7 +488,7 @@ A diferencia de los métodos anteriores :python:`reduce()` no
 regresa un **iterador**, regresa un solo valor.
 
 :python:`zip()`
-^^^^^^^^^^^^^^^
+***************
 
 Aunque la función :python:`zip()` no es considerada una función de orden
 superior ya que no toma como argumento o produce una función, si es una
@@ -489,7 +496,7 @@ función utilizada en el estilo de programación funcional, ya que nos
 evita crear ciclos y secuencias mutables para generar un nuevo iterable que
 es una combinación de varias secuencias. De nuevo, veamos un ejemplo:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> ids = [1, 3, 10]
    >>> años = [2025, 2013, 2025]
@@ -507,7 +514,7 @@ para consumir.
 
 Podemos volver a separar cada
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> z = list(zip(ids, titulos, años))
    >>> zip(*z)
@@ -518,13 +525,13 @@ Podemos volver a separar cada
 
 
 :python:`enumerate()`
-^^^^^^^^^^^^^^^^^^^^^
+*********************
 
 Por último tenemos a :python:`enumerate()`, esta función toma como parámetro
 una secuencia y para cada elemento regresa una tupla con un índice  como primer
 elemento:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> titulos = ['How to Train Your Dragon', 'Prisoners', 'The Substance']
    >>> for i, t in enumerate(titulos):
@@ -547,7 +554,7 @@ función recibe el argumento :python:`factor`, que será utilizado por la funci�
 (:python:`multiplica(x)`) para multiplicarla por :python:`x`.  Veamos el
 ejemplo:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> def clausura(factor):
    ...    def multiplica(x):
@@ -582,7 +589,7 @@ como si construyéramos funciones personalizadas con sus propios
 En Python incluso es posible ver los datos de las variables que recuerda cierta
 función:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> por_siete.__closure__[0].cell_contents
    7
@@ -652,25 +659,27 @@ código original de las funciones.
 Veamos un ejemplo sencillo de un decorador que imprime mensajes antes y después
 de ejecutar una función:
 
->>> def imprime(funcion):
-...     def funcion_imprime(*args, **kwargs):
-...         print(f"Iniciando {funcion.__name__}")
-...         resultado = funcion(*args, **kwargs)
-...         print(f"Fin de {funcion.__name__}")
-...         return resultado
-...     return funcion_imprime
-...
->>>
->>> @imprime
-... def hola(nombre):
-...     print(f"Hola {nombre}")
-...
->>>
->>> hola("Ana")
-Iniciando hola
-Hola Ana
-Fin de hola
->>>
+.. code-block:: pycon
+
+    >>> def imprime(funcion):
+    ...     def funcion_imprime(*args, **kwargs):
+    ...         print(f"Iniciando {funcion.__name__}")
+    ...         resultado = funcion(*args, **kwargs)
+    ...         print(f"Fin de {funcion.__name__}")
+    ...         return resultado
+    ...     return funcion_imprime
+    ...
+    >>>
+    >>> @imprime
+    ... def hola(nombre):
+    ...     print(f"Hola {nombre}")
+    ...
+    >>>
+    >>> hola("Ana")
+    Iniciando hola
+    Hola Ana
+    Fin de hola
+    >>>
 
 En este ejemplo, la función ``hola(nombre)`` no contiene ninguna instrucción relacionada
 con la impresión de mensajes. Toda la lógica adicional se encuentra encapsulada en el
@@ -729,7 +738,7 @@ En Haskell la sintáxis es muy parecida:
 
 Veamos como se define esta nueva lista por compresión en Python:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> [ x * x for x in range(1, 11) if not x % 2 ]
    [4, 16, 36, 64, 100]
@@ -757,28 +766,28 @@ Por ejemplo, en la sección anterior utilizamos las funciones :python:`map()` y 
 para extraer de nuestra lista de películas los títulos de las películas posteriores al año
 2023:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> list(map(lambda p: p[1], filter(lambda p: p[2]>2023, peliculas)))
    ['How to Train Your Dragon', 'The Substance']
 
 Utilizando listas por comprensión esto sería más conciso:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> [p[1] for p in peliculas if p[2] > 2023]
    ['How to Train Your Dragon', 'The Substance']
 
 Podemos desempacar los elementos para utilizar nombres en lugar de índices:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> [título for id, título, año, categoría, duración, rating  in peliculas if año > 2023]
    ['How to Train Your Dragon', 'The Substance']
 
 Las expresiones pueden incluir funciones:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> argumentos = ((1,2), (2,4), (3,4))
    >>> suma = lambda a, b: a + b
@@ -787,14 +796,14 @@ Las expresiones pueden incluir funciones:
 
 Se pueden anidar las comprensiones:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> [str(elemento*2) for elemento in [ a ** 2 for a in range(4) ] ]
    ['0', '2', '8', '18']
 
 También podemos utilizar la comprensión para cambiar de estructura:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> [{'id':id, 'título':título, 'año':año} for id, título, año, _, _, _  in peliculas][0]
    {'id': '1', 'título': 'How to Train Your Dragon', 'año': 2025}
@@ -806,7 +815,7 @@ En este ejemplo utilizamos algunos elementos nuevos:
 Utilizando comprensión podemos crear otras estructuras como diccionarios o
 conjuntos:
 
-.. code-block:: python
+.. code-block:: pycon
 
    >>> {x: x**2 for x in range(5)}       # diccionario por comprensión
    {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
