@@ -884,31 +884,10 @@ Resumen del capítulo
 
 En este capítulo revisamos el modelo de **programación orientada a objetos** en
 Python desde una perspectiva práctica: un lenguaje donde el paradigma OO es muy
-utilizado, pero no es obligatorio para escribir programas funcionales.
-
-En particular, estudiamos:
-
-- La relación entre **ámbitos**, **espacios de nombres** y **visibilidad**, como
-  base conceptual para entender encapsulamiento en módulos, funciones anidadas y
-  posteriormente en clases.
-
-- La definición de **clases** e **instancias**, así como el papel de ``self`` al
-  referirnos explícitamente a atributos y métodos de una instancia.
-
-- El uso de **métodos especiales** (por ejemplo ``__init__``, ``__str__`` y
-  ``__repr__``) y cómo el intérprete los invoca automáticamente al realizar
-  operaciones comunes como imprimir objetos o crear instancias.
-
-- La distinción entre *objeto* e *instancia* en Python y la noción de identidad,
-  tipo, estado y comportamiento.
-
-- La flexibilidad del lenguaje mediante **introspección** y la posibilidad de
-  agregar atributos o métodos dinámicamente, destacando que esta capacidad debe
-  usarse con cuidado en proyectos mantenibles.
-
-- La **herencia** simple y múltiple, así como la importancia de construir
-  constructores cooperativos utilizando ``super()`` y argumentos por *keywords*
-  para evitar ambigüedades.
-
-- Por último, el módulo `dataclasses` es muy práctico para definir clases de manera 
-  compacta.
+utilizado, pero no es obligatorio para escribir programas funcionales. Vimos la
+flexibilidad del lenguaje mediante **introspección** y la posibilidad de
+agregar atributos o métodos dinámicamente, destacando que esta capacidad debe
+usarse con cuidado en proyectos mantenibles. La **herencia** simple y múltiple,
+así como la importancia de construir constructores cooperativos utilizando
+``super()`` y argumentos por *keywords* para evitar ambigüedades. Por último,
+el módulo `dataclasses` es muy práctico para definir clases de manera compacta.
