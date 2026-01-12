@@ -4,23 +4,23 @@
 Bases de Datos
 ==============
 
-En esta sección nos centraremos en el amacenamiento de datos utilizando
-sistemas de bases de datos relacionales :cite:`codd1990relational` y no
-relacionales :cite:`strauch2011nosql`. Estos sistemas son de vital importancia
-para el desarrollo de aplicaciones, ya que la mayoría de ellas requiere una
+En esta sección nos centraremos en el **almacenamiento de datos** utilizando
+sistemas de bases de datos **relacionales** :cite:`codd1990relational` y **no
+relacionales** :cite:`strauch2011nosql`. Estos sistemas son fundamentales 
+para el desarrollo de aplicaciones modernas, ya que la mayoría de ellas requiere una
 gestión de datos escalable, eficiente y segura.
 
-Elegir entre una base de datos relacional o no relacional depende del tipo de
-aplicación que estemos desarrollando: Los sistemas relacionales como
-*PostgreSQL* :cite:`stonebraker1991postgres`, *MySQL*
-:cite:`grippa2021learning` o *Oracle* :cite:`greenwald2013oracle`, ofrecen un
-esquema estructurado y formal que ofrece integridad y consistencia de los
-datos, además de contar con un lenguaje estándar como SQL que nos permite hacer
-consultas complejas de manera eficiente. Por otro lado, los sistemas no
-relacionaes como *MongoDB* :cite:`banker2016mongodb` o *Redis*
-:cite:`eddelbuettel2022brief`, aportan flexibilidad en el manejo de estructuras
-de datos heterogéneas y una escalabilidad superior, lo que los hace
-especialmente adecuados para aplicaciones distribuidas con una gran demanda.
+Elegir entre utilizar una base de datos relacional o no relacional depende del
+tipo de aplicación. Los sistemas relacionales como *PostgreSQL*
+:cite:`stonebraker1991postgres`, *MySQL* :cite:`grippa2021learning` o *Oracle*
+:cite:`greenwald2013oracle`, ofrecen un **esquema estructurado** y formal que
+ofrece **integridad** y **consistencia** de los datos, además de un lenguaje
+estándar como SQL para expresar consultas complejas de manera eficiente. Por
+otro lado, los sistemas no relacionales como *MongoDB*
+:cite:`banker2016mongodb` o *Redis* :cite:`eddelbuettel2022brief`, aportan
+flexibilidad en el manejo de estructuras de datos heterogéneas y una
+escalabilidad superior, lo que los hace especialmente adecuados para
+aplicaciones distribuidas con una gran demanda.
 
 .. list-table:: Comparación entre bases de datos relacionales y no relacionales
    :widths: 25 35 40
@@ -34,7 +34,7 @@ especialmente adecuados para aplicaciones distribuidas con una gran demanda.
      - MongoDB, Redis
    * - Modelo de datos
      - Tablas con esquemas rígidos
-     - Documentos, clave-valor, documentos, gráfos, etc.
+     - Documentos, clave-valor, grafos, etc.
    * - Lenguaje de consulta
      - SQL
      - Específico de cada sistema
@@ -60,22 +60,23 @@ Bases de Datos relacionales
 ***************************
 
 Al igual que otros lenguajes, Python cuenta con una especificación estándar que
-deben seguir los desarrolladores de APIs para que los desarrolladores puedan
-interactuar con bases de datos sin preocuparse de los detalles específicos del
-sistema de base de datos.  Si ya haz desarrollado aplicaciones de datos en
-otros lenguajes probablemente haz utilizado librerías que siguen un estándar
+deben seguir los autores de APIs para que las aplicaciones puedan
+interactuar con bases de datos sin depender de los detalles específicos del
+sistema de base de datos.  Si ya has desarrollado aplicaciones de datos en
+otros lenguajes probablemente utilizaste librerías que siguen un estándar
 como ODBC (Open Database Connectivity), JDBC (Java Database Connectivity) o
 ADO.NET. Python por su parte cuenta con el Python Database API Specification
-v2.0 (PEP 249), dónde se especifica una interfaz estándar para conectar
+v2.0 (PEP 249), donde se especifica una interfaz estándar para conectar
 aplicaciones Python con sistemas de bases de datos relacionales.  Antes de
 entrar a los detalles veamos los componentes principales del estándar:
 
 **1. Constructores**
 
 Antes de empezar a interactuar con un servidor de base de datos, debemos
-establecer una conexión, normalmente utilizamon una cadena dónde enviamos
-los datos específicos de la conexión y una vez establecida la conexión nos
-regresa un objecto que representa una conexión específica.
+establecer una conexión, típicamente utilizamos una cadena de conexión con los
+parámetros necesarios para establecer la conexión (host, puerto, usuario,etc.).
+Una vez establecida la conexión nos regresa un objeto que representa una
+conexión específica.
 
 **2. Conexión**
 
@@ -156,12 +157,13 @@ ejemplificar el uso del lenguaje.
    :align: center
    :alt: Diseño Entidad-Relación para un directorio de películas.
 
-El modelo índica que una persona (``Persona``) puede tener varios roles
+El modelo indica que una persona (``Persona``) puede tener varios roles
 (``Rol``) en una película (``Película``) . Por ejemplo, el director de una
-película, también puede ser el productor o e incluso uno de los actores, para
-establecer esta relación tripartita se crea la entidad ``Credito``.  Además, una
-película puede pertenecer a varios géneros.  La información de las películas se
-pueden extraer de la plataforma "TMDB"
+película, también puede ser el productor o e incluso uno de los actores. Para
+modelar esta relación tripartita (persona–rol–película) se crea la entidad
+``Credito``.  Además, una película puede pertenecer a varios géneros.  La
+información de las películas se puede extraer de la plataforma "The Movie Data
+Base (TMDB)"
 
 Veamos ejemplos para SQLite y PostgreSQL:
 
@@ -176,13 +178,13 @@ No requiere configuración, ni opera como un servidor independiente. Sin
 embargo, a pesar de su simplicidad, ofrece un alto rendimiento y soporte
 completo de transacciones **ACID** :cite:`vossen2009acid`. La base de datos se
 puede almacenar en un solo archivo y su licencia de dominio público la hace
-ideal para ambiéntes académicos, pero también profesionales. Como se ejecuta en
-móviles y navegadores web, se considera ampleamente como el sistema de bases de
-datos más instalado en el mundo.
+ideal para ambientes académicos, pero también profesionales. Además, SQLite se
+utiliza en móviles y navegadores web, y suele describirse como uno de los
+motores de bases de datos más desplegados del mundo.
 
 La librería estándar de Python incluye el módulo :python:`sqlite3` que implementa
 el DB API 2.0 visto anteriormente. Como no tiene un proceso independiente
-utilizado como servidor y la base de datos es solemante un archivo, no requerimos
+utilizado como servidor y la base de datos es solamente un archivo, no requerimos
 instalar nada y solamente nos "conectamos" pasando como argumento el nombre del
 archivo con el que vamos a trabajar:
 
@@ -193,7 +195,7 @@ Antes de crear nuestra primera tabla, es importante conocer los tipos de datos
 de SQLite. SQLite es muy flexible en cuanto a los tipos de dato que utiliza e
 incluso es opcional indicar el tipo de dato. Es parecida a Python en el sentido
 de que el tipo de dato no se estipula a nivel de la columna, es más bien
-flexible y se almacena junto con cada valor. Sin embargo para la versión 3.37
+flexible y se almacena junto con cada valor. Sin embargo, a partir de la versión 3.37
 es posible indicar tipos de datos estríctos. Los tipos de datos de
 almacenamiento de SQLite son los siguientes:
 
@@ -246,15 +248,15 @@ El script agrega la información de dos películas:
 
 Si utilizas un editor de texto como Visual Studio Code, puedes instalar un
 **``plug-in`** para visualizar la base de datos que hemos creado. Por ejemplo,
-el SQLite Viwer de Forian Klampfer.
+el SQLite Viewer de Forian Klampfer.
 
 Una vez creada la base de datos, podemos conectarnos y hacer consultas
-utilizando el :python:`cursor.execute()`. El **cursor** ahora si contiene
+utilizando el :python:`cursor.execute()`. El **cursor** ahora sí contiene
 elementos ya que el comando es una consulta ``SELECT`` y puede regresar ciertos
 datos. Podemos iterar el cursor recuperando un registro a la vez con el método
 :python:`fetchone()`.
 
->>> res = cursor.execute("SELECT * FROM PERSONA");
+>>> res = cursor.execute("SELECT * FROM Persona");
 >>> res.fetchone()
 (190, 'Clint Eastwood')
 >>> res.fetchone()
@@ -266,7 +268,7 @@ todo el iterador:
 >>> import sqlite3 as sql
 >>> con = sql.connect("movies.sqlite")
 >>> cursor = con.cursor()
->>> res = cursor.execute("SELECT * FROM PERSONA");
+>>> res = cursor.execute("SELECT * FROM Persona");
 >>> res.fetchall() # Resultados recortados por espacio:
 [(190, 'Clint Eastwood'), (3265, 'Eli Wallach'), (4078, 'Lee Van Cleef'), (1442583, 'Park So-dam')]
 >>> res.fetchall() # El iterador ya se consumió en su totalidad
@@ -282,7 +284,7 @@ escapar los valores proporcionados antes de ejecutar el comando.
 
 Veamos un ejemplo de inserción utilizando una consulta parametrizada:
 
->>> cursor.execute("INSERT INTO PERSONA (ID, NOMBRE) VALUES (?, ?)", (999, "Nuevo Actor"))
+>>> cursor.execute("INSERT INTO Persona(ID, NOMBRE) VALUES (?, ?)", (999, "Nuevo Actor"))
 <sqlite3.Cursor object at 0x00000248C990C840>
 >>> con.commit()
 
@@ -292,7 +294,7 @@ los valores se pasan como una tupla.
 Si tenemos varios registros se puede utilizar ``executemany()``:
 
 >>> personas = [(1001, "Leonardo DiCaprio"), (1002, "Brad Pitt")]
->>> cursor.executemany("INSERT INTO PERSONA (ID, NOMBRE) VALUES (?, ?)", personas)
+>>> cursor.executemany("INSERT INTO Persona (ID, NOMBRE) VALUES (?, ?)", personas)
 <sqlite3.Cursor object at 0x00000248C990C840>
 >>> con.commit()
 
@@ -304,7 +306,7 @@ nuestro programa:
 ...
 >>> def insertar_persona(con, persona_id, nombre):
 ...     cur = con.cursor()
-...     cur.execute("INSERT INTO PERSONA (ID, NOMBRE) VALUES (?, ?)", (persona_id, nombre))
+...     cur.execute("INSERT INTO Persona (ID, NOMBRE) VALUES (?, ?)", (persona_id, nombre))
 ...     con.commit()
 ...
 >>> con = conectar_db("movies.sqlite")
@@ -338,8 +340,8 @@ automáticamente mediante un ``ROLLBACK``.
 
   con = sqlite3.connect(":memory:") # Creamos la base de datos en memoria
 
-  # Creamos una nueva tabla PERSONA,  con una restricción UNIQUE
-  con.execute("CREATE TABLE PERSONA(id INTEGER PRIMARY KEY, nombre VARCHAR UNIQUE)")
+  # Creamos una nueva tabla Persona,  con una restricción UNIQUE
+  con.execute("CREATE TABLE Persona(id INTEGER PRIMARY KEY, nombre VARCHAR UNIQUE)")
 
   # Si hay exito automáticamente se llama con.commit()
   with con:
@@ -351,14 +353,14 @@ automáticamente mediante un ``ROLLBACK``.
       with con:
           con.execute("INSERT INTO Persona(nombre) VALUES(?)", ("Leonardo DiCaprio",))
   except sqlite3.IntegrityError:
-      print("couldn't add Python twice")
+      print("No se puede insertar la persona dos veces.")
 
   # El objecto ``Connection`` utilizado solo compromete o deshace transacciones, no
   # cierra la conexión
   con.close()
 
 Resumen de capítulo
--------------------
+********************
 
 En este capítulo revisamos el papel de los sistemas de bases de datos en el
 desarrollo de aplicaciones modernas, comparando enfoques **relacionales (SQL)**

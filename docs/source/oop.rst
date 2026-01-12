@@ -761,6 +761,123 @@ método ``.mro()``. Por ejemplo:
 
    Estudiante_Empleado.mro()
 
+El módulo ``dataclasses``
+-------------------------
+
+En algunas situaciones queremos trabajar con estructuras de datos que encapsulen
+atributos de manera compacta y clara, de forma similar a como utilizaríamos una
+tupla, pero con nombres asociados a cada campo. Para estos casos, Python incluye
+el módulo ``dataclasses``, el cual permite definir clases de manera concisa
+utilizando el decorador ``@dataclass``.
+
+Este módulo agrega automáticamente métodos especiales como ``__init__`` y
+``__repr__``, entre otros, reduciendo considerablemente la cantidad de código
+necesario. Esta funcionalidad se describe en la
+`PEP 557 <https://peps.python.org/pep-0557/>`_.
+
+Al definir los atributos de una *dataclass* se utilizan anotaciones de tipo.
+Veamos un ejemplo sencillo:
+
+.. code-block:: pycon
+
+   >>> from dataclasses import dataclass
+   >>> @dataclass
+   ... class Empleado:
+   ...     id: int
+   ...     nombre: str
+   ...     salario: float
+   ...     horas: int = 8
+   ...
+   ...     def salario_diario(self) -> float:
+   ...         return self.salario * self.horas
+   ...
+   >>> ana = Empleado(1, 'Ana Lee', 34.23)
+   >>> ana.salario_diario()
+   273.84
+
+En este caso, Python genera automáticamente el constructor utilizando los
+atributos definidos en la clase. Conceptualmente, el método generado es
+equivalente a lo siguiente:
+
+.. code-block:: python
+
+   def __init__(self, id: int, nombre: str, salario: float, horas: int = 8):
+       self.id = id
+       self.nombre = nombre
+       self.salario = salario
+       self.horas = horas
+
+También se agrega automáticamente el método ``__repr__``, lo que facilita la
+inspección del objeto:
+
+.. code-block:: pycon
+
+   >>> ana
+   Empleado(id=1, nombre='Ana Lee', salario=34.23, horas=8)
+
+El módulo ``dataclasses`` incluye funciones auxiliares útiles, por ejemplo para
+representar los objetos como tuplas:
+
+.. code-block:: pycon
+
+   >>> from dataclasses import astuple
+   >>> astuple(ana)
+   (1, 'Ana Lee', 34.23, 8)
+
+o como diccionarios:
+
+.. code-block:: pycon
+
+   >>> from dataclasses import asdict
+   >>> asdict(ana)
+   {'id': 1, 'nombre': 'Ana Lee', 'salario': 34.23, 'horas': 8}
+
+Definición avanzada de campos
+-----------------------------
+
+Cada atributo puede definirse de manera más detallada utilizando la función
+``field()``. Por ejemplo, el parámetro ``default_factory`` recibe un *callable*
+sin argumentos que se ejecuta para generar el valor por defecto del campo:
+
+.. code-block:: python
+
+   from dataclasses import dataclass, field
+
+   @dataclass
+   class MisEnteros:
+       mi_lista: list[int] = field(default_factory=list)
+
+En este caso, se llama internamente al constructor ``list()`` cada vez que se crea
+una nueva instancia, evitando problemas comunes con valores mutables compartidos.
+
+Otros parámetros de ``field()`` permiten una mayor flexibilidad. Por ejemplo:
+
+.. code-block:: python
+
+   from dataclasses import dataclass, field
+
+   @dataclass
+   class Alumno:
+       id: int = field(repr=False)
+       nombre: str = field(kw_only=True)
+       correo: str = field(init=False)
+
+       def __post_init__(self):
+           self.correo = f'{self.nombre.lower()}@tijuana.tecnm.mx'
+
+En este ejemplo:
+
+- El campo ``id`` no se muestra al imprimir el objeto, utilizando
+  ``repr=False``.
+- El campo ``nombre`` debe proporcionarse explícitamente como argumento con
+  nombre, debido a ``kw_only=True``.
+- El campo ``correo`` no se incluye en el constructor generado automáticamente,
+  ya que se define con ``init=False``.
+
+El método especial ``__post_init__`` se ejecuta inmediatamente después de que el
+objeto ha sido creado. Esto permite inicializar atributos que dependen de otros
+campos ya existentes, como en este caso el correo electrónico, que se construye
+a partir del nombre del alumno.
 
 Resumen del capítulo
 --------------------
@@ -793,3 +910,5 @@ En particular, estudiamos:
   constructores cooperativos utilizando ``super()`` y argumentos por *keywords*
   para evitar ambigüedades.
 
+- Por último, el módulo `dataclasses` es muy práctico para definir clases de manera 
+  compacta.

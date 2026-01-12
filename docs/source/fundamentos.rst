@@ -332,7 +332,7 @@ indentado utilizando cuatro espacios. El bloque termina con la única instrucci�
 operación :python:`a + b`, la suma de los dos números ``a`` y ``b``.
 
 Ejecución de funciones
-^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
 
 
 Una vez definida la función, podemos ejecutarla de esta manera, utilizando
@@ -374,31 +374,6 @@ continuación?
 El resultado sería :python:`'hola mundo'`, la concatenación de las dos cadenas
 de entrada. Esto resalta el punto que habíamos considerado anteriormente: no
 debemos asumir que los nombres estarán atados a objetos de cierto tipo.
-
-Anotación de tipos
-^^^^^^^^^^^^^^^^^^
-
-
-Desde la versión 2.5 se le agregó la anotación de tipos (*type hints* o *type
-annotations*). Estas anotaciones nos permiten especificar como en otros
-lenguajes, el tipo de dato de los parámetros y el del valor que regresan las
-funciones. El problema es que no son obligatorias y no tienen un efecto en
-tiempo de ejecución. Python no vigila que los datos enviados o regresados sean
-los correctos. Ejemplo:
-
-.. code-block:: python
-
-   def suma(a: int, b: int) -> int:
-       return a + b
-
-Aquí, ``a`` y ``b`` se anotan como enteros (:python:`int`), y ``-> int`` indica
-que la función devuelve un entero. Estas anotaciones son utilizadas por
-herramientas de edición y librerías para alertarnos de manera estática de
-posibles errores en nuestro código. En otra sección veremos el uso del método
-:python:`type()` incluido de fábrica para inspeccionar en tiempo de ejecución el
-tipo de dato de una variable, lo que nos permitirá verificar que los parámetros
-sean del tipo correcto. Por lo pronto, puedes investigar este método e intentar
-validar que solo se reciban y regresen valores enteros.
 
 Las funciones siempre regresan un valor
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -460,8 +435,88 @@ Enviamos a la función :python:`aplica(f, a)` la función `:python:`por_tres(a)`
 resultado el resultado de la función, en este caso :python:`6 * 3`. Este tema lo vamos a
 retomar cuando veamos el tema de programación funcional.
 
+Anotación de tipos
+------------------
+
+A partir de Python 3.5 se agregó un sistema de *anotación de tipos* (*type
+hints* o *type annotations*), que nos permite especificar, de manera opcional,
+el tipo de dato de los parámetros de una función y el tipo de dato del valor
+que esta regresa. La sintaxis fue estandarizada en la PEP 484 y desde entonces
+se ha ampliado con diversas propuestas adicionales como el `PEP 526 <https://peps.python.org/pep-0526/>`_.
+
+Estas anotaciones no son obligatorias y no tienen efecto directo en tiempo de
+ejecución. Es decir, Python no valida automáticamente que los argumentos
+recibidos ni el valor regresado coincidan con los tipos anotados. Su principal
+objetivo es servir como apoyo para:
+
+* Herramientas de análisis estático.
+* Editores de código y entornos de desarrollo.
+* Generación de documentación automática.
+* Mejorar de la legibilidad y mantenibilidad del código.
+
+Veamos un ejemplo sencillo:
+
+.. code-block:: python
+
+   def suma(a: int, b: int) -> int:
+       return a + b
+
+En este caso:
+
+* ``a`` y ``b`` están anotados como enteros (int).
+* ``-> int`` indica que la función debería regresar un entero.
+
+Sin embargo, Python no impide que se invoque la función con argumentos de otro
+tipo:
+
+.. code-block:: python
+
+   suma("hola", " mundo")
+
+El resultado será la concatenación de las cadenas, sin que el intérprete genere
+ningún error. Esto refuerza la idea de que Python sigue siendo un lenguaje
+dinámicamente tipado, aun cuando utilicemos anotaciones de tipos.
+
+Las anotaciones son aprovechadas principalmente por herramientas externas como
+analizadores estáticos y *linters*, que pueden advertirnos antes de ejecutar el
+programa sobre posibles inconsistencias de tipos.
+
+Inspección de tipos en tiempo de ejecución
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Si necesitamos verificar el tipo de dato en tiempo de ejecución, Python incluye
+de fábrica la función ``type()``, que nos permite inspeccionar el tipo de un
+objeto:
+
+.. code-block:: python
+
+   def suma(a: int, b: int) -> int:
+       if type(a) is not int or type(b) is not int:
+           raise TypeError("Los parámetros deben ser enteros")
+       return a + b
+
+Este tipo de validación es completamente opcional y debe usarse con criterio, ya
+que introducir demasiadas verificaciones explícitas puede ir en contra de la
+filosofía flexible del lenguaje. 
+
+.. important::
+
+   Las anotaciones de tipos **no imponen restricciones en tiempo de ejecución**.
+   Python no valida que los argumentos recibidos ni el valor regresado por una
+   función coincidan con los tipos anotados. El uso de anotaciones no cambia el
+   carácter dinámico del lenguaje; únicamente proporciona información adicional
+   para el programador y las herramientas de desarrollo.
+
+.. note::
+
+   Más adelante vamos a utilizar **anotaciones de tipos** para describir estructuras
+   de datos más complejas, como listas de elementos homogéneos, diccionarios
+   clave-valor y *dataclasses*. En estos casos, las anotaciones se vuelven
+   especialmente útiles para documentar la intención del código y facilitar
+   su mantenimiento.
+
 Colecciones
---------------------------
+-----------
 
 .. sidebar:: Objetos inmutables y mutables.
 
@@ -472,9 +527,8 @@ Colecciones
 
 El pionero de la computación y autor del lenguaje Pascal, `Niklaus Wirth`_
 escribió un libro titulado **Algoritmos + Estructuras de Datos = Programas**, la
-idea básica del título sigue siendo muy poderosa y vigente:
-
-   "Un buen programa es el resultado de un algoritmo eficaz combinado con estructuras de datos adecuadas."
+idea básica del título sigue siendo muy poderosa y vigente: "Un buen programa es el resultado de 
+un algoritmo eficaz combinado con estructuras de datos adecuadas."
 
 Como programadores debemos saber elegir correctamente las estructuras de datos
 que vamos a utlizar en nuestros programas ya que esto puede simplificar o
@@ -961,7 +1015,6 @@ como clave.
 
 
 .. figure:: ./images/hash.png
-   :scale: 80 %
    :alt: Ejemplo de una `función hash <https://es.wikipedia.org/wiki/Funci%C3%B3n_hash>`__ .
 
 Funciones *Hash*
@@ -1105,6 +1158,40 @@ Diccionarios
    - Recuperación del valor utilizando la clave es muy rápida, en promedio O(1).
    - Insertar o eliminar un valor es muy rápido O(1) en promedio.
    - Iteración secuencial es también rápida ya que cada elemento es O(1) asimtóticamente igual que las listas, pero en la práctica las listas son más rápidas para esta tarea.
+
+
+Anotaciones de tipos en colecciones
+------------------------------------
+
+Las anotaciones de tipos también pueden describir **colecciones de datos**. Por
+ejemplo, una lista de números enteros:
+
+.. code-block:: python
+
+   numeros: list[int] = [1, 2, 3, 4, 5]
+
+La anotación ``list[int]`` indica que la lista debería contener únicamente
+valores enteros.
+
+Las tuplas pueden anotarse especificando el tipo de cada uno de sus elementos,
+lo cual es muy útil cuando la tupla representa una estructura fija:
+
+.. code-block:: python
+
+   punto: tuple[float, float] = (3.5, 4.2)
+
+En el caso de los diccionarios, se puede indicar el tipo de las claves y el tipo
+de los valores:
+
+.. code-block:: python
+
+   alumno: dict[str, int] = {
+       "edad": 21,
+       "semestre": 5
+   }
+
+Aquí se indica que las claves del diccionario son cadenas de caracteres y los
+valores son enteros.
 
 
 Expresiones lógicas
