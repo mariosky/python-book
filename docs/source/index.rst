@@ -47,6 +47,7 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
    fuzzy
    ga
    distribuido
+   web
 
 .. raw:: latex
 
@@ -62,10 +63,9 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
    instalación
    controlador
    controlpso
-   bibliografía
 
-.. raw:: latex
-
-   \backmatter
+.. bibliography:: biblio.bib
+    :style: plain
+    :all:
 
 
