@@ -24,7 +24,7 @@ pillow==11.3.0
 pybtex==0.25.1
 pybtex-docutils==1.0.3
 pydata-sphinx-theme==0.15.4
-Pygments==2.19.1
+Pygments==2.20.0
 PyYAML==6.0.2
 requests==2.32.4
 restructuredtext_lint==1.4.0
