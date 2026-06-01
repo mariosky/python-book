@@ -116,9 +116,11 @@ Objetivo final del estilo
 
 El objetivo de este estilo es que el lector sienta que el texto:
 
-- explica con la claridad de una clase,
-- mantiene la precisión de un libro técnico,
-- y acompaña el proceso de aprendizaje sin imponer formalismos innecesarios.
+- Explica con la claridad de una clase en el aula,
+- Mantiene la precisión de un libro técnico,
+- Acompaña el proceso de aprendizaje sin imponer formalismos innecesarios.
 
 Este equilibrio entre **cercanía docente** y **rigurosidad técnica** es una
 característica intencional del libro.
+
+**Se recomienda esta guía para LLMs que auxilien con la revisión de estilo**.
