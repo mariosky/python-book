@@ -1,182 +1,130 @@
-# pyBook
+# Python Aplicado
 
-Dependencias
+**Guía práctica para programación, análisis de datos, inteligencia computacional y servicios web.**
 
-Python
-  - Crear ambiente virtual e instalar `requirements.txt`.
-
-Perl 
-  Windows: https://strawberryperl.com/
-
-LaTeX  https://www.latex-project.org/get/#tex-distributions
+📖 Sitio web del libro: https://python.mariosky.dev/
 
 ---
 
-## Capítulo 1: **Introducción a Python**
+## Acerca del libro
 
-**Objetivo:** Familiarizar al lector con la instalación y configuración de
-Python en distintos sistemas operativos, incluyendo el uso de Jupyter Notebooks
-como herramienta interactiva de programación y otras herramientas similares.
+**Python Aplicado** es un libro dirigido a estudiantes, profesores y profesionales con experiencia previa en programación que desean actualizarse en el ecosistema Python y utilizarlo para resolver problemas reales de ingeniería y ciencias computacionales.
 
-- **Secciones:** Instalación Básica, Múltiples versiones, Distribuciones,
-  Jupyter Notebooks y Google Colaboratory
-- **Avance breve:** Paso a paso de instalación y configuración.
-- **Ilustraciones:** Capturas de pantalla del proceso de instalación y
-  configuración de Jupyter Notebooks.
+El contenido combina fundamentos del lenguaje con aplicaciones modernas en análisis de datos, aprendizaje automático, computación inteligente, cómputo distribuido y desarrollo de servicios web.
+
+El objetivo no es únicamente enseñar la sintaxis del lenguaje, sino mostrar cómo Python puede utilizarse para construir soluciones completas en distintos dominios de aplicación.
 
 ---
 
-## Capítulo 2: **Fundamentos del Lenguaje Python**
+## Contenido
 
-**Objetivo:** Introducir los conceptos básicos del lenguaje Python, cubriendo
-estructuras de datos fundamentales.
-
-- **Secciones:** Introducción al lenguaje, Estructuras (Secuenciales,
-  Diccionarios, Conjuntos)
-- **Avance breve:** Ejemplos de sintaxis y operaciones básicas.
-- **Ilustraciones:** Diagramas de flujo para estructuras secuenciales y
-  representaciones visuales de diccionarios y conjuntos.
-
----
-
-## Capítulo 3: **Manipulación de Cadenas de Texto**
-
-**Objetivo:** Enseñar técnicas para trabajar con cadenas de texto en Python,
-incluyendo métodos comunes y manipulación avanzada.
-
-- **Secciones:** Cadenas de Texto
-- **Avance breve:** Métodos para análisis y transformación de texto.
-- **Ilustraciones:** Ejemplos de manipulación de cadenas y salidas de texto
-  formateadas.
+1. Fundamentos del lenguaje
+2. Programación Funcional
+3. Procesamiento de Texto
+4. Manejo de Archivos
+5. Programación Orientada a Objetos en Python
+6. Módulos y Paquetes
+7. Ambientes Virtuales
+8. Bases de Datos
+9. Estructuras de Datos para Análisis Numérico y Tabular
+10. Aprendizaje Automático con Scikit-learn
+11. Sistemas Difusos
+12. Metaheurísticas Basadas en Poblaciones
+13. Escalado Computacional en Python
+14. Servicios Web con FastAPI
 
 ---
 
-## Capítulo 4: **Programación Funcional**
+## Audiencia
 
-**Objetivo:** Explorar los principios de la programación funcional en Python, incluyendo funciones de orden superior y expresiones lambda.
+Este libro está dirigido a:
 
-- **Secciones:** Programación Funcional
-- **Avance breve:** Ejemplos de funciones lambda y map/reduce.
-- **Ilustraciones:** Comparación visual entre programación imperativa y funcional.
-
----
-
-## Capítulo 5: **Manejo de Archivos**
-
-**Objetivo:** Proporcionar las herramientas para leer, escribir y manipular archivos en Python.
-
-- **Secciones:** Archivos
-- **Avance breve:** Ejemplos de lectura/escritura en archivos de texto.
-- **Ilustraciones:** Diagramas de flujo de operaciones de archivo.
+* Estudiantes de ingeniería e informática.
+* Estudiantes de ciencia de datos e inteligencia artificial.
+* Profesores e investigadores.
+* Desarrolladores de software.
+* Profesionales que desean incorporar Python a sus proyectos.
 
 ---
 
-## Capítulo 6: **Programación Orientada a Objetos (OOP)**
+## Temas Destacados
 
-**Objetivo:** Introducir los principios de OOP en Python, cubriendo clases, herencia y encapsulación.
-
-- **Secciones:** Programación Orientada a Objetos
-- **Avance breve:** Ejemplos de creación de clases y herencia.
-- **Ilustraciones:** Diagramas de clases y relaciones entre objetos.
-
----
-
-## Capítulo 7: **Módulos y Librerías de Python**
-
-**Objetivo:** Explorar módulos estándar y librerías de terceros que amplían las capacidades de Python.
-
-- **Secciones:** Módulos estándar, Otros módulos, Requests, Beautiful Soup
-- **Avance breve:** Ejemplos de uso de módulos estándar y librerías de scraping.
-- **Ilustraciones:** Ejemplos de resultados con Beautiful Soup y Requests.
+* Programación avanzada en Python.
+* Análisis de datos.
+* Aprendizaje automático.
+* Inteligencia computacional.
+* Sistemas difusos.
+* Computación evolutiva.
+* Computación distribuida.
+* Desarrollo de APIs y servicios web.
+* Despliegue de aplicaciones modernas.
 
 ---
 
-## Capítulo 8: **Manejo de Ambientes Virtuales**
+## Filosofía del Libro
 
-**Objetivo:** Introducir la creación y gestión de ambientes virtuales para proyectos Python.
+Es común que programadores se interesen por Python al enfrentar un proyecto o problema específico para el cual ya existe una librería o una base de código que resuelve una parte importante del problema central.
 
-- **Secciones:** Ambientes Virtuales
-- **Avance breve:** Pasos para crear y activar ambientes virtuales.
-- **Ilustraciones:** Diagramas de flujo para la configuración de ambientes.
+Algunos ejemplos incluyen:
 
----
+* Uso de APIs de inteligencia artificial.
+* Procesamiento de imágenes.
+* Interacción con servicios en la nube.
+* Desarrollo de aplicaciones web.
+* Construcción de rastreadores web.
+* Simulación de sistemas.
+* Análisis y visualización de datos.
 
-## Capítulo 9: **Bases de Datos Relacionales en Python**
+Python ofrece librerías, ejemplos y comunidades activas para abordar este tipo de problemas.
 
-**Objetivo:** Proveer al lector los conocimientos necesarios para trabajar con bases de datos SQL.
-
-- **Secciones:** SQLite, PostgreSQL, ORM
-- **Avance breve:** Ejemplos de consultas y conexión a bases de datos SQL.
-- **Ilustraciones:** Diagramas de tablas y relaciones.
-
----
-
-## Capítulo 10: **Bases de Datos NoSQL**
-
-**Objetivo:** Introducir los conceptos y herramientas para trabajar con bases de datos NoSQL.
-
-- **Secciones:** Redis, MongoDB, S3
-- **Avance breve:** Ejemplos de operaciones CRUD en NoSQL.
-- **Ilustraciones:** Visualización de documentos JSON y flujos de datos.
+Este libro busca servir como una guía práctica para que programadores con experiencia previa puedan incorporar rápidamente Python a sus proyectos y aprovechar las herramientas modernas disponibles en su ecosistema.
 
 ---
 
-## Capítulo 11: **Análisis de Datos con Python**
+## Estado del Proyecto
 
-**Objetivo:** Capacitar al lector en el uso de librerías para análisis y visualización de datos.
+La versión correspondiente al periodo sabático **2025–2026** se encuentra archivada como una edición histórica del libro.
 
-- **Secciones:** Numpy, Pandas, Matplotlib
-- **Avance breve:** Ejemplos de manipulación y visualización de datos.
-- **Ilustraciones:** Gráficos y visualizaciones de datos.
+El material continúa en desarrollo y podrá incorporar nuevos capítulos, ejemplos, ejercicios y contribuciones futuras.
 
----
+### Versiones
 
-## Capítulo 12: **Introducción al Machine Learning**
-
-**Objetivo:** Enseñar los fundamentos de machine learning, desde el preprocesamiento hasta las redes neuronales.
-
-- **Secciones:** Scikit-Learn, Preprocesamiento, Redes Neuronales
-- **Avance breve:** Ejemplos de entrenamiento y evaluación de modelos.
-- **Ilustraciones:** Diagramas de redes neuronales y resultados de modelos.
+* `sabatico-2026-final` — Versión final entregada durante el periodo sabático.
+* `main` — Desarrollo activo del libro.
 
 ---
 
-## Capítulo 13: **Computación Inteligente**
+## Reconocimientos
 
-**Objetivo:** Introducir técnicas avanzadas de inteligencia computacional, como lógica difusa y simulaciones.
-
-- **Secciones:** Lógica Difusa (Scikit Fuzzy), Simulación (ODE), Control Difuso
-- **Avance breve:** Ejemplos de lógica difusa y simulaciones.
-- **Ilustraciones:** Representaciones gráficas de sistemas difusos.
+Este libro fue elaborado durante el ejercicio del periodo sabático autorizado por el **Tecnológico Nacional de México (TecNM)**.
 
 ---
 
-## Capítulo 14: **Cómputo Evolutivo**
+## Autor
 
-**Objetivo:** Explorar métodos de optimización evolutiva como algoritmos genéticos y PSO.
+**José Mario García Valdez**
 
-- **Secciones:** GA, PSO
-- **Avance breve:** Ejemplos de optimización usando algoritmos evolutivos.
-- **Ilustraciones:** Flujos de algoritmos genéticos y PSO.
+Profesor e investigador en Ciencias Computacionales.
 
----
+Áreas de interés:
 
-## Capítulo 15: **Cómputo Distribuido en Python**
-
-**Objetivo:** Introducir los principios de computación distribuida y cómo implementarlos en Python.
-
-- **Secciones:** Cómputo Distribuido
-- **Avance breve:** Ejemplos de procesamiento distribuido.
-- **Ilustraciones:** Diagramas de arquitectura distribuida.
+* Inteligencia Artificial
+* Aprendizaje Automático
+* Computación Distribuida
+* Servicios Web
+* Ciencia de Datos
 
 ---
 
-## Capítulo 16: **Desarrollo de Servicios Web**
+## Sitio Web
 
-**Objetivo:** Proporcionar los conocimientos para desarrollar y desplegar servicios web usando Python.
-
-- **Secciones:** FastAPI, Django
-- **Avance breve:** Ejemplos de creación de APIs y aplicaciones web.
-- **Ilustraciones:** Estructuras de APIs y diagramas de flujo de aplicaciones.
+https://python.mariosky.dev/
 
 ---
+
+## Licencia
+
+Pendiente de definir.
+
+Se recomienda utilizar una licencia abierta para el texto y una licencia permisiva para los ejemplos de código incluidos en el libro.
+
