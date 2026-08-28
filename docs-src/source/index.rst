@@ -1,17 +1,29 @@
-.. pyBook documentation master file, created by
-   sphinx-quickstart on Mon Jun  9 07:08:10 2025.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Python para estudiantes de computación
+=======================================
 
-Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo Distribuido y Servicios Web
-========================================================================================================
+Análisis de Datos, Computación Inteligente, Cómputo Distribuido y Servicios Web
+-------------------------------------------------------------------------------
+
+**José Mario García Valdez**
+
+Este libro presenta los fundamentos del lenguaje Python y su aplicación al
+análisis de datos, la computación inteligente, el cómputo distribuido y el
+desarrollo de servicios web. Está dirigido principalmente a estudiantes de
+computación que desean avanzar desde los conceptos básicos hasta la creación
+de soluciones prácticas.
+
+.. image:: images/portada.png
+   :alt: Portada de Python para estudiantes de computación
+   :align: center
+   :width: 420px
+
 .. raw:: latex
    
    \frontmatter
 
 .. toctree::
-   :hidden:
-   :glob:
+   :maxdepth: 1
+   :caption: Presentación
 
    contribución_académica
    agradecimientos
@@ -26,13 +38,10 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
     \mainmatter
 
 .. toctree::
-   :hidden:
-   :includehidden:
    :numbered: 2
    :maxdepth: 4
-   :caption: Contenido:
+   :caption: Contenido
    :name: mastertoc
-   :glob:
 
    fundamentos
    funcional
@@ -54,18 +63,11 @@ Python para estudiantes: Análisis de Datos, Computación Inteligente, Cómputo 
    \appendix
 
 .. toctree::
-   :hidden:
    :numbered: 4
    :maxdepth: 4
-   :caption: Apéndice
-   :glob:
+   :caption: Apéndices
 
    instalación
    controlador
    controlpso
-
-.. bibliography:: biblio.bib
-    :style: plain
-    :all:
-
-
+   bibliografía
