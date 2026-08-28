@@ -1,16 +1,13 @@
 Python para estudiantes de computación
 =======================================
+**J Mario García Valdez**
 
-Análisis de Datos, Computación Inteligente, Cómputo Distribuido y Servicios Web
--------------------------------------------------------------------------------
-
-**José Mario García Valdez**
-
-Este libro presenta los fundamentos del lenguaje Python y su aplicación al
-análisis de datos, la computación inteligente, el cómputo distribuido y el
-desarrollo de servicios web. Está dirigido principalmente a estudiantes de
-computación que desean avanzar desde los conceptos básicos hasta la creación
-de soluciones prácticas.
+Este libro presenta los fundamentos del lenguaje Python y su aplicación en
+áreas como el análisis de datos, la computación inteligente, el cómputo
+distribuido y el desarrollo de servicios web. Está dirigido principalmente a
+**estudiantes de computación** con algún conocimiento previo de programación
+que desean realizar un repaso rápido del lenguaje, desde los conceptos básicos
+hasta el desarrollo de soluciones prácticas de ciencias de la computación.
 
 .. image:: images/portada.png
    :alt: Portada de Python para estudiantes de computación
