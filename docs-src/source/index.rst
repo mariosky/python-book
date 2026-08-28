@@ -39,7 +39,7 @@ de soluciones prácticas.
 
 .. toctree::
    :numbered: 2
-   :maxdepth: 4
+   :maxdepth: 1
    :caption: Contenido
    :name: mastertoc
 
@@ -64,7 +64,7 @@ de soluciones prácticas.
 
 .. toctree::
    :numbered: 4
-   :maxdepth: 4
+   :maxdepth: 1
    :caption: Apéndices
 
    instalación
