@@ -1,14 +1,12 @@
-# Python Aplicado
-
+# Python para estudiantes de computación
 **Guía práctica para programación, análisis de datos, inteligencia computacional y servicios web.**
 
-📖 Sitio web del libro: https://python.mariosky.dev/
-
+[Libro en HTML](https://mariosky.github.io/python-book/index.html)
 ---
 
 ## Acerca del libro
 
-**Python Aplicado** es un libro dirigido a estudiantes, profesores y
+Este es un libro dirigido a estudiantes, profesores y
 profesionales con experiencia previa en programación que desean actualizarse en
 el ecosistema **Python** y utilizarlo para resolver problemas reales de ingeniería
 y ciencias computacionales.
