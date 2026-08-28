@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Python para estudiantes'
-copyright = '2025, José Mario García Valdez'
+#copyright = '2025, José Mario García Valdez'
 author = 'José Mario García Valdez'
 
 # -- General configuration ---------------------------------------------------
