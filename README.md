@@ -101,14 +101,8 @@ Profesor e investigador en Ciencias Computacionales.
 * Servicios Web
 * Ciencia de Datos
 
----
 
-## Sitio Web
 
-https://python.mariosky.dev/
 
----
 
-## Licencia
 
-Los derechos de autoría 
