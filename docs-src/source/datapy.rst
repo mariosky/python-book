@@ -676,7 +676,109 @@ Esto nos da:
 
 Aquí ``axis=0`` indica que la operación se aplica columna por columna, lo que
 corresponde a obtener el promedio de cada actividad considerando a todos los
-alumnos.
+alumnos. Para atacar problemas más complejos, es importante enteder muy bien el
+rol de los ejes (el parámetro ``axis``) cuando cambiamos de número de
+dimensiones. Esto se facilita con una ayuda visual. 
+
+
+Una interpretación visual de las dimensiones
+---------------------------------------------
+
+Una forma sencilla de visualizar los ejes de un arreglo de NumPy es pensar
+primero en renglones y columnas y, posteriormente, en páginas de un libro.
+Incluso al agregar más dimensiones podríamos hablar luego de estántes, libreros,
+bibliotecas, etc. Veamos por lo pronto el caso de tres dimensiones.
+
+
+.. figure:: ./images/dim_axis.png
+   :align: center
+   :alt: Analogía de Libro en NumPy.
+
+Un arreglo unidimensional solamente tiene un eje, ``axis 0``. Por ejemplo:
+
+.. code-block:: python
+
+   a = np.array([123, 20, 18])
+
+   a.shape
+   # (3,)
+
+Este arreglo no es formalmente un renglón ni una columna: simplemente es una
+secuencia de tres elementos. Sin embargo, podemos representarlo de distintas
+formas dependiendo del contexto.
+
+En análisis de datos es común visualizarlo horizontalmente:
+
+.. code-block:: text
+
+   [123, 20, 18]
+
+mientras que en matemáticas un vector suele representarse verticalmente:
+
+.. code-block:: text
+
+   [123,
+     20,
+     18]
+
+En ambos casos, el arreglo sigue teniendo una sola dimensión y su único eje es
+``axis 0``.
+
+Cuando agregamos una segunda dimensión, aparecen dos ejes:
+
+.. code-block:: text
+
+   shape = (6, 3)
+            │  │
+            │  └── columnas, axis 1
+            └───── renglones, axis 0
+
+Por ejemplo, una imagen simplificada con seis píxeles RGB puede representarse
+como:
+
+.. code-block:: python
+
+   imagen = np.array([
+       [123,  20,  18],
+       [200, 180, 170],
+       [ 10, 220,  30],
+       [  5,  10, 200],
+       [250, 250, 250],
+       [ 80,  80,  80]
+   ])
+
+   imagen.shape
+   # (6, 3)
+
+Aquí ``axis 0`` recorre los renglones y ``axis 1`` recorre las columnas.
+
+Para visualizar un arreglo tridimensional podemos imaginar un libro formado
+por varias páginas. Cada página contiene una matriz de renglones y columnas:
+
+.. code-block:: text
+
+   shape = (2, 6, 3)
+            │  │  │
+            │  │  └── columnas, axis 2
+            │  └───── renglones, axis 1
+            └──────── páginas, axis 0
+
+Así, para un arreglo tridimensional podemos usar la interpretación:
+
+.. code-block:: text
+
+   arreglo[página, renglón, columna]
+
+Esta representación es especialmente útil para comprender operaciones como
+``np.newaxis`` y *broadcasting*, ya que agregar un nuevo eje equivale a agregar
+un nuevo nivel de organización al arreglo.
+
+.. important::
+
+   Los nombres *renglón*, *columna* y *página* son una ayuda visual para
+   interpretar los ejes. NumPy solamente conoce ejes numerados como
+   ``axis 0``, ``axis 1``, ``axis 2``, etc. El significado de cada eje depende
+   del problema que estemos modelando.
 
 Ejemplo: Cuantización Vectorial de Colores RGB
 -----------------------------------------------
@@ -723,7 +825,25 @@ Queremos asignar cada píxel de la imagen al color de la paleta *más cercano*
 usando la distancia euclidiana.
 
 Primero calculamos la diferencia entre cada píxel y cada color de la paleta.
-Utilizamos *broadcasting* para evitar ciclos explícitos:
+Queremos utilizar *broadcasting* para evitar ciclos explícitos y para esto debemos 
+agregar nuevos ejes a cada arreglo:
+
+Para las imágenes queremos separar cada pixel de la imagen en una página diferente, para despues 
+realizar una operacion con todas las entradas de paleta RGB. Esto lo hacemos con la instrucción:
+
+>>> imagen[:, np.newaxis, :]
+
+En el caso de la paleta RGB vamos a pasarla a 3D agregando nuestro arreglo 2D a la primera 
+página del arreglo 3D:
+
+>>> paleta[np.newaxis, :, :]
+
+Gráficamente:
+
+.. figure:: ./images/imagen_paleta.png
+   :align: center
+   :alt: Preparación para Broadcasting para los arreglos ``imagen`` y ``paleta``.
+
 
 .. code-block:: python
 
@@ -736,6 +856,13 @@ El arreglo ``dif`` tiene forma ``(6, 4, 3)``:
 - 6 píxeles,
 - 4 colores en la paleta,
 - 3 componentes (R, G, B).
+
+Hay mucho que procesar en esta línea de código, la operación hace broadcasting y agregaga ejes a ambos 
+arreglos. Lo vemos gráficamente:
+
+.. figure:: ./images/imagen_paleta_brodcast.png
+   :align: center
+   :alt: Preparación para Broadcasting para los arreglos ``imagen`` y ``paleta``.
 
 Calculamos ahora la distancia euclidiana a lo largo del último eje:
 
