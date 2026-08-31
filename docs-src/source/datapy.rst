@@ -298,7 +298,7 @@ array([[2, 3, 4],
 
 En este caso utilizamos enteros con signo de 8 bits, lo que nos permite
 representar enteros de ``-128`` a ``127``. Si se incluye un entero fuera del
-rango, el valor puede desbordarse (wrap-around).
+rango, Python produce un error ``OverflowError``.
 
 Rank y Shape
 ------------
@@ -338,7 +338,7 @@ Comparemos la dimension de los arreglos utilizando el atributo `ndim`:
 >>> arreglo_np.ndim
 2
 
-El número de dimensiones se conoce en NumPy como el *rank* (rango) del arreglo.
+El atributo ``ndim`` indica el número de dimensiones o ejes del arreglo
 
 Otro atributo importante es la forma (*shape*) del arreglo, que indica el número
 de elementos en cada dimensión:
@@ -540,8 +540,8 @@ conceptual el arreglo ``ponderacion`` para que sea compatible con ``evaluaciones
 Como ejemplo, vamos a suponer que no agregamos una ponderación para la
 evaluación de la participación:
 
->>> ponderacion = np.array([0.40, 0.40])
->>> ponderacion.shape
+>>> ponderacion_incompleta = np.array([0.40, 0.40])
+>>> ponderacion_incompleta.shape
 (2,)
 
 En este caso no podemos hacer la multiplicación elemento por elemento, ya 
@@ -552,16 +552,21 @@ estirando alguno de ellos:
    :align: center
    :alt: Ejemplo de *broadcasting* en NumPy.
 
+Para establecer si dos arreglos son compatibles para *broadcasting*, NumPy
+compara sus formas desde la última dimensión, es decir, de derecha a izquierda.
+Dos dimensiones son compatibles si tienen el mismo tamaño o si una de ellas
+tiene tamaño ``1``.
+
 ``numpy.newaxis``
 -----------------
 
 En algunos casos debemos agregar una dimensión adicional a nuestros arreglos
 para que estos sean compatibles. Veamos un ejemplo. 
 
-De nuevo vamos dar un punto extra a los alumnos, pero solo a algunos.
-Para especificar a que alumnos daremos un punto extra utilizaremos un 
+De nuevo vamos a dar un punto extra a los alumnos, pero solo a algunos.
+Para especificar a qué alumnos daremos un punto extra utilizaremos un 
 arreglo de una dimensión con cuatro elementos, indicando el valor que 
-sumaremos al las evaluaciones de cada alumno:
+sumaremos a las evaluaciones de cada alumno:
 
 >>> puntos_extra = np.array([1,0,0,1])
 >>> puntos_extra
@@ -583,9 +588,10 @@ Podemos ver gráficamente una manera de solucionar este problema:
    :align: center
    :alt: Ejemplo de *broadcasting* en NumPy.
 
-La solución es cambiar el arreglo de una dimensión a dos dimensiones con 
-forma ``4 x 1``. Para esto utilizaremos la constante ``np.newaxis`` dentro de la
-operación de indexado:
+La solución es cambiar el arreglo de una dimensión a dos dimensiones con forma
+``4 x 1``. Para esto utilizaremos la constante ``np.newaxis`` dentro de la
+operación de indexado. ``np.newaxis`` inserta **un eje de longitud 1
+exactamente en la posición donde aparece**.
 
 Primero vamos la forma actual:
 
@@ -593,7 +599,7 @@ Primero vamos la forma actual:
 (4,)
 
 Si agregamos ``np.newaxis`` en el primer índice se 
-crea una arreglo con forma ``(1, 4)``:
+crea un arreglo con forma ``(1, 4)``:
 
 >>> puntos_extra[np.newaxis, :]
 array([[1, 0, 0, 1]])
@@ -601,7 +607,7 @@ array([[1, 0, 0, 1]])
 (1, 4)
 
 Esto nos da un arreglo similar al que tenemos,
-pero ahora es un renglon con cuatro columnas.
+pero ahora es un renglón con cuatro columnas.
 
 Probemos agregando la constante en el segundo índice:
 
@@ -642,10 +648,11 @@ cada renglón. NumPy puede hacerlo de manera vectorizada:
     >>> (evaluaciones * ponderacion).sum(axis=1)
     array([8. , 7.8, 8.2, 6.6])
 
-Esto lo hacemos aplicando la función suma a los elementos del eje
-correspondiente. Al utilizar ``axis=1`` indicamos que la suma debe realizarse a
-lo largo de cada renglón, es decir, sumamos las actividades de cada alumno para
-obtener su promedio ponderado.
+Esto lo hacemos aplicando la función de suma a los elementos del eje
+correspondiente. Al utilizar `axis=1`, indicamos que la suma debe realizarse
+a lo largo del eje 1, es decir, recorriendo las columnas de cada renglón.
+Como resultado de la reducción, este eje desaparece. En este caso particular,
+sumamos las actividades de cada alumno para obtener su promedio ponderado.
 
 Esto produce un arreglo unidimensional donde cada entrada corresponde al
 promedio ponderado de un alumno.
@@ -676,7 +683,7 @@ Esto nos da:
 
 Aquí ``axis=0`` indica que la operación se aplica columna por columna, lo que
 corresponde a obtener el promedio de cada actividad considerando a todos los
-alumnos. Para atacar problemas más complejos, es importante enteder muy bien el
+alumnos. Para atacar problemas más complejos, es importante entender muy bien el
 rol de los ejes (el parámetro ``axis``) cuando cambiamos de número de
 dimensiones. Esto se facilita con una ayuda visual. 
 
@@ -686,7 +693,7 @@ Una interpretación visual de las dimensiones
 
 Una forma sencilla de visualizar los ejes de un arreglo de NumPy es pensar
 primero en renglones y columnas y, posteriormente, en páginas de un libro.
-Incluso al agregar más dimensiones podríamos hablar luego de estántes, libreros,
+Incluso al agregar más dimensiones podríamos hablar luego de estantes, libreros,
 bibliotecas, etc. Veamos por lo pronto el caso de tres dimensiones.
 
 
@@ -828,8 +835,8 @@ Primero calculamos la diferencia entre cada píxel y cada color de la paleta.
 Queremos utilizar *broadcasting* para evitar ciclos explícitos y para esto debemos 
 agregar nuevos ejes a cada arreglo:
 
-Para las imágenes queremos separar cada pixel de la imagen en una página diferente, para despues 
-realizar una operacion con todas las entradas de paleta RGB. Esto lo hacemos con la instrucción:
+Para las imágenes queremos separar cada píxel de la imagen en una página diferente, para después 
+realizar una operación con todas las entradas de paleta RGB. Esto lo hacemos con la instrucción:
 
 >>> imagen[:, np.newaxis, :]
 
@@ -844,6 +851,73 @@ Gráficamente:
    :align: center
    :alt: Preparación para Broadcasting para los arreglos ``imagen`` y ``paleta``.
 
+Antes de realizar la resta, observemos en la terminal cómo cambian las formas de los
+dos arreglos:
+
+.. code-block:: python
+
+   >>> imagen.shape
+   (6, 3)
+
+   >>> imagen[:, np.newaxis, :].shape
+   (6, 1, 3)
+
+   >>> paleta.shape
+   (4, 3)
+
+   >>> paleta[np.newaxis, :, :].shape
+   (1, 4, 3)
+
+En ``imagen`` agregamos un eje entre los píxeles y las componentes RGB.
+Utilizando la analogía anterior, podemos imaginar el arreglo resultante
+como seis páginas, cada una con un renglón y tres columnas:
+
+.. code-block:: text
+
+   (6, 1, 3)
+    │  │  │
+    │  │  └── componentes RGB
+    │  └───── un renglón
+    └──────── seis páginas, una por píxel
+
+En cambio, al agregar el nuevo eje al inicio de ``paleta`` obtenemos una
+sola página con cuatro renglones y tres columnas:
+
+.. code-block:: text
+
+   (1, 4, 3)
+    │  │  │
+    │  │  └── componentes RGB
+    │  └───── cuatro colores
+    └──────── una página
+
+Ahora las formas son compatibles para *broadcasting*:
+
+.. code-block:: text
+
+   imagen[:, np.newaxis, :]    (6, 1, 3)
+   paleta[np.newaxis, :, :]    (1, 4, 3)
+                                ---------
+                                (6, 4, 3)
+
+El eje de longitud ``1`` de ``imagen`` se extiende conceptualmente hasta
+cuatro posiciones, mientras que el eje de longitud ``1`` de ``paleta`` se
+extiende hasta seis páginas. De esta forma NumPy puede calcular, sin ciclos
+explícitos, la diferencia entre cada uno de los seis píxeles y cada uno de
+los cuatro colores de la paleta.
+
+.. code-block:: python
+
+   >>> dif = imagen[:, np.newaxis, :] - paleta[np.newaxis, :, :]
+   >>> dif.shape
+   (6, 4, 3)
+
+Podemos interpretar entonces cada eje del resultado como:
+
+.. code-block:: text
+
+   dif[píxel, color, componente]
+
 
 .. code-block:: python
 
@@ -857,8 +931,8 @@ El arreglo ``dif`` tiene forma ``(6, 4, 3)``:
 - 4 colores en la paleta,
 - 3 componentes (R, G, B).
 
-Hay mucho que procesar en esta línea de código, la operación hace broadcasting y agregaga ejes a ambos 
-arreglos. Lo vemos gráficamente:
+Hay mucho que procesar en esta línea de código, la operación hace broadcasting y agrega ejes a ambos 
+arreglos, como vimos antes. También lo vemos gráficamente:
 
 .. figure:: ./images/imagen_paleta_brodcast.png
    :align: center
